@@ -1,0 +1,33 @@
+/* General body styling */
+body {
+  background-color: #f8f9fa;
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Card styling */
+.card {
+  border-radius: 10px;
+  border: none;
+}
+
+/* Input field styling */
+.form-control {
+  border-radius: 5px;
+  height: 45px;
+  font-size: 16px;
+}
+
+.form-control:focus {
+  box-shadow: none;
+  border-color: #007bff;
+}
+
+/* Eye icon styling */
+.input-group-text {
+  cursor: pointer;
+}
+
+/* Centering form on the page */
+.container {
+  padding: 30px;
+}

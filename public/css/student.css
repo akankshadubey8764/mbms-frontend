@@ -1,0 +1,46 @@
+body {
+  background-color: #f5f7fa;
+}
+
+.login-container {
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-box {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.form-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.form-box .form-control {
+  margin-bottom: 20px;
+}
+
+.form-box .form-control:focus {
+  box-shadow: none;
+  border-color: #007bff;
+}
+
+.form-box .captcha {
+  font-size: 24px;
+  font-weight: bold;
+  color: #d9534f;
+}
+
+.form-box .btn-primary {
+  width: 100%;
+}
+
+.forgot-password {
+  text-align: right;
+}

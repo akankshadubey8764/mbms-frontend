@@ -1,0 +1,66 @@
+body {
+  background-color: #f8f9fa;
+}
+.sidebar {
+  height: 100vh;
+  width: 250px;
+  background-color: #343a40;
+  position: fixed;
+  top: 0;
+  left: 0;
+  color: white;
+  padding-top: 20px;
+}
+.sidebar .nav-link {
+  color: #ced4da;
+}
+.sidebar .nav-link:hover {
+  color: white;
+  background-color: #495057;
+}
+.sidebar .nav-link.active {
+  color: white;
+  background-color: #495057;
+}
+.content {
+  width: 100%;
+  padding: 30px;
+  background-color: #f8f9fa;
+}
+
+.profile-card {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.profile-header {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.profile-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.profile-info label {
+  font-weight: bold;
+  width: 200px;
+}
+
+.profile-info span {
+  font-size: 18px;
+}
+
+.form-check-label {
+  font-weight: normal;
+}
+
+.form-check-input:disabled {
+  cursor: default;
+}
