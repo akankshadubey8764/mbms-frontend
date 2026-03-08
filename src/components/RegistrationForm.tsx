@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Upload, User, Mail, Phone, Building, Hash } from 'lucide-react';
+import { Upload, Mail, Phone, Building, Hash } from 'lucide-react';
+import Logo from '../assets/images/logos/tpgit_logo.png';
+import { toast } from 'react-hot-toast';
 import apiClient from '../api/apiClient';
 
 interface FormData {
@@ -60,7 +62,7 @@ const RegistrationForm: React.FC = () => {
         const file = e.target.files?.[0];
         if (file) {
             if (file.size > 5 * 1024 * 1024) {
-                alert('File size exceeds 5MB');
+                toast.error('File size exceeds 5MB');
                 return;
             }
             setFormData((prev) => ({ ...prev, photo: file }));
@@ -75,12 +77,19 @@ const RegistrationForm: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        // Email domain validation
+        if (!formData.email.toLowerCase().endsWith('@tpgit.com')) {
+            toast.error('Hostel registration is restricted to @tpgit.com email addresses.');
+            return;
+        }
+
         if (formData.password !== formData.confirmPassword) {
-            alert('Passwords do not match!');
+            toast.error('Passwords do not match!');
             return;
         }
 
         setLoading(true);
+        const regToast = toast.loading('Registering your account...');
 
         try {
             const formDataToSend = new FormData();
@@ -96,7 +105,7 @@ const RegistrationForm: React.FC = () => {
                 },
             });
 
-            alert('Registration successful! Your account will be activated once approved by the admin.');
+            toast.success('Registration successful! Your account will be activated once approved by the admin.', { id: regToast, duration: 6000 });
             // Reset form
             setFormData({
                 firstName: '',
@@ -115,7 +124,7 @@ const RegistrationForm: React.FC = () => {
             });
             setPhotoPreview('');
         } catch (error: any) {
-            alert(error.response?.data?.message || 'Registration failed. Please try again.');
+            toast.error(error.response?.data?.message || 'Registration failed. Please try again.', { id: regToast });
         } finally {
             setLoading(false);
         }
@@ -126,19 +135,18 @@ const RegistrationForm: React.FC = () => {
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="bg-white rounded-2xl shadow-2xl p-8 md:p-12 animate-fade-in">
                     {/* Header */}
-                    <div className="text-center mb-8">
-                        <div className="flex justify-center items-center space-x-4 mb-4">
-                            <div className="w-16 h-16 bg-primary-600 rounded-full flex items-center justify-center">
-                                <span className="text-white font-bold text-2xl">T</span>
-                            </div>
-                            <div className="w-12 h-12 bg-primary-700 rounded-full flex items-center justify-center">
-                                <User className="text-white" size={24} />
+                    <div className="text-center mb-10">
+                        <div className="flex justify-center items-center mb-6">
+                            <div className="w-24 h-24 p-2 bg-white rounded-full shadow-lg border border-gray-100 transform hover:rotate-6 transition-transform duration-500">
+                                <img src={Logo} alt="TPGIT Logo" className="w-full h-full object-contain" />
                             </div>
                         </div>
-                        <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
-                            Student Hostel Registration Form
+                        <h2 className="text-xl font-display font-semibold text-primary-600 uppercase tracking-widest mb-2">Thanthai Periyar Government Institute of Technology</h2>
+                        <h1 className="text-3xl md:text-5xl font-display font-bold text-gray-900 mb-4">
+                            Hostel Registration
                         </h1>
-                        <p className="text-gray-600 mt-2">Fill in your details to register for hostel accommodation</p>
+                        <div className="h-1 w-24 bg-primary mx-auto rounded-full mb-6"></div>
+                        <p className="text-gray-600 text-lg max-w-2xl mx-auto">Please provide your academic and personal details to request a room in the college hostel.</p>
                     </div>
 
                     <form onSubmit={handleSubmit}>
@@ -297,6 +305,7 @@ const RegistrationForm: React.FC = () => {
                                             value={formData.email}
                                             onChange={handleInputChange}
                                             className="form-input pl-10"
+                                            placeholder="example@tpgit.com"
                                             required
                                         />
                                     </div>

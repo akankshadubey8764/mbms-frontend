@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Wallet, Calendar, MessageSquare, User, Lock, LogOut, LayoutDashboard, UtensilsCrossed } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 import apiClient from '../../api/apiClient';
 
 interface StudentData {
@@ -32,6 +33,7 @@ const StudentDashboard: React.FC = () => {
             setStudentData(response.data);
         } catch (error) {
             console.error('Error fetching student data:', error);
+            toast.error('Failed to load dashboard data');
         } finally {
             setLoading(false);
         }
@@ -46,13 +48,14 @@ const StudentDashboard: React.FC = () => {
     const handleFeedbackSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setSubmittingFeedback(true);
+        const feedbackToast = toast.loading('Submitting feedback...');
 
         try {
             await apiClient.post('/student/feedback', { message: feedback });
-            alert('Feedback submitted successfully!');
+            toast.success('Feedback submitted successfully!', { id: feedbackToast });
             setFeedback('');
         } catch (error: any) {
-            alert(error.response?.data?.message || 'Failed to submit feedback');
+            toast.error(error.response?.data?.message || 'Failed to submit feedback', { id: feedbackToast });
         } finally {
             setSubmittingFeedback(false);
         }

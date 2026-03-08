@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 import apiClient from '../api/apiClient';
 
 const ContactContent: React.FC = () => {
@@ -21,10 +22,11 @@ const ContactContent: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
+        const contactToast = toast.loading('Sending message...');
 
         try {
             await apiClient.post('/contact/submit', formData);
-            alert('Your message has been sent successfully! We will get back to you soon.');
+            toast.success('Your message has been sent successfully!', { id: contactToast });
             setFormData({
                 name: '',
                 email: '',
@@ -33,7 +35,7 @@ const ContactContent: React.FC = () => {
                 message: '',
             });
         } catch (error: any) {
-            alert(error.response?.data?.message || 'Failed to send message. Please try again.');
+            toast.error(error.response?.data?.message || 'Failed to send message', { id: contactToast });
         } finally {
             setLoading(false);
         }
@@ -210,6 +212,22 @@ const ContactContent: React.FC = () => {
                                 📞 +91 123 456 7890
                             </a>
                         </div>
+                    </div>
+                </div>
+
+                {/* Google Map Section */}
+                <div className="mt-16 bg-white rounded-2xl shadow-xl p-4 animate-fade-in relative z-10 transition-transform duration-500 hover:scale-[1.01]">
+                    <div className="rounded-xl overflow-hidden h-[450px] shadow-inner">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3889.303986422792!2d79.11706247473215!3d12.91500438739502!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bad389d00000001%3A0xe67c638c4c34d852!2sThanthai%20Periyar%20Government%20Institute%20of%20Technology!5e0!3m2!1sen!2sin!4v1709123456789!5m2!1sen!2sin"
+                            width="100%"
+                            height="100%"
+                            style={{ border: 0 }}
+                            allowFullScreen
+                            loading="lazy"
+                            referrerPolicy="no-referrer-when-downgrade"
+                            title="TPGIT Location"
+                        ></iframe>
                     </div>
                 </div>
             </div>

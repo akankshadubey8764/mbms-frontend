@@ -1,0 +1,501 @@
+/* AdminStudentsList.css */
+
+.admin-students-list-container {
+    animation: fadeIn 0.3s ease-in-out;
+    margin-bottom: 24px;
+    position: relative;
+    padding: 10px;
+    /* Base padding */
+}
+
+/* Department Tabs */
+.asl-tabs-container {
+    /* background-color: white;
+    border-radius: 1.5rem;
+    padding: 20px;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    border: 1px solid #f3f4f6; */
+    margin-bottom: 18px;
+}
+
+.asl-tabs-scroll-area {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+.asl-tabs-scroll-area::-webkit-scrollbar {
+    display: none;
+    /* Safari and Chrome */
+}
+
+.asl-tab-btn {
+    padding: 10px 20px;
+    border-radius: 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    white-space: nowrap;
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
+}
+
+.asl-tab-btn.active {
+    background-color: #009688;
+    /* Assuming primary color is a dark slate */
+    color: white;
+    box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.2);
+}
+
+.asl-tab-btn.inactive {
+    background-color: #f9fafb;
+    color: #4b5563;
+}
+
+.asl-tab-btn.inactive:hover {
+    background-color: #f3f4f6;
+}
+
+/* Year Cards */
+.asl-cards-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 14px;
+}
+
+.asl-stat-card {
+    width: 90px;
+    height: 70px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 1rem;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.3s;
+}
+
+.asl-stat-card.active {
+    background-color: rgba(15, 23, 42, 0.05);
+    border-color: #0f172a;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.asl-stat-card.inactive {
+    background-color: white;
+    border-color: #f3f4f6;
+}
+
+.asl-stat-card.inactive:hover {
+    border-color: #e5e7eb;
+    background-color: #f9fafb;
+}
+
+.asl-card-count {
+    font-size: 24px;
+    font-weight: 900;
+    color: #111827;
+    /* margin-bottom: 4px; */
+    margin-top: 0;
+}
+
+.asl-card-label {
+    color: #6b7280;
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: capitalize;
+    /* letter-spacing: 0.1em; */
+    text-align: center;
+    margin: 0;
+}
+
+/* Search Bar */
+.asl-search-container {
+    background-color: white;
+    border-radius: 1.5rem;
+    padding: 16px;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    border: 1px solid #f3f4f6;
+    margin-bottom: 24px;
+    position: relative;
+}
+
+.asl-search-icon {
+    position: absolute;
+    left: 32px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+}
+
+.asl-search-input {
+    width: 100%;
+    height: 56px;
+    padding-left: 48px;
+    padding-right: 24px;
+    border-radius: 0.75rem;
+    background-color: #f9fafb;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+    font-weight: 500;
+    font-size: 0.875rem;
+    box-sizing: border-box;
+}
+
+.asl-search-input:focus {
+    background-color: white;
+    outline: none;
+    border-color: #0f172a;
+    box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.2);
+}
+
+/* Table Section */
+.asl-table-container {
+    background-color: white;
+    border-radius: 1.5rem;
+    box-shadow: 0 20px 25px -5px rgba(229, 231, 235, 0.5);
+    border: 1px solid #f3f4f6;
+    overflow: hidden;
+}
+
+.asl-table-overflow {
+    overflow-x: auto;
+}
+
+.asl-table {
+    width: 100%;
+    white-space: nowrap;
+    border-collapse: collapse;
+}
+
+.asl-table thead tr {
+    background-color: rgba(249, 250, 251, 0.8);
+}
+
+.asl-table th {
+    padding: 16px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 900;
+    color: black;
+    font-weight: 600;
+    text-transform: capitalize;
+    /* letter-spacing: 0.1em; */
+    font-family: arial;
+}
+
+.asl-table tbody tr {
+    border-bottom: 1px solid #f9fafb;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.asl-table tbody tr:hover {
+    background-color: rgba(249, 250, 251, 0.5);
+}
+
+.asl-table td {
+    padding: 12px 16px;
+    font-size: 0.875rem;
+}
+
+.asl-text-center {
+    text-align: center;
+}
+
+.asl-font-bold {
+    font-weight: 700;
+}
+
+.asl-font-black {
+    font-weight: 900;
+}
+
+.asl-text-primary {
+    color: #0f172a;
+}
+
+.asl-text-gray {
+    color: #6b7280;
+}
+
+.asl-text-dark {
+    color: #111827;
+}
+
+.asl-cell-group p {
+    margin: 0;
+}
+
+.asl-cell-title {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #374151;
+}
+
+.asl-cell-subtitle {
+    font-size: 10px;
+    font-weight: 900;
+    color: #9ca3af;
+    text-transform: capitalize;
+    /* letter-spacing: 0.1em; */
+}
+
+/* Badges */
+.asl-badge {
+    padding: 4px 8px;
+    border-radius: 0.375rem;
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: capitalize;
+    /* letter-spacing: 0.1em; */
+    border: 1px solid;
+    display: inline-block;
+}
+
+.asl-badge.paid {
+    background-color: #ecfdf5;
+    color: #059669;
+    border-color: #d1fae5;
+}
+
+.asl-badge.partial {
+    background-color: #fffbeb;
+    color: #d97706;
+    border-color: #fef3c7;
+}
+
+.asl-badge.unpaid {
+    background-color: #fff1f2;
+    color: #e11d48;
+    border-color: #ffe4e6;
+}
+
+.asl-badge.none {
+    background-color: #f9fafb;
+    color: #6b7280;
+    border-color: #e5e7eb;
+}
+
+/* Dropdown */
+.asl-action-cell {
+    position: relative;
+    text-align: center;
+}
+
+.asl-action-btn {
+    padding: 8px;
+    border-radius: 0.5rem;
+    color: #9ca3af;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.asl-action-btn:hover {
+    color: #111827;
+    background-color: #f3f4f6;
+}
+
+.asl-dropdown-menu {
+    position: absolute;
+    right: 32px;
+    top: 40px;
+    background-color: white;
+    border: 1px solid #f3f4f6;
+    border-radius: 0.75rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    width: 128px;
+    padding: 4px 0;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+}
+
+.asl-dropdown-item {
+    padding: 10px 16px;
+    text-align: left;
+    font-size: 0.875rem;
+    font-weight: 700;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.asl-dropdown-item.edit {
+    color: #374151;
+}
+
+.asl-dropdown-item.edit:hover {
+    background-color: #f9fafb;
+}
+
+.asl-dropdown-item.delete {
+    color: #e11d48;
+}
+
+.asl-dropdown-item.delete:hover {
+    background-color: #fff1f2;
+}
+
+/* Pagination */
+.asl-pagination {
+    padding: 16px 24px;
+    border-top: 1px solid #f9fafb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgba(249, 250, 251, 0.2);
+}
+
+.asl-pagination-info {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #9ca3af;
+    text-transform: capitalize;
+    /* letter-spacing: 0.1em; */
+    margin: 0;
+}
+
+.asl-pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.asl-page-btn {
+    padding: 8px 16px;
+    border-radius: 0.75rem;
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    color: #6b7280;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: capitalize;
+    /* letter-spacing: 0.1em; */
+    cursor: pointer;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    transition: all 0.2s;
+}
+
+.asl-page-btn:hover:not(:disabled) {
+    background-color: #f9fafb;
+}
+
+.asl-page-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.asl-page-current {
+    padding: 8px 16px;
+    background-color: rgba(15, 23, 42, 0.1);
+    color: #0f172a;
+    font-weight: 900;
+    font-size: 0.75rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(15, 23, 42, 0.2);
+}
+
+/* Modal specifically mapped */
+.asl-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+
+.asl-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+}
+
+.asl-modal-content {
+    position: relative;
+    background-color: white;
+    width: 100%;
+    max-width: 56rem;
+    /* max-w-4xl */
+    border-radius: 2rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.asl-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px;
+    border-bottom: 1px solid #f3f4f6;
+    background-color: rgba(249, 250, 251, 0.5);
+}
+
+.asl-modal-title {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #111827;
+    margin: 0;
+}
+
+.asl-modal-subtitle {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #6b7280;
+    margin: 4px 0 0 0;
+}
+
+.asl-modal-close-btn {
+    padding: 8px;
+    color: #9ca3af;
+    background: transparent;
+    border: none;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.asl-modal-close-btn:hover {
+    color: #111827;
+    background-color: #f3f4f6;
+}
+
+.asl-modal-body {
+    padding: 24px;
+    overflow-y: auto;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Responsive queries */
+@media (min-width: 768px) {
+    .admin-students-list-container {
+        padding: 0;
+    }
+
+    .asl-modal-body {
+        padding: 32px;
+    }
+}

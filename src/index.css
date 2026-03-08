@@ -1,21 +1,57 @@
 @import "tailwindcss";
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Roboto+Condensed:wght@300;400;700&display=swap');
-
 @theme {
-  --font-sans: 'Inter', 'Roboto', sans-serif;
-  --font-condensed: 'Roboto Condensed', sans-serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-display: "Outfit", sans-serif;
 
-  --color-primary-50: #e6f2ff;
-  --color-primary-100: #cce5ff;
-  --color-primary-200: #99ccff;
-  --color-primary-300: #66b2ff;
-  --color-primary-400: #3399ff;
-  --color-primary-500: #007bff;
-  --color-primary-600: #0062cc;
-  --color-primary-700: #004a99;
-  --color-primary-800: #003166;
-  --color-primary-900: #001933;
+  --color-primary-50: #e0f2f1;
+  --color-primary-100: #b2dfdb;
+  --color-primary-200: #80cbc4;
+  --color-primary-300: #4db6ac;
+  --color-primary-400: #26a69a;
+  --color-primary-500: #009688;
+  --color-primary-600: #00897b;
+  --color-primary-700: #00796b;
+  --color-primary-800: #00695c;
+  --color-primary-900: #004d40;
+
+  --color-primary: var(--color-primary-500);
+
+  --color-secondary: #f0a500;
+  --color-secondary-light: #ffc107;
+  --color-secondary-dark: #c79100;
+
+  --color-dark: #343a40;
+  --color-dark-900: #101c32;
+
+  --color-light: #f8f9fa;
+  --color-light-blue: #e0e8f2;
+}
+
+@layer base {
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    @apply text-gray-800 antialiased;
+  }
+
+  h1 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    @apply font-bold;
+  }
+
+  h2, h3 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    @apply font-semibold;
+  }
+
+  h4, h5, h6 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    @apply font-semibold;
+  }
 }
 
 @layer components {
@@ -58,7 +94,7 @@
 
   /* Feature box styling */
   .feature-box {
-    @apply bg-gradient-to-br from-primary-600 to-primary-800 text-white p-6 rounded-xl shadow-lg transition-all duration-300 hover:shadow-2xl hover:scale-105;
+    @apply bg-white p-6 rounded-xl shadow-lg transition-all duration-300 hover:shadow-2xl hover:scale-105 border border-gray-100 relative overflow-hidden;
   }
 
   /* Button styles */
@@ -110,21 +146,21 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #007bff;
+  background: #009688;
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #0056b3;
+  background: #00796b;
 }
 
 /* Gradient backgrounds */
 .gradient-primary {
-  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  background: linear-gradient(135deg, #009688 0%, #00796b 100%);
 }
 
 .gradient-secondary {
-  background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+  background: linear-gradient(135deg, #f0a500 0%, #c79100 100%);
 }
 
 /* Glass morphism effect */

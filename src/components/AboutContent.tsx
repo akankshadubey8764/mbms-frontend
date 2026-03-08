@@ -1,4 +1,4 @@
-import React from 'react';
+import { Link } from 'react-router-dom';
 import { Building2, Users2 } from 'lucide-react';
 
 const AboutContent: React.FC = () => {
@@ -52,9 +52,9 @@ const AboutContent: React.FC = () => {
                                     </ul>
                                 </div>
                             </div>
-                            <button className="btn-secondary w-full md:w-auto">
+                            <Link to="/registration" className="btn-secondary inline-block text-center w-full md:w-auto">
                                 Explore More
-                            </button>
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -94,9 +94,9 @@ const AboutContent: React.FC = () => {
                                     </ul>
                                 </div>
                             </div>
-                            <button className="btn-secondary w-full md:w-auto">
+                            <Link to="/registration" className="btn-secondary inline-block text-center w-full md:w-auto">
                                 Explore More
-                            </button>
+                            </Link>
                         </div>
                     </div>
                 </div>

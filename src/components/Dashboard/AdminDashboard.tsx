@@ -13,6 +13,7 @@ import {
 
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 import apiClient from '../../api/apiClient';
 
 interface Student {
@@ -60,6 +61,7 @@ const AdminDashboard: React.FC = () => {
             setStudents(response.data);
         } catch (error) {
             console.error('Error fetching students:', error);
+            toast.error('Failed to load students data');
         } finally {
             setLoading(false);
         }
@@ -95,23 +97,25 @@ const AdminDashboard: React.FC = () => {
     };
 
     const handleUpdateBill = async (studentId: string) => {
+        const billToast = toast.loading('Updating bill...');
         try {
             await apiClient.put(`/admin/students/${studentId}/update-bill`);
-            alert('Bill updated successfully!');
+            toast.success('Bill updated successfully!', { id: billToast });
             fetchStudents();
         } catch (error: any) {
-            alert(error.response?.data?.message || 'Failed to update bill');
+            toast.error(error.response?.data?.message || 'Failed to update bill', { id: billToast });
         }
     };
 
     const handleRemoveStudent = async (studentId: string) => {
         if (window.confirm('Are you sure you want to remove this student?')) {
+            const removeToast = toast.loading('Removing student...');
             try {
                 await apiClient.delete(`/admin/students/${studentId}`);
-                alert('Student removed successfully!');
+                toast.success('Student removed successfully!', { id: removeToast });
                 fetchStudents();
             } catch (error: any) {
-                alert(error.response?.data?.message || 'Failed to remove student');
+                toast.error(error.response?.data?.message || 'Failed to remove student', { id: removeToast });
             }
         }
     };
