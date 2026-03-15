@@ -410,3 +410,227 @@
     font-size: 0.75rem;
     border-radius: 0.75rem;
 }
+
+/* New Inventory Features */
+.ai-view-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 12px 24px;
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.ai-tabs {
+    display: flex;
+    gap: 8px;
+    background: #f3f4f6;
+    padding: 4px;
+    border-radius: 1rem;
+}
+
+.ai-tab {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 0.75rem;
+    border: none;
+    background: transparent;
+    color: #6b7280;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.ai-tab.active {
+    background: white;
+    color: #009688;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.ai-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.ai-btn-add {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: #009688;
+    color: white;
+    border: none;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.ai-btn-add:hover {
+    background: #00796b;
+    box-shadow: 0 4px 12px rgba(0, 150, 136, 0.3);
+}
+
+.ai-issue-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fee2e2;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.ai-issue-btn:hover {
+    background: #dc2626;
+    color: white;
+}
+
+/* Modals */
+.ai-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.ai-modal {
+    background: white;
+    border-radius: 1.5rem;
+    width: 100%;
+    max-width: 500px;
+    padding: 32px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.ai-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.ai-modal-header h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 800;
+    color: #111827;
+}
+
+.ai-modal-header button {
+    background: transparent;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+}
+
+.ai-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.ai-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.ai-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.ai-form-group label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #4b5563;
+    text-transform: uppercase;
+}
+
+.ai-form-group input,
+.ai-form-group select {
+    padding: 10px 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    outline: none;
+    font-size: 14px;
+    transition: border-color 0.2s;
+}
+
+.ai-form-group input:focus {
+    border-color: #009688;
+}
+
+.ai-total-preview {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    background: #f0fdf4;
+    color: #166534;
+    border-radius: 8px;
+    font-weight: 700;
+}
+
+.ai-btn-submit {
+    padding: 12px;
+    background: #009688;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.ai-btn-submit:hover {
+    background: #00796b;
+}
+
+.ai-variant-issue {
+    background: #dc2626;
+}
+
+.ai-variant-issue:hover {
+    background: #b91c1c;
+}
+
+.ai-seller-info,
+.ai-date-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #4b5563;
+}
+
+.ai-seller-icon {
+    color: #9ca3af;
+}
+
+.ai-issue-info {
+    margin-bottom: 20px;
+    padding: 12px;
+    background: #eff6ff;
+    color: #1e40af;
+    border-radius: 8px;
+    font-size: 14px;
+}

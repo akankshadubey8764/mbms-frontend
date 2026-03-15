@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Home, Info, Phone, UserPlus, LogIn, ChevronDown, User, ShieldCheck, ChefHat } from 'lucide-react';
+import { Menu, X, Home, Info, Phone, UserPlus, ChevronDown, User, ShieldCheck, ChefHat } from 'lucide-react';
 import Logo from '../../assets/images/logos/TPGIT_HOSTELS.png';
 
 const Navbar: React.FC = () => {

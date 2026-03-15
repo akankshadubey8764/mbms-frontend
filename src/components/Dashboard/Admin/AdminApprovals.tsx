@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { UserCheck, UserX, ShieldCheck, Clock, Calendar, Hash, Mail, Phone, MapPin } from 'lucide-react';
+import { UserCheck, UserX, ShieldCheck, Clock } from 'lucide-react';
 import toast from 'react-hot-toast';
 import apiClient from '../../../api/apiClient';
 import './AdminApprovals.css';
@@ -76,10 +76,10 @@ const AdminApprovals: React.FC = () => {
     return (
         <div className="admin-approvals-container">
             <div className="aa-header-section">
-                <div>
+                {/* <div>
                     <h1 className="aa-header-title">Registration Requests</h1>
                     <p className="aa-header-subtitle">Review and manage pending student applications</p>
-                </div>
+                </div> */}
                 <div className="aa-status-stats">
                     <div className="aa-stat-card">
                         <Clock className="aa-stat-icon" size={20} />
@@ -140,13 +140,13 @@ const AdminApprovals: React.FC = () => {
                                             </td>
                                             <td>
                                                 <div className="aa-contact-cell">
-                                                    <Mail size={12} className="aa-cell-icon" />
+                                                    {/* <Mail size={12} className="aa-cell-icon" /> */}
                                                     <span className="aa-email-text">{request.email}</span>
                                                 </div>
                                             </td>
                                             <td>
                                                 <div className="aa-contact-cell">
-                                                    <Phone size={12} className="aa-cell-icon" />
+                                                    {/* <Phone size={12} className="aa-cell-icon" /> */}
                                                     <span className="aa-phone-text">{request.phone}</span>
                                                 </div>
                                             </td>
@@ -158,19 +158,19 @@ const AdminApprovals: React.FC = () => {
                                             </td>
                                             <td>
                                                 <div className="aa-room-cell">
-                                                    <Hash size={12} className="aa-cell-icon" />
+                                                    {/* <Hash size={12} className="aa-cell-icon" /> */}
                                                     <span>{request.roomNo}</span>
                                                 </div>
                                             </td>
                                             <td>
                                                 <div className="aa-block-cell">
-                                                    <MapPin size={12} className="aa-cell-icon" />
+                                                    {/* <MapPin size={12} className="aa-cell-icon" /> */}
                                                     <span>{request.block}</span>
                                                 </div>
                                             </td>
                                             <td>
                                                 <div className="aa-date-cell">
-                                                    <Calendar size={12} className="aa-cell-icon" />
+                                                    {/* <Calendar size={12} className="aa-cell-icon" /> */}
                                                     <span>{formatDate(request.createdAt)}</span>
                                                 </div>
                                             </td>
@@ -181,16 +181,16 @@ const AdminApprovals: React.FC = () => {
                                                         className="aa-btn aa-btn-reject"
                                                         title="Reject Request"
                                                     >
-                                                        <UserX size={16} />
-                                                        <span className="aa-btn-text">Reject</span>
+                                                        <UserX size={13} />
+                                                        {/* <span className="aa-btn-text">Reject</span> */}
                                                     </button>
                                                     <button
                                                         onClick={() => handleAction(request._id, 'approve')}
                                                         className="aa-btn aa-btn-approve"
                                                         title="Approve Request"
                                                     >
-                                                        <UserCheck size={16} />
-                                                        <span className="aa-btn-text">Approve</span>
+                                                        <UserCheck size={13} />
+                                                        {/* <span className="aa-btn-text">Approve</span> */}
                                                     </button>
                                                 </div>
                                             </td>

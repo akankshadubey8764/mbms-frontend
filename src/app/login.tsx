@@ -64,7 +64,7 @@ const Login: React.FC = () => {
                     break;
                 case 'mess_manager':
                 case 'mess':
-                    navigate('/mess-users-dashboard');
+                    navigate('/mess-dashboard');
                     break;
                 default:
                     console.warn('Unknown role received:', role);

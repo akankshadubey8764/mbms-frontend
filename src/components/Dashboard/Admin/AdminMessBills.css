@@ -64,9 +64,67 @@
     box-shadow: 0 20px 25px -5px rgba(17, 24, 39, 0.1);
 }
 
-.amb-generate-btn:hover {
+.amb-generate-btn:hover:not(.disabled) {
     background-color: #009688;
     /* primary */
+}
+
+.amb-generate-btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #9ca3af;
+}
+
+.amb-btn-secondary {
+    padding: 12px 24px;
+    background-color: white;
+    color: #111827;
+    border-radius: 1rem;
+    font-weight: 900;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid #e5e7eb;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.amb-btn-secondary:hover {
+    background-color: #f9fafb;
+    border-color: #d1d5db;
+}
+
+.amb-year-select-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 1rem;
+    padding: 0 16px;
+    transition: all 0.3s;
+}
+
+.amb-year-select-wrapper:hover {
+    border-color: #009688;
+}
+
+.amb-calendar-icon {
+    color: #9ca3af;
+}
+
+.amb-year-select {
+    padding: 12px 8px;
+    border: none;
+    background: transparent;
+    font-weight: 900;
+    font-size: 0.875rem;
+    color: #111827;
+    outline: none;
+    cursor: pointer;
 }
 
 /* Summary Grid */
@@ -233,6 +291,22 @@
     gap: 16px;
 }
 
+.amb-info-alert {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background-color: #fffbeb;
+    /* amber-50 */
+    border: 1px solid #fef3c7;
+    /* amber-100 */
+    border-radius: 1rem;
+    color: #92400e;
+    /* amber-800 */
+    font-size: 11px;
+    font-weight: 700;
+}
+
 .amb-filter-btn {
     padding: 12px;
     background-color: white;
@@ -279,47 +353,80 @@
 /* Table */
 .amb-table-wrapper {
     overflow-x: auto;
+    position: relative;
 }
 
-.amb-table {
+.amb-status-table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
 }
 
-.amb-table thead tr {
+.amb-status-table thead tr {
     background-color: rgba(249, 250, 251, 0.5);
 }
 
-.amb-th {
-    padding: 24px 40px;
+.amb-status-table th {
+    padding: 20px 16px;
     font-size: 10px;
     font-weight: 900;
     color: #9ca3af;
     text-transform: uppercase;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.1em;
     text-align: center;
+    border-bottom: 1px solid #f3f4f6;
+    background-color: #f9fafb;
 }
 
-.amb-th.left {
+.amb-th-sticky {
+    position: sticky;
+    left: 0;
+    z-index: 10;
+    background-color: #f9fafb !important;
+}
+
+.amb-status-table td {
+    padding: 16px;
+    text-align: center;
+    vertical-align: middle;
+    border-bottom: 1px solid #f9fafb;
+    font-size: 0.875rem;
+    color: #4b5563;
+}
+
+.amb-td-sticky {
+    position: sticky;
+    left: 0;
+    z-index: 5;
+    background-color: white;
+    border-right: 1px solid #f3f4f6;
+}
+
+.amb-status-table tr:hover .amb-td-sticky {
+    background-color: #f9fafb;
+}
+
+.amb-student-info {
     text-align: left;
 }
 
-.amb-th.right {
-    text-align: right;
+.amb-name {
+    font-weight: 900;
+    color: #111827;
+    margin: 0;
+    white-space: nowrap;
 }
 
-.amb-th.w-16 {
-    width: 4rem;
+.amb-reg {
+    font-size: 10px;
+    font-weight: 700;
+    color: #9ca3af;
+    text-transform: uppercase;
+    margin: 0;
 }
 
-.amb-checkbox {
-    width: 20px;
-    height: 20px;
-    border-radius: 0.375rem;
-    border: 1px solid #d1d5db;
-    /* gray-300 */
-    color: #009688;
-    cursor: pointer;
+.amb-status-table .text-left {
+    text-align: left;
 }
 
 .amb-table tbody tr {
@@ -549,6 +656,23 @@
     font-weight: 900;
     font-size: 0.75rem;
     border-radius: 0.75rem;
+}
+
+.amb-cell-vertical {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.amb-cell-amount {
+    font-size: 10px;
+    font-weight: 800;
+    color: #4b5563;
+}
+
+.op-30 {
+    opacity: 0.3;
 }
 
 @keyframes fadeIn {

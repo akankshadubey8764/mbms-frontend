@@ -1,277 +1,289 @@
-import React, { useState, useEffect } from 'react';
-import { Send, CheckCircle, Clock, Search, Filter, Mail, Bell, ChevronLeft, ChevronRight } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import {
+    CheckCircle,
+    XCircle,
+    Upload,
+    Search,
+    Calendar,
+    AlertCircle,
+    Download
+} from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import apiClient from '../../../api/apiClient';
 import './AdminMessBills.css';
 
-interface StudentBill {
-    _id: string;
-    studentName: string;
-    regNumber: string;
-    amount: number;
-    status: 'PAID' | 'PENDING' | 'UNPAID' | 'PARTIAL';
-    email: string;
-    month?: number;
-    year?: number;
+interface MonthStatus {
+    status: 'PAID' | 'PARTIAL' | 'UNPAID';
+    isVerified: boolean;
+    amountIssued: number;
+    amountPaid: number;
+    daysPresent: number;
+    daysAbsent: number;
 }
 
-const MONTHS = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+interface StudentMessStatus {
+    _id: string;
+    name: string;
+    regNumber: string;
+    dept: string;
+    year: string;
+    phone: string;
+    billStatus: { [key: number]: MonthStatus[] };
+}
+
+const MONTHS_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 const AdminMessBills: React.FC = () => {
-    const [bills, setBills] = useState<StudentBill[]>([]);
-    const [total, setTotal] = useState(0);
+    const [statusList, setStatusList] = useState<StudentMessStatus[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
-    const [selectedStudents, setSelectedStudents] = useState<string[]>([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [limit] = useState(10);
+    const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+    const [uploadAllowed, setUploadAllowed] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const years = Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - i);
 
     useEffect(() => {
-        fetchBills();
-    }, [currentPage]);
+        fetchStatusList();
+        checkUploadWindow();
+    }, [selectedYear]);
 
-    const fetchBills = async () => {
+    const fetchStatusList = async () => {
         setLoading(true);
         try {
-            const skip = (currentPage - 1) * limit;
-            const response = await apiClient.get('/admin/mess-bills', { params: { skip, limit } });
-            if (response.data && response.data.data) {
-                setBills(response.data.data);
-                setTotal(response.data.total);
-            } else {
-                setBills([]);
-                setTotal(0);
-            }
+            const response = await apiClient.get('/admin/mess-bills/status-list', {
+                params: { year: selectedYear }
+            });
+            setStatusList(response.data);
         } catch (error) {
-            console.error('Error fetching bills:', error);
-            toast.error('Failed to fetch mess bills');
-            setBills([]);
-            setTotal(0);
+            console.error('Error fetching mess status:', error);
+            toast.error('Failed to fetch mess status list');
         } finally {
             setLoading(false);
         }
     };
 
-    const toggleSelect = (id: string) => {
-        setSelectedStudents(prev =>
-            prev.includes(id) ? prev.filter(s => s !== id) : [...prev, id]
-        );
-    };
-
-    const handleMarkPaid = async (bill: StudentBill) => {
-        const statusToast = toast.loading('Updating bill status...');
+    const checkUploadWindow = async () => {
         try {
-            await apiClient.patch('/admin/mess-bills/status', {
-                studentId: bill._id,
-                month: bill.month,
-                year: bill.year,
-                status: 'PAID'
-            });
-            toast.success('Bill marked as PAID', { id: statusToast });
-            fetchBills();
-        } catch (error: any) {
-            toast.error(error.response?.data?.message || 'Failed to update bill status', { id: statusToast });
+            const response = await apiClient.get('/admin/mess-bills/upload-window');
+            setUploadAllowed(response.data.allowed);
+        } catch (error) {
+            console.error('Error checking upload window:', error);
         }
     };
 
-    const handleSendReminder = (name: string) => {
-        toast.success(`Payment reminder sent to ${name}`);
+    const handleBulkUploadClick = () => {
+        if (!uploadAllowed) {
+            toast.error('Bulk upload is only open on the last day of the month and first day of the next month.');
+            return;
+        }
+        fileInputRef.current?.click();
     };
 
-    const filteredBills = bills.filter(b =>
-        (b.studentName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (b.regNumber || '').toLowerCase().includes(searchTerm.toLowerCase())
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = async (event) => {
+            const text = event.target?.result as string;
+            const rows = text.split('\n').filter(row => row.trim() !== '');
+            const headers = rows[0].split(',').map(h => h.trim());
+
+            const data = rows.slice(1).map(row => {
+                const values = row.split(',').map(v => v.trim());
+                const obj: any = {};
+                headers.forEach((header, i) => {
+                    obj[header] = values[i];
+                });
+                return obj;
+            });
+
+            const uploadToast = toast.loading('Processing bulk upload...');
+            try {
+                await apiClient.post('/admin/mess-bills/bulk-upload', {
+                    year: selectedYear,
+                    data
+                });
+                toast.success('Bulk upload processed successfully!', { id: uploadToast });
+                fetchStatusList();
+            } catch (error: any) {
+                toast.error(error.response?.data?.message || 'Bulk upload failed', { id: uploadToast });
+            }
+        };
+        reader.readAsText(file);
+        // Reset input
+        e.target.value = '';
+    };
+
+    const filteredList = statusList.filter(s =>
+        s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        s.regNumber.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    const isPaid = (s: string) => s === 'PAID';
+    const isCurrentOrFutureMonth = (monthIndex: number) => {
+        const now = new Date();
+        if (selectedYear > now.getFullYear()) return true;
+        if (selectedYear === now.getFullYear() && monthIndex >= now.getMonth()) return true;
+        return false;
+    };
+
+    const renderMonthCell = (student: StudentMessStatus, monthIndex: number) => {
+        const monthNum = monthIndex + 1;
+        const bills = student.billStatus[monthNum] || [];
+        const bill = bills[0];
+
+        if (bill) {
+            return (
+                <div className="amb-cell-vertical">
+                    <span className="amb-cell-amount">
+                        {bill.amountIssued > 0 ? `₹${bill.amountIssued}` : ''}
+                    </span>
+                    {bill.status === 'PAID' ? (
+                        <CheckCircle size={16} className="text-emerald-500" />
+                    ) : (
+                        <XCircle size={16} className="text-rose-500" />
+                    )}
+                </div>
+            );
+        }
+
+        // Current or future month - neutral
+        if (isCurrentOrFutureMonth(monthIndex)) {
+            return <div className="text-gray-300 mx-auto text-xs">-</div>;
+        }
+
+        // Past month with no record
+        return (
+            <div className="amb-cell-vertical op-30">
+                <span className="amb-cell-amount">N/A</span>
+                <XCircle size={16} className="text-gray-300" />
+            </div>
+        );
+    };
+
+    const downloadTemplate = () => {
+        const headers = ["S.No", "Reg Number"];
+        MONTHS_SHORT.forEach(m => {
+            headers.push(`${m} Present`, `${m} Absent`);
+        });
+
+        const content = [
+            headers.join(','),
+            `1,REG001,${MONTHS_SHORT.map(() => '0,0').join(',')}`
+        ].join('\n');
+
+        const blob = new Blob([content], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Mess_Bill_Template_${selectedYear}.csv`;
+        a.click();
+    };
 
     return (
         <div className="amb-container">
-            {/* <div className="amb-header">
-                <div>
-                    <h1 className="amb-title">Mess Billing</h1>
-                    <p className="amb-subtitle">Manage student mess payments and issue reminders</p>
-                </div>
+            <div className="amb-header">
+                {/* <div>
+                    <h1 className="amb-title">Mess Bill Management</h1>
+                    <p className="amb-subtitle">Track and calculate student mess bills for {selectedYear}</p>
+                </div> */}
                 <div className="amb-header-actions">
-                    <button className="amb-generate-btn">
-                        <Wallet size={16} />
-                        <span>Generate Monthly Bills</span>
+                    <div className="amb-year-select-wrapper">
+                        <Calendar size={16} className="amb-calendar-icon" />
+                        <select
+                            value={selectedYear}
+                            onChange={(e) => setSelectedYear(Number(e.target.value))}
+                            className="amb-year-select"
+                        >
+                            {years.map(y => <option key={y} value={y}>{y}</option>)}
+                        </select>
+                    </div>
+                    <button
+                        onClick={downloadTemplate}
+                        className="amb-btn-secondary"
+                        title="Download CSV Template"
+                    >
+                        <Download size={16} />
+                        <span>Template</span>
                     </button>
-                </div>
-            </div> */}
-
-            {/* Summary Cards */}
-            <div className="amb-summary-grid">
-                <div className="amb-summary-card">
-                    <p className="amb-summary-label">Total Records</p>
-                    <p className="amb-summary-value">{total}</p>
-                </div>
-                <div className="amb-summary-card emerald">
-                    <p className="amb-summary-label">Paid</p>
-                    <p className="amb-summary-value">{bills.filter(b => isPaid(b.status)).length}</p>
-                </div>
-                <div className="amb-summary-card rose">
-                    <p className="amb-summary-label">Pending</p>
-                    <p className="amb-summary-value">{bills.filter(b => !isPaid(b.status)).length}</p>
-                </div>
-                <div className="amb-summary-card blue">
-                    <p className="amb-summary-label">Total Amount</p>
-                    <p className="amb-summary-value">₹{bills.reduce((s, b) => s + (b.amount || 0), 0).toLocaleString()}</p>
+                    <button
+                        onClick={handleBulkUploadClick}
+                        className={`amb-generate-btn ${!uploadAllowed ? 'disabled' : ''}`}
+                    >
+                        <Upload size={16} />
+                        <span>Bulk Upload</span>
+                    </button>
+                    <input
+                        type="file"
+                        ref={fileInputRef}
+                        onChange={handleFileChange}
+                        style={{ display: 'none' }}
+                        accept=".csv"
+                    />
                 </div>
             </div>
 
             <div className="amb-content-wrapper">
-                {/* Search & Filters */}
                 <div className="amb-filters-container">
                     <div className="amb-search-wrapper">
                         <Search className="amb-search-icon" size={18} />
                         <input
                             type="text"
-                            placeholder="Find student by name or ID..."
+                            placeholder="Search by name or reg number..."
                             className="amb-search-input"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
                     </div>
-                    <div className="amb-filter-actions">
-                        <button className="amb-filter-btn">
-                            <Filter size={20} />
-                        </button>
-                        <button
-                            disabled={selectedStudents.length === 0}
-                            onClick={() => selectedStudents.forEach(id => {
-                                const b = bills.find(x => x._id === id);
-                                if (b) handleSendReminder(b.studentName);
-                            })}
-                            className="amb-remind-btn"
-                        >
-                            <Bell size={14} />
-                            <span>Remind Selected ({selectedStudents.length})</span>
-                        </button>
-                    </div>
+                    {!uploadAllowed && (
+                        <div className="amb-info-alert">
+                            <AlertCircle size={14} />
+                            <span>Bulk upload opens on monthly billing windows (Last/First day).</span>
+                        </div>
+                    )}
                 </div>
 
                 <div className="amb-table-wrapper">
-                    <table className="amb-table">
+                    <table className="amb-status-table">
                         <thead>
                             <tr>
-                                <th className="amb-th left w-16">
-                                    <input
-                                        type="checkbox"
-                                        className="amb-checkbox"
-                                        checked={selectedStudents.length === filteredBills.length && filteredBills.length > 0}
-                                        onChange={(e) => setSelectedStudents(e.target.checked ? filteredBills.map(b => b._id) : [])}
-                                    />
-                                </th>
-                                <th className="amb-th left">Resident</th>
-                                <th className="amb-th">Period</th>
-                                <th className="amb-th">Amount Due</th>
-                                <th className="amb-th">Status</th>
-                                <th className="amb-th right">Actions</th>
+                                <th className="amb-th-sticky">S.No</th>
+                                <th className="amb-th-sticky text-left">Name</th>
+                                <th>Dept</th>
+                                <th>Year</th>
+                                <th>Phone</th>
+                                {MONTHS_SHORT.map(m => <th key={m}>{m}</th>)}
                             </tr>
                         </thead>
                         <tbody>
                             {loading ? (
-                                <tr><td colSpan={6} className="amb-loader-row">Loading Records...</td></tr>
-                            ) : filteredBills.length === 0 ? (
-                                <tr><td colSpan={6} className="amb-empty-row">No billing records found.</td></tr>
+                                <tr><td colSpan={17} className="amb-loader-row">Loading records...</td></tr>
+                            ) : filteredList.length === 0 ? (
+                                <tr><td colSpan={17} className="amb-empty-row">No students found.</td></tr>
                             ) : (
-                                filteredBills.map((bill) => (
-                                    <tr key={bill._id}>
-                                        <td className="amb-td left w-16">
-                                            <input
-                                                type="checkbox"
-                                                className="amb-checkbox"
-                                                checked={selectedStudents.includes(bill._id)}
-                                                onChange={() => toggleSelect(bill._id)}
-                                            />
-                                        </td>
-                                        <td className="amb-td left">
-                                            <div className="amb-student-cell">
-                                                <div className="amb-student-avatar">
-                                                    {(bill.studentName || 'ST').substring(0, 2).toUpperCase()}
-                                                </div>
-                                                <div>
-                                                    <p className="amb-student-name">{bill.studentName || 'Unknown'}</p>
-                                                    <p className="amb-student-reg">{bill.regNumber || 'N/A'}</p>
-                                                </div>
+                                filteredList.map((student, idx) => (
+                                    <tr key={student._id}>
+                                        <td className="amb-td-sticky text-center font-bold">{idx + 1}</td>
+                                        <td className="amb-td-sticky text-left">
+                                            <div className="amb-student-info">
+                                                <p className="amb-name">{student.name}</p>
+                                                <p className="amb-reg">{student.regNumber}</p>
                                             </div>
                                         </td>
-                                        <td className="amb-td">
-                                            <span className="amb-period-text">
-                                                {bill.month ? `${MONTHS[bill.month]} ${bill.year}` : 'N/A'}
-                                            </span>
-                                        </td>
-                                        <td className="amb-td">
-                                            <p className="amb-amount-text">₹{bill.amount?.toLocaleString() || '0'}</p>
-                                        </td>
-                                        <td className="amb-td">
-                                            {isPaid(bill.status) ? (
-                                                <span className="amb-status-badge paid">
-                                                    <CheckCircle size={10} />
-                                                    <span>Paid</span>
-                                                </span>
-                                            ) : (
-                                                <span className="amb-status-badge pending">
-                                                    <Clock size={10} />
-                                                    <span>{bill.status || 'Pending'}</span>
-                                                </span>
-                                            )}
-                                        </td>
-                                        <td className="amb-td right">
-                                            <div className="amb-actions-container">
-                                                {!isPaid(bill.status) && (
-                                                    <button
-                                                        onClick={() => handleMarkPaid(bill)}
-                                                        className="amb-btn-mark-paid"
-                                                        title="Mark as Paid"
-                                                    >
-                                                        Mark Paid
-                                                    </button>
-                                                )}
-                                                <button
-                                                    onClick={() => handleSendReminder(bill.studentName)}
-                                                    className="amb-btn-icon"
-                                                    title="Send Reminder"
-                                                >
-                                                    <Send size={16} />
-                                                </button>
-                                                <button className="amb-btn-icon blue">
-                                                    <Mail size={16} />
-                                                </button>
-                                            </div>
-                                        </td>
+                                        <td>{student.dept}</td>
+                                        <td>{student.year}</td>
+                                        <td className="text-xs font-mono">{student.phone}</td>
+                                        {MONTHS_SHORT.map((_, mIdx) => (
+                                            <td key={mIdx}>
+                                                {renderMonthCell(student, mIdx)}
+                                            </td>
+                                        ))}
                                     </tr>
                                 ))
                             )}
                         </tbody>
                     </table>
-                </div>
-
-                {/* Pagination */}
-                <div className="amb-pagination-container">
-                    <p className="amb-pagination-info">
-                        Showing {filteredBills.length} of {total} records
-                    </p>
-                    <div className="amb-pagination-controls">
-                        <button
-                            disabled={currentPage === 1}
-                            onClick={() => setCurrentPage(p => p - 1)}
-                            className="amb-page-btn"
-                        >
-                            <ChevronLeft size={16} />
-                        </button>
-                        <span className="amb-page-current">
-                            {currentPage}
-                        </span>
-                        <button
-                            disabled={currentPage * limit >= total}
-                            onClick={() => setCurrentPage(p => p + 1)}
-                            className="amb-page-btn"
-                        >
-                            <ChevronRight size={16} />
-                        </button>
-                    </div>
                 </div>
             </div>
         </div>

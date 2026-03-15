@@ -1,0 +1,247 @@
+/* MessManagerGrocery.css */
+.mmg-container {
+    animation: ammFadeIn 0.5s ease-out;
+}
+
+.mmg-card {
+    background-color: white;
+    border-radius: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+}
+
+.mmg-card-header {
+    padding: 32px;
+    border-bottom: 1px solid #f1f5f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mmg-card-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0;
+}
+
+.mmg-card-subtitle {
+    font-size: 14px;
+    color: #64748b;
+    margin: 4px 0 0 0;
+}
+
+.mmg-form {
+    padding: 0;
+}
+
+.mmg-table-container {
+    overflow-x: auto;
+    padding: 0 32px;
+}
+
+.mmg-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 12px;
+}
+
+.mmg-table th {
+    text-align: left;
+    padding: 12px 16px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.mmg-row {
+    background-color: #f8fafc;
+    transition: background-color 0.2s;
+}
+
+.mmg-row:hover {
+    background-color: #f1f5f9;
+}
+
+.mmg-row td {
+    padding: 12px 16px;
+    border-top: 1px solid #f1f5f9;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.mmg-row td:first-child {
+    border-left: 1px solid #f1f5f9;
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+}
+
+.mmg-row td:last-child {
+    border-right: 1px solid #f1f5f9;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+/* Inputs */
+.mmg-input-wrapper,
+.mmg-date-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: white;
+    padding: 8px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+}
+
+.mmg-input-icon {
+    color: #94a3b8;
+}
+
+.mmg-input-wrapper input,
+.mmg-date-wrapper input {
+    border: none;
+    outline: none;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e293b;
+    width: 100%;
+}
+
+.mmg-qty-group {
+    display: flex;
+    gap: 4px;
+}
+
+.mmg-qty-input {
+    width: 60px !important;
+    padding: 8px !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    text-align: center;
+}
+
+.mmg-qty-group select {
+    padding: 8px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #64748b;
+}
+
+.mmg-narrow-input {
+    width: 80px;
+    padding: 8px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.mmg-total-cell {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: 800;
+    color: #059669;
+}
+
+.mmg-remove-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    border: none;
+    background-color: #fee2e2;
+    color: #ef4444;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.mmg-remove-btn:hover {
+    background-color: #ef4444;
+    color: white;
+}
+
+/* Footer */
+.mmg-form-footer {
+    padding: 32px;
+    background-color: #f8fafc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #f1f5f9;
+}
+
+.mmg-summary-total {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.mmg-sum-label {
+    font-size: 16px;
+    font-weight: 700;
+    color: #64748b;
+}
+
+.mmg-sum-value {
+    font-size: 24px;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+.mmg-btn-primary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
+    transition: all 0.2s;
+}
+
+.mmg-btn-primary:hover:not(:disabled) {
+    background-color: #1d4ed8;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 20px -5px rgba(37, 99, 235, 0.4);
+}
+
+.mmg-btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.mmg-btn-secondary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background-color: white;
+    color: #2563eb;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.mmg-btn-secondary:hover {
+    background-color: #f8fafc;
+    border-color: #2563eb;
+}

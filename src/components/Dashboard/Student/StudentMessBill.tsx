@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Wallet, Download, Clock, CheckCircle2, AlertCircle, TrendingUp } from 'lucide-react';
+import { Wallet, Clock, CheckCircle2, AlertCircle, TrendingUp } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 import apiClient from '../../../api/apiClient';
 
 interface Bill {
@@ -31,6 +32,27 @@ const StudentMessBill: React.FC = () => {
         }
     };
 
+    const handleUploadProof = async () => {
+        const bill = bills[bills.length - 1];
+        if (!bill) return;
+
+        const receiptUrl = window.prompt('Please enter the receipt URL (Google Drive, Image, etc.):');
+        if (!receiptUrl) return;
+
+        const uploadToast = toast.loading('Submitting payment proof...');
+        try {
+            await apiClient.post('/students/bills/upload-proof', {
+                month: bill.month,
+                year: bill.year,
+                receiptUrl
+            });
+            toast.success('Payment submitted successfully!', { id: uploadToast });
+            fetchBills();
+        } catch (error: any) {
+            toast.error(error.response?.data?.message || 'Failed to submit proof', { id: uploadToast });
+        }
+    };
+
     const getMonthName = (monthNum: number) => {
         const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         return months[monthNum - 1] || "Month";
@@ -53,9 +75,13 @@ const StudentMessBill: React.FC = () => {
                     <h1 className="text-3xl font-display font-bold text-gray-900">Mess Billing</h1>
                     <p className="text-gray-600">Manage your mess expenses and payment history</p>
                 </div>
-                <button className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-primary-600 to-primary-700 text-white rounded-2xl font-bold hover:shadow-lg hover:shadow-primary/30 transition-all duration-300">
+                <button
+                    onClick={handleUploadProof}
+                    disabled={!currentBill || currentBill.paymentStatus === 'PAID'}
+                    className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-primary-600 to-primary-700 text-white rounded-2xl font-bold hover:shadow-lg hover:shadow-primary/30 transition-all duration-300 disabled:opacity-50"
+                >
                     <Wallet size={18} />
-                    <span>Upload Payment Proof</span>
+                    <span>{currentBill?.paymentStatus === 'PAID' ? 'Paid' : 'Upload Payment Proof'}</span>
                 </button>
             </div>
 

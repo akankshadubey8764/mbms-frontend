@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Utensils, Coffee, Sun, Soup, Star, AlertCircle } from 'lucide-react';
+import { Utensils, Coffee, Sun, Soup, AlertCircle } from 'lucide-react';
 import apiClient from '../../../api/apiClient';
 
 interface MenuItem {
@@ -96,13 +96,13 @@ const StudentMessMenu: React.FC = () => {
                         <TodayMeal icon={Coffee} label="Breakfast" value={todayMenu.breakfast} />
                         <TodayMeal icon={Sun} label="Lunch" value={todayMenu.lunch} />
                         <TodayMeal icon={Soup} label="Dinner" value={todayMenu.dinner} />
-                        <div className="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 flex flex-col justify-center items-center text-center">
+                        {/* <div className="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 flex flex-col justify-center items-center text-center">
                             <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-1">Feedback</p>
                             <p className="text-xs font-bold text-white/60">Rate Today's Meal</p>
                             <div className="flex space-x-1 mt-2">
                                 {[1, 2, 3, 4, 5].map(i => <Star key={i} size={12} className="text-primary" />)}
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>

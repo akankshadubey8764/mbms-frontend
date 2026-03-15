@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, MoreHorizontal, X, UserCheck, Download } from 'lucide-react';
+import { Search, MoreHorizontal, X } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import apiClient from '../../../api/apiClient';
 import AddStudentModal from './AddStudentModal';
@@ -24,7 +24,7 @@ interface Student {
     regNumber: string;
     department: string;
     year: string;
-    roomno: string;
+    roomNo: string;
     block: string;
     email: string;
     phnnum?: string;
@@ -115,23 +115,23 @@ const AdminStudentsList: React.FC = () => {
         return matchesSearch;
     });
 
-    const handleExportCSV = async () => {
-        const exportToast = toast.loading('Preparing export...');
-        try {
-            const response = await apiClient.get('/students/export-csv', { responseType: 'blob' });
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement('a');
-            link.href = url;
-            link.setAttribute('download', 'students.csv');
-            document.body.appendChild(link);
-            link.click();
-            link.parentNode?.removeChild(link);
-            toast.success('Export successful', { id: exportToast });
-        } catch (e) {
-            console.error('Error exporting CSV:', e);
-            toast.error('Export failed', { id: exportToast });
-        }
-    };
+    // const handleExportCSV = async () => {
+    //     const exportToast = toast.loading('Preparing export...');
+    //     try {
+    //         const response = await apiClient.get('/students/export-csv', { responseType: 'blob' });
+    //         const url = window.URL.createObjectURL(new Blob([response.data]));
+    //         const link = document.createElement('a');
+    //         link.href = url;
+    //         link.setAttribute('download', 'students.csv');
+    //         document.body.appendChild(link);
+    //         link.click();
+    //         link.parentNode?.removeChild(link);
+    //         toast.success('Export successful', { id: exportToast });
+    //     } catch (e) {
+    //         console.error('Error exporting CSV:', e);
+    //         toast.error('Export failed', { id: exportToast });
+    //     }
+    // };
 
     const handleDelete = async (id: string) => {
         // Since the user wants NO javascript alerts, including confirm(), I should ideally have a custom modal.
@@ -285,7 +285,7 @@ const AdminStudentsList: React.FC = () => {
                                                 {student.createdAt ? new Date(student.createdAt).toLocaleDateString() : 'N/A'}
                                             </td>
                                             <td className="asl-text-center asl-cell-group">
-                                                <p className="asl-cell-title">Room {student.roomno}</p>
+                                                <p className="asl-cell-title">Room {student.roomNo}</p>
                                                 <p className="asl-cell-subtitle">{student.block}</p>
                                             </td>
                                             <td className="asl-text-center">

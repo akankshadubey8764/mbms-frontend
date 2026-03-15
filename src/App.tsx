@@ -25,8 +25,17 @@ import AdminMessBills from './components/Dashboard/Admin/AdminMessBills';
 import AdminInventory from './components/Dashboard/Admin/AdminInventory';
 import AdminQueries from './components/Dashboard/Admin/AdminQueries';
 import AdminSettings from './components/Dashboard/Admin/AdminSettings';
+import AdminMessMenu from './components/Dashboard/Admin/AdminMessMenu';
 
-import MessUsersDashboard from './app/mess-users-dashboard';
+// Mess Manager Dashboard Components
+import MessManagerDashboardLayout from './components/Dashboard/MessManager/MessManagerDashboardLayout';
+import MessManagerOverview from './components/Dashboard/MessManager/MessManagerOverview';
+import MessManagerGrocery from './components/Dashboard/MessManager/MessManagerGrocery';
+import MessManagerStock from './components/Dashboard/MessManager/MessManagerStock';
+import MessManagerMenu from './components/Dashboard/MessManager/MessManagerMenu';
+import MessManagerSettings from './components/Dashboard/MessManager/MessManagerSettings';
+
+
 
 // Protected Route Component
 interface ProtectedRouteProps {
@@ -93,20 +102,28 @@ const App: React.FC = () => {
                         <Route path="approvals" element={<AdminApprovals />} />
                         <Route path="mess-bills" element={<AdminMessBills />} />
                         <Route path="inventory" element={<AdminInventory />} />
-                        <Route path="mess-menu" element={<StudentMessMenu />} /> {/* Reusing the menu component */}
+                        <Route path="mess-menu" element={<AdminMessMenu />} /> {/* Reusing the menu component */}
                         <Route path="queries" element={<AdminQueries />} />
                         <Route path="settings" element={<AdminSettings />} />
                     </Route>
 
-                    {/* Mess Manager Dashboard */}
+                    {/* Mess Manager Dashboard Nested Routes */}
                     <Route
-                        path="/mess-users-dashboard"
+                        path="/mess-dashboard"
                         element={
-                            <ProtectedRoute allowedRoles={['mess']}>
-                                <MessUsersDashboard />
+                            <ProtectedRoute allowedRoles={['mess', 'mess_manager']}>
+                                <MessManagerDashboardLayout />
                             </ProtectedRoute>
                         }
-                    />
+                    >
+                        <Route index element={<MessManagerOverview />} />
+                        <Route path="grocery" element={<MessManagerGrocery />} />
+                        <Route path="issue" element={<MessManagerStock />} />
+                        <Route path="menu" element={<MessManagerMenu />} />
+                        <Route path="settings" element={<MessManagerSettings />} />
+                    </Route>
+
+
 
                     {/* Catch all - redirect to home */}
                     <Route path="*" element={<Navigate to="/" replace />} />

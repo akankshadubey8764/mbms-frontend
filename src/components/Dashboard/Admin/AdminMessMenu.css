@@ -1,0 +1,242 @@
+.amm-container {
+    padding: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+    animation: ammFadeIn 0.5s ease-out;
+}
+
+@keyframes ammFadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.amm-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.amm-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: #111827;
+    margin-bottom: 4px;
+}
+
+.amm-subtitle {
+    color: #6b7280;
+    font-size: 16px;
+}
+
+.amm-header-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.amm-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
+}
+
+.amm-btn-primary {
+    background-color: #3b82f6;
+    color: white;
+}
+
+.amm-btn-primary:hover {
+    background-color: #2563eb;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.amm-btn-secondary {
+    background-color: #f3f4f6;
+    color: #374151;
+}
+
+.amm-btn-secondary:hover {
+    background-color: #e5e7eb;
+}
+
+.amm-btn-save {
+    background-color: #10b981;
+    color: white;
+}
+
+.amm-btn-save:hover {
+    background-color: #059669;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.amm-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: 1px border #f3f4f6;
+    overflow: hidden;
+}
+
+.amm-card-header {
+    padding: 24px;
+    background-color: #f9fafb;
+    border-bottom: 1px solid #f3f4f6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.amm-label-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.amm-label-icon {
+    color: #3b82f6;
+}
+
+.amm-label-text {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.amm-status-badge {
+    padding: 6px 14px;
+    background-color: #eff6ff;
+    color: #3b82f6;
+    border-radius: 9999px;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.amm-week-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.amm-week-input-wrapper label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #4b5563;
+}
+
+.amm-week-input {
+    padding: 8px 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+    width: 250px;
+}
+
+.amm-table-wrapper {
+    overflow-x: auto;
+}
+
+.amm-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.amm-th {
+    padding: 16px 24px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 700;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.amm-th-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.amm-td {
+    padding: 16px 24px;
+    border-bottom: 1px solid #f3f4f6;
+    vertical-align: top;
+}
+
+.amm-day-cell {
+    font-weight: 700;
+    color: #111827;
+    width: 150px;
+    font-size: 16px;
+}
+
+.amm-menu-text {
+    font-size: 14px;
+    color: #4b5563;
+    line-height: 1.6;
+}
+
+.amm-textarea {
+    width: 100%;
+    min-height: 80px;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+    resize: vertical;
+    transition: border-color 0.2s;
+}
+
+.amm-textarea:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.amm-info-note {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #6b7280;
+    font-size: 13px;
+    font-style: italic;
+}
+
+.amm-loader-container {
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+}
+
+.amm-loader {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #f3f4f6;
+    border-top-color: #3b82f6;
+    border-radius: 50%;
+    animation: ammSpin 1s linear infinite;
+}
+
+@keyframes ammSpin {
+    to { transform: rotate(360deg); }
+}
+
+.amm-tr:hover {
+    background-color: #f9fafb;
+}
+
+.amm-tr:last-child .amm-td {
+    border-bottom: none;
+}
