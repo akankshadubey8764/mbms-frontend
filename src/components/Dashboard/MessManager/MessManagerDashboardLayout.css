@@ -33,21 +33,16 @@
     padding-left: 8px;
 }
 
-.mdl-logo-icon {
-    width: 44px;
-    height: 44px;
-    background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+.mdl-logo-img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
 }
 
-.mdl-logo-letter {
-    font-size: 24px;
-    font-weight: 800;
-    color: white;
+.mdl-mobile-logo-img {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
 }
 
 .mdl-logo-title {

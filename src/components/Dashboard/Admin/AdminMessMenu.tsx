@@ -13,6 +13,7 @@ interface MenuItem {
 interface MenuData {
     week: string;
     menuItems: MenuItem[];
+    updatedAt?: string;
 }
 
 const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
@@ -156,7 +157,16 @@ const AdminMessMenu: React.FC = () => {
                             />
                         </div>
                     ) : (
-                        <span className="amm-status-badge">{menu?.week || 'Not Set'}</span>
+                        <span className="amm-status-badge">
+                            Last Updated: {menu?.updatedAt ? new Date(menu.updatedAt).toLocaleString('en-IN', {
+                                day: '2-digit',
+                                month: 'long',
+                                year: 'numeric',
+                                hour: 'numeric',
+                                minute: '2-digit',
+                                hour12: true
+                            }).replace(',', '') : 'Never'}
+                        </span>
                     )}
                 </div>
 

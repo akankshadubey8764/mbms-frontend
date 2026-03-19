@@ -1,33 +1,72 @@
 import React, { useState, useEffect } from 'react';
-import { Package, TrendingUp, ShoppingCart, BarChart3, AlertTriangle } from 'lucide-react';
+import { Package, TrendingUp, ShoppingCart, AlertTriangle, Clock, ChevronRight, Calculator } from 'lucide-react';
 import apiClient from '../../../api/apiClient';
 import './MessManagerOverview.css';
 
 interface StockItem {
-    id: string;
+    _id: string;
     itemName: string;
     currentStock: number;
     minimumStock: number;
     status: 'Good' | 'Low' | 'Critical';
+    unit: string;
+}
+
+interface DashboardStats {
+    totalItems: number;
+    lowStockCount: number;
+    criticalStockCount: number;
+    monthlyExpenditure: number;
 }
 
 const MessManagerOverview: React.FC = () => {
     const [stocks, setStocks] = useState<StockItem[]>([]);
+    const [stats, setStats] = useState<DashboardStats>({
+        totalItems: 0,
+        lowStockCount: 0,
+        criticalStockCount: 0,
+        monthlyExpenditure: 0
+    });
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetchData();
+        fetchDashboardData();
     }, []);
 
-    const fetchData = async () => {
+    const fetchDashboardData = async () => {
+        setLoading(true);
         try {
-            // Reusing admin stock endpoint but it works for manager too
-            const response = await apiClient.get('/admin/stock');
-            if (response.data && response.data.data) {
-                setStocks(response.data.data);
-            }
+            // Fetch Stock Data
+            const stockResponse = await apiClient.get('/admin/stock');
+            const inventoryData = stockResponse.data.data || [];
+            setStocks(inventoryData);
+
+            // Fetch History for Expenditure calculation
+            const groceryResponse = await apiClient.get('/mess/grocery');
+            const now = new Date();
+            const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+
+            let monthlyTotal = 0;
+            (groceryResponse.data || []).forEach((item: any) => {
+                if (item.purchaseHistory) {
+                    item.purchaseHistory.forEach((h: any) => {
+                        const hMonth = new Date(h.date).toISOString().slice(0, 7);
+                        if (hMonth === currentMonth) {
+                            monthlyTotal += h.totalPrice;
+                        }
+                    });
+                }
+            });
+
+            setStats({
+                totalItems: inventoryData.length,
+                lowStockCount: inventoryData.filter((s: any) => s.status === 'Low').length,
+                criticalStockCount: inventoryData.filter((s: any) => s.status === 'Critical').length,
+                monthlyExpenditure: monthlyTotal
+            });
+
         } catch (error) {
-            console.error('Error fetching data:', error);
+            console.error('Error fetching dashboard data:', error);
         } finally {
             setLoading(false);
         }
@@ -46,142 +85,145 @@ const MessManagerOverview: React.FC = () => {
         return (
             <div className="mmo-loader-container">
                 <div className="mmo-loader"></div>
-                <p>Loading overview data...</p>
+                <p className="font-bold text-slate-400 mt-4 uppercase tracking-widest text-xs">Assembling Dashboard...</p>
             </div>
         );
     }
 
     const criticalItems = stocks.filter(s => s.status === 'Critical');
-    const lowItems = stocks.filter(s => s.status === 'Low');
 
     return (
-        <div className="mmo-container">
-            <div className="mmo-welcome">
-                <h1 className="mmo-title">Operations Overview</h1>
-                <p className="mmo-subtitle">Monitor stock levels and manage grocery deliveries</p>
+        <div className="mmo-container animate-fade-in">
+            <div className="mmo-header-alt">
+                <div className="flex items-center gap-4">
+                    <img src="/images/logos/tpgit_logo.png" alt="TPGIT" className="w-16 h-16" />
+                    <div>
+                        <h1 className="mmo-title-alt">Mess Operations</h1>
+                        <p className="mmo-subtitle-alt">TPGIT Hostel Mess Management Portal</p>
+                    </div>
+                </div>
+                <div className="mmo-date-display">
+                    <Clock size={16} />
+                    <span>{new Date().toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}</span>
+                </div>
             </div>
 
-            {/* Stats Cards */}
+            {/* Core Metrics */}
             <div className="mmo-stats-grid">
-                <div className="mmo-stat-card mmo-sky">
-                    <div className="mmo-stat-info">
-                        <span className="mmo-stat-label">Total Items</span>
-                        <span className="mmo-stat-value">{stocks.length}</span>
-                    </div>
-                    <div className="mmo-stat-icon-bg">
-                        <ShoppingCart size={24} />
-                    </div>
-                </div>
-                <div className="mmo-stat-card mmo-emerald">
-                    <div className="mmo-stat-info">
-                        <span className="mmo-stat-label">In Stock</span>
-                        <span className="mmo-stat-value">{stocks.filter(s => s.status === 'Good').length}</span>
-                    </div>
-                    <div className="mmo-stat-icon-bg">
-                        <Package size={24} />
-                    </div>
-                </div>
-                <div className="mmo-stat-card mmo-amber">
-                    <div className="mmo-stat-info">
-                        <span className="mmo-stat-label">Low Stock</span>
-                        <span className="mmo-stat-value">{lowItems.length}</span>
-                    </div>
-                    <div className="mmo-stat-icon-bg">
-                        <TrendingUp size={24} />
-                    </div>
-                </div>
-                <div className="mmo-stat-card mmo-rose">
-                    <div className="mmo-stat-info">
-                        <span className="mmo-stat-label">Critical</span>
-                        <span className="mmo-stat-value">{criticalItems.length}</span>
-                    </div>
-                    <div className="mmo-stat-icon-bg">
-                        <AlertTriangle size={24} />
-                    </div>
-                </div>
+                <MetricCard
+                    label="Stock Expenditure"
+                    value={`₹${(stats.monthlyExpenditure || 0).toLocaleString()}`}
+                    icon={Calculator}
+                    color="sky"
+                    subtitle="Current Month Total"
+                />
+                <MetricCard
+                    label="Critical Items"
+                    value={stats.criticalStockCount}
+                    icon={AlertTriangle}
+                    color="rose"
+                    subtitle="Items needing restock"
+                />
+                <MetricCard
+                    label="Low Stock"
+                    value={stats.lowStockCount}
+                    icon={TrendingUp}
+                    color="amber"
+                    subtitle="Consider restock soon"
+                />
+                <MetricCard
+                    label="Total Inventory"
+                    value={stats.totalItems}
+                    icon={ShoppingCart}
+                    color="emerald"
+                    subtitle="Items currently tracked"
+                />
             </div>
 
-            <div className="mmo-content-grid">
-                {/* Critical Issues */}
-                <div className="mmo-card mmo-critical-panel">
-                    <div className="mmo-card-header">
-                        <h2 className="mmo-card-title">Immediate Attention Required</h2>
-                        <span className="mmo-count-badge">{criticalItems.length}</span>
+            <div className="mmo-main-content">
+                {/* Left Panel: Critical Restock */}
+                <div className="mmo-panel">
+                    <div className="mmo-panel-header">
+                        <div>
+                            <h2 className="mmo-panel-title">Priority Restock</h2>
+                            <p className="mmo-panel-desc">Items below safety threshold</p>
+                        </div>
+                        <span className="mmo-badge-rose">{criticalItems.length} items</span>
                     </div>
-                    <div className="mmo-card-body">
+                    <div className="mmo-panel-body">
                         {criticalItems.length > 0 ? (
-                            <div className="mmo-issue-list">
+                            <div className="mmo-critical-items">
                                 {criticalItems.map(item => (
-                                    <div key={item.id} className="mmo-issue-item">
-                                        <div className="mmo-issue-icon">!</div>
-                                        <div className="mmo-issue-details">
-                                            <p className="mmo-issue-name">{item.itemName}</p>
-                                            <p className="mmo-issue-desc">Only {item.currentStock} units remaining (Threshold: {item.minimumStock})</p>
+                                    <div key={item._id} className="mmo-restock-card">
+                                        <div className="mmo-restock-info">
+                                            <p className="mmo-restock-name">{item.itemName}</p>
+                                            <p className="mmo-restock-qty">Current: <span className="text-rose-600 font-bold">{item.currentStock} {item.unit}</span></p>
+                                        </div>
+                                        <div className="mmo-restock-target">
+                                            <p className="text-[10px] text-slate-400 font-bold uppercase">Threshold</p>
+                                            <p className="font-bold">{item.minimumStock}</p>
                                         </div>
                                     </div>
                                 ))}
                             </div>
                         ) : (
-                            <p className="mmo-empty-text">No critical stock issues at the moment.</p>
+                            <div className="mmo-empty-state">
+                                <Package size={40} className="text-slate-200 mb-2" />
+                                <p>All items above critical level.</p>
+                            </div>
                         )}
                     </div>
                 </div>
 
-                {/* Stock Status Table */}
-                <div className="mmo-card mmo-stock-panel">
-                    <div className="mmo-card-header">
-                        <h2 className="mmo-card-title">Stock Status Overview</h2>
+                {/* Right Panel: Inventory Quick Look */}
+                <div className="mmo-panel flex-grow">
+                    <div className="mmo-panel-header">
+                        <h2 className="mmo-panel-title">Inventory Health</h2>
+                        <button className="mmo-panel-link">View Full Stock <ChevronRight size={14} /></button>
                     </div>
-                    <div className="mmo-card-body no-padding">
-                        <div className="mmo-table-wrapper">
-                            <table className="mmo-table">
-                                <thead>
-                                    <tr>
-                                        <th>Item Name</th>
-                                        <th>Current Stock</th>
-                                        <th>Status</th>
+                    <div className="mmo-panel-body no-padding">
+                        <table className="mmo-table-alt">
+                            <thead>
+                                <tr>
+                                    <th>Item Name</th>
+                                    <th className="center">Current Stock</th>
+                                    <th className="center">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {stocks.slice(0, 8).map(item => (
+                                    <tr key={item._id}>
+                                        <td className="font-bold text-slate-700">{item.itemName}</td>
+                                        <td className="center font-black text-slate-600">{item.currentStock} <span className="text-[10px] lowercase text-slate-400 font-medium">{item.unit}</span></td>
+                                        <td className="center">
+                                            <span className={`mmo-status-pill ${getStatusColor(item.status)}`}>
+                                                {item.status}
+                                            </span>
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    {stocks.slice(0, 8).map(item => (
-                                        <tr key={item.id}>
-                                            <td className="mmo-item-name">{item.itemName}</td>
-                                            <td className="mmo-item-qty">{item.currentStock}</td>
-                                            <td>
-                                                <span className={`mmo-status-badge ${getStatusColor(item.status)}`}>
-                                                    {item.status}
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Analytics Placeholder */}
-            <div className="mmo-card mmo-analytics-panel">
-                <div className="mmo-card-header">
-                    <h2 className="mmo-card-title">Consumption Analytics</h2>
-                    <p className="mmo-card-subtitle text-xs uppercase font-bold tracking-widest text-slate-400">Past 30 Days</p>
-                </div>
-                <div className="mmo-card-body">
-                    <div className="mmo-analytics-grid">
-                        <div className="mmo-chart-placeholder sky">
-                            <BarChart3 size={32} />
-                            <p>Monthly Consumption Trends</p>
-                        </div>
-                        <div className="mmo-chart-placeholder emerald">
-                            <TrendingUp size={32} />
-                            <p>Stock Utilization Patterns</p>
-                        </div>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     );
 };
+
+const MetricCard: React.FC<{ label: string; value: any; icon: any; color: string; subtitle: string }> = ({ label, value, icon: Icon, color, subtitle }) => (
+    <div className={`mmo-metric-card ${color}`}>
+        <div className="mmo-metric-main">
+            <div>
+                <p className="mmo-metric-label">{label}</p>
+                <p className="mmo-metric-value">{value}</p>
+            </div>
+            <div className="mmo-metric-icon">
+                <Icon size={24} />
+            </div>
+        </div>
+        <p className="mmo-metric-subtitle">{subtitle}</p>
+    </div>
+);
 
 export default MessManagerOverview;

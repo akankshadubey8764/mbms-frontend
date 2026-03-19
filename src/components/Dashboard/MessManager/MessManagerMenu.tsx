@@ -17,7 +17,7 @@ interface WeeklyMenu {
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
 const MessManagerMenu: React.FC = () => {
-    const [menu, setMenu] = useState<WeeklyMenu>({});
+    const [menu, setMenu] = useState<WeeklyMenu & { updatedAt?: string }>({});
     const [isEditing, setIsEditing] = useState(false);
     const [loading, setLoading] = useState(true);
     const [editMenu, setEditMenu] = useState<WeeklyMenu>({});
@@ -95,6 +95,18 @@ const MessManagerMenu: React.FC = () => {
         <div className="amm-container">
             <div className="amm-header">
                 <div>
+                    {!isEditing && (
+                        <span className="amm-status-badge">
+                            Last Updated: {menu?.updatedAt ? new Date(menu.updatedAt).toLocaleString('en-IN', {
+                                day: '2-digit',
+                                month: 'long',
+                                year: 'numeric',
+                                hour: 'numeric',
+                                minute: '2-digit',
+                                hour12: true
+                            }).replace(',', '') : 'Never'}
+                        </span>
+                    )}
                 </div>
                 {!isEditing ? (
                     <button onClick={handleEdit} className="amm-btn amm-btn-primary">

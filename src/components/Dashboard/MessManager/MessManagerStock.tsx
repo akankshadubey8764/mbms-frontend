@@ -1,190 +1,271 @@
 import React, { useState, useEffect } from 'react';
-import { Package, MinusCircle, Search, AlertCircle, CheckCircle2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import apiClient from '../../../api/apiClient';
 import './MessManagerStock.css';
 
-interface StockItem {
-    id: string;
+interface MonthlyStockItem {
+    _id: string;
     itemName: string;
-    currentStock: number;
+    seller: string;
+    quantityBought: number;
     unit: string;
+    photo?: string;
+    pricePerKg: number;
+    totalPrice: number;
+    quantityRemaining?: number;
+    comments?: string;
+}
+
+interface MonthlyStock {
+    _id: string;
+    month: number;
+    year: number;
+    items: MonthlyStockItem[];
 }
 
 const MessManagerStock: React.FC = () => {
-    const [stocks, setStocks] = useState<StockItem[]>([]);
+    const [stock, setStock] = useState<MonthlyStock | null>(null);
     const [loading, setLoading] = useState(true);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [issuingId, setIssuingId] = useState<string | null>(null);
-    const [issuedQty, setIssuedQty] = useState<number>(0);
+    const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
+    const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+
+    // For Adding Item
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [newItem, setNewItem] = useState({
+        itemName: '',
+        seller: '',
+        quantityBought: 0,
+        unit: 'kg',
+        pricePerKg: 0,
+        photo: ''
+    });
+
+    // Check if it's the last day of the month
+    const isLastDay = () => {
+        const today = new Date();
+        const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+        return today.getDate() === lastDay;
+    };
+
+    const months = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
 
     useEffect(() => {
-        fetchStocks();
-    }, []);
+        fetchMonthlyStock();
+    }, [selectedMonth, selectedYear]);
 
-    const fetchStocks = async () => {
+    const fetchMonthlyStock = async () => {
         setLoading(true);
         try {
-            const response = await apiClient.get('/admin/stock');
-            if (response.data && response.data.data) {
-                // Ensure the mapping matches what individual components expect
-                const mappedData = response.data.data.map((item: any) => ({
-                    id: item._id || item.id,
-                    itemName: item.itemName,
-                    currentStock: item.currentStock,
-                    unit: item.unit
-                }));
-                setStocks(mappedData);
-            }
+            const response = await apiClient.get('/monthly-stock', {
+                params: { month: selectedMonth, year: selectedYear }
+            });
+            setStock(response.data);
         } catch (error) {
-            console.error('Error fetching stocks:', error);
-            toast.error('Failed to load stock data');
+            console.error('Error fetching monthly stock:', error);
+            toast.error('Failed to load inventory');
         } finally {
             setLoading(false);
         }
     };
 
-    const handleIssueStock = async (e: React.FormEvent) => {
+    const handleAddItem = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!issuingId || issuedQty <= 0) return;
-
-        const item = stocks.find(s => s.id === issuingId);
-        if (item && issuedQty > item.currentStock) {
-            toast.error('Cannot issue more than available stock');
-            return;
-        }
-
-        const loadingToast = toast.loading('Updating issued items...');
+        const loadingToast = toast.loading('Adding item...');
         try {
-            await apiClient.patch('/mess/stock/issue', {
-                itemId: issuingId,
-                issuedQty: issuedQty
+            await apiClient.post('/monthly-stock/item', {
+                month: selectedMonth,
+                year: selectedYear,
+                item: {
+                    ...newItem,
+                    totalPrice: newItem.quantityBought * newItem.pricePerKg
+                }
             });
-            toast.success('Stock updated successfully', { id: loadingToast });
-            setIssuingId(null);
-            setIssuedQty(0);
-            fetchStocks();
+            toast.success('Item added successfully', { id: loadingToast });
+            setIsAddModalOpen(false);
+            setNewItem({ itemName: '', seller: '', quantityBought: 0, unit: 'kg', pricePerKg: 0, photo: '' });
+            fetchMonthlyStock();
         } catch (error) {
-            console.error('Error issuing stock:', error);
-            toast.error('Failed to update stock', { id: loadingToast });
+            toast.error('Failed to add item', { id: loadingToast });
         }
     };
 
-    const filteredStocks = stocks.filter(s =>
-        s.itemName.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const handleUpdateEndMonth = async (itemId: string, qtyRem: number, comms: string) => {
+        const loadingToast = toast.loading('Updating record...');
+        try {
+            await apiClient.patch('/monthly-stock/item', {
+                month: selectedMonth,
+                year: selectedYear,
+                itemId,
+                quantityRemaining: qtyRem,
+                comments: comms
+            });
+            toast.success('Record updated', { id: loadingToast });
+            fetchMonthlyStock();
+        } catch (error) {
+            toast.error('Update failed', { id: loadingToast });
+        }
+    };
+
+    const grandTotal = stock?.items?.reduce((sum, item) => sum + item.totalPrice, 0) || 0;
 
     return (
         <div className="mms-container">
             <div className="mms-card">
                 <div className="mms-card-header">
-                    <div className="mms-header-text">
-                        <h2 className="mms-card-title">Stock Issuance</h2>
-                        <p className="mms-card-subtitle">Record item consumption for mess meals</p>
+                    <div>
+                        <h2 className="mms-card-title">Inventory Management</h2>
+                        <p className="mms-card-subtitle">Manage monthly grocery stock and expenses</p>
                     </div>
-                    <div className="mms-search-box">
-                        <Search size={18} className="mms-search-icon" />
-                        <input
-                            type="text"
-                            placeholder="Find an item..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                        />
+
+                    <div className="mms-header-actions">
+                        <div className="mms-filters">
+                            <select value={selectedMonth} onChange={(e) => setSelectedMonth(Number(e.target.value))}>
+                                {months.map((m, i) => <option key={m} value={i + 1}>{m}</option>)}
+                            </select>
+                            <select value={selectedYear} onChange={(e) => setSelectedYear(Number(e.target.value))}>
+                                {[2024, 2025, 2026].map(y => <option key={y} value={y}>{y}</option>)}
+                            </select>
+                        </div>
+                        <button onClick={() => setIsAddModalOpen(true)} className="mms-add-btn">
+                            + Add Item
+                        </button>
                     </div>
                 </div>
 
-                <div className="mms-content">
-                    {loading ? (
-                        <div className="mms-loader-box">
-                            <div className="mms-spinner"></div>
-                            <p>Fetching inventory...</p>
-                        </div>
-                    ) : (
-                        <div className="mms-stock-grid">
-                            {filteredStocks.map((item) => (
-                                <div key={item.id} className={`mms-stock-card ${issuingId === item.id ? 'active' : ''}`}>
-                                    <div className="mms-stock-info">
-                                        <div className="mms-stock-icon">
-                                            <Package size={24} />
-                                        </div>
-                                        <div className="mms-stock-details">
-                                            <h3 className="mms-item-name">{item.itemName}</h3>
-                                            <p className="mms-item-available">
-                                                Available: <span>{item.currentStock} {item.unit}</span>
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    {issuingId === item.id ? (
-                                        <form onSubmit={handleIssueStock} className="mms-issue-form">
-                                            <div className="mms-issue-input-group">
-                                                <input
-                                                    type="number"
-                                                    autoFocus
-                                                    placeholder="Qty"
-                                                    value={issuedQty || ''}
-                                                    onChange={(e) => setIssuedQty(Number(e.target.value))}
-                                                    max={item.currentStock}
-                                                    required
-                                                />
-                                                <span className="mms-unit-label">{item.unit}</span>
-                                            </div>
-                                            <div className="mms-issue-actions">
-                                                <button type="button" onClick={() => setIssuingId(null)} className="mms-btn-cancel">Cancel</button>
-                                                <button type="submit" className="mms-btn-confirm">Issue</button>
-                                            </div>
-                                        </form>
-                                    ) : (
-                                        <button
-                                            onClick={() => {
-                                                setIssuingId(item.id);
-                                                setIssuedQty(0);
-                                            }}
-                                            className="mms-btn-issue"
-                                            disabled={item.currentStock <= 0}
-                                        >
-                                            <MinusCircle size={18} />
-                                            <span>Issue Items</span>
-                                        </button>
-                                    )}
-
-                                    {item.currentStock <= 3 && item.currentStock > 0 && (
-                                        <div className="mms-low-stock-alert">
-                                            <AlertCircle size={12} />
-                                            <span>Low Stock Hint</span>
-                                        </div>
-                                    )}
-                                    {item.currentStock === 0 && (
-                                        <div className="mms-out-of-stock">
-                                            <AlertCircle size={12} />
-                                            <span>Out of Stock</span>
-                                        </div>
-                                    )}
-                                </div>
-                            ))}
-
-                            {filteredStocks.length === 0 && (
-                                <div className="mms-empty-state">
-                                    <p>No items found matching your search.</p>
-                                </div>
+                <div className="mms-table-wrapper">
+                    <table className="mms-table">
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Item Name</th>
+                                <th>Seller Place</th>
+                                <th>Qty Bought</th>
+                                <th>Photo</th>
+                                <th>Price/Kg</th>
+                                <th>Total Price</th>
+                                <th>Qty Remaining</th>
+                                <th>Comments</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {loading ? (
+                                <tr><td colSpan={10} className="mms-loader-row">Loading...</td></tr>
+                            ) : !stock?.items || stock.items.length === 0 ? (
+                                <tr><td colSpan={10} className="mms-empty-row">No records for this month.</td></tr>
+                            ) : (
+                                stock.items.map((item, idx) => (
+                                    <StockRow
+                                        key={item._id}
+                                        item={item}
+                                        idx={idx}
+                                        isLastDay={isLastDay()}
+                                        onUpdate={handleUpdateEndMonth}
+                                    />
+                                ))
                             )}
-                        </div>
-                    )}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colSpan={6} className="text-right font-black">Grand Total:</td>
+                                <td className="font-black text-emerald-600 text-lg">₹{grandTotal.toLocaleString()}</td>
+                                <td colSpan={3}></td>
+                            </tr>
+                        </tfoot>
+                    </table>
                 </div>
             </div>
 
-            {/* Quick Tips */}
-            <div className="mms-tips">
-                <div className="mms-tip-item">
-                    <CheckCircle2 size={16} className="mms-tip-icon" />
-                    <span>Always update after every meal preparation</span>
+            {isAddModalOpen && (
+                <div className="mms-modal-overlay">
+                    <div className="mms-modal">
+                        <h3>Add Stock Item (1st Day)</h3>
+                        <form onSubmit={handleAddItem}>
+                            <div className="mms-form-grid">
+                                <div className="mms-form-group">
+                                    <label>Item Name</label>
+                                    <input required value={newItem.itemName} onChange={e => setNewItem({ ...newItem, itemName: e.target.value })} />
+                                </div>
+                                <div className="mms-form-group">
+                                    <label>Seller Place</label>
+                                    <input required value={newItem.seller} onChange={e => setNewItem({ ...newItem, seller: e.target.value })} />
+                                </div>
+                                <div className="mms-form-group">
+                                    <label>Quantity Bought</label>
+                                    <input type="number" required value={newItem.quantityBought} onChange={e => setNewItem({ ...newItem, quantityBought: Number(e.target.value) })} />
+                                </div>
+                                <div className="mms-form-group">
+                                    <label>Unit</label>
+                                    <select value={newItem.unit} onChange={e => setNewItem({ ...newItem, unit: e.target.value })}>
+                                        <option value="kg">kg</option>
+                                        <option value="liter">liter</option>
+                                        <option value="packet">packet</option>
+                                    </select>
+                                </div>
+                                <div className="mms-form-group">
+                                    <label>Price per Unit</label>
+                                    <input type="number" required value={newItem.pricePerKg} onChange={e => setNewItem({ ...newItem, pricePerKg: Number(e.target.value) })} />
+                                </div>
+                                <div className="mms-form-group">
+                                    <label>Photo URL</label>
+                                    <input value={newItem.photo} onChange={e => setNewItem({ ...newItem, photo: e.target.value })} />
+                                </div>
+                            </div>
+                            <div className="mms-modal-actions">
+                                <button type="button" onClick={() => setIsAddModalOpen(false)}>Cancel</button>
+                                <button type="submit" className="mms-btn-submit">Add Item</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <div className="mms-tip-item">
-                    <CheckCircle2 size={16} className="mms-tip-icon" />
-                    <span>Ensure quantities are accurate for inventory management</span>
-                </div>
-            </div>
+            )}
         </div>
+    );
+};
+
+const StockRow: React.FC<{ item: MonthlyStockItem; idx: number; isLastDay: boolean; onUpdate: any }> = ({ item, idx, isLastDay, onUpdate }) => {
+    const [qRem, setQRem] = useState(item.quantityRemaining || 0);
+    const [comms, setComms] = useState(item.comments || '');
+
+    return (
+        <tr>
+            <td className="text-center">{idx + 1}</td>
+            <td className="font-bold">{item.itemName}</td>
+            <td>{item.seller}</td>
+            <td className="text-center">{item.quantityBought} {item.unit}</td>
+            <td className="text-center">
+                {item.photo ? <img src={item.photo} alt="item" className="mms-thumb" /> : '--'}
+            </td>
+            <td className="text-center">₹{item.pricePerKg}</td>
+            <td className="text-center font-bold">₹{item.totalPrice}</td>
+            <td className="text-center">
+                <input
+                    type="number"
+                    value={qRem}
+                    onChange={e => setQRem(Number(e.target.value))}
+                    disabled={!isLastDay}
+                    className="mms-inline-input"
+                />
+            </td>
+            <td>
+                <input
+                    type="text"
+                    value={comms}
+                    onChange={e => setComms(e.target.value)}
+                    disabled={!isLastDay}
+                    className="mms-inline-input"
+                    placeholder="Comments..."
+                />
+            </td>
+            <td className="text-center">
+                {isLastDay && (
+                    <button onClick={() => onUpdate(item._id, qRem, comms)} className="mms-save-row-btn">Save</button>
+                )}
+            </td>
+        </tr>
     );
 };
 

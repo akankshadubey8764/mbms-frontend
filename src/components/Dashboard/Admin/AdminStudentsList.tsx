@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Search, MoreHorizontal, X } from 'lucide-react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Search, MoreHorizontal, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import apiClient from '../../../api/apiClient';
 import AddStudentModal from './AddStudentModal';
@@ -49,28 +49,13 @@ const AdminStudentsList: React.FC = () => {
     const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
     const [selectedStudentBills, setSelectedStudentBills] = useState<Student | null>(null);
 
-    // For handling clicks outside the dropdown
+    const isFetchingCounts = useRef(false);
+    const isFetchingStudents = useRef(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        fetchCounts();
-
-        const handleClickOutside = (event: MouseEvent) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-                setActiveDropdown(null);
-            }
-        };
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, []);
-
-    useEffect(() => {
-        if (activeTab || Object.keys(countsData).length === 0) {
-            fetchStudents();
-        }
-    }, [currentPage, activeTab, activeYear]);
-
-    const fetchCounts = async () => {
+    const fetchCounts = useCallback(async () => {
+        if (isFetchingCounts.current) return;
+        isFetchingCounts.current = true;
         try {
             const response = await apiClient.get('/students/counts');
             setCountsData(response.data);
@@ -81,10 +66,14 @@ const AdminStudentsList: React.FC = () => {
         } catch (error) {
             console.error('Error fetching counts:', error);
             toast.error('Failed to load student counts');
+        } finally {
+            isFetchingCounts.current = false;
         }
-    };
+    }, [activeTab]);
 
-    const fetchStudents = async () => {
+    const fetchStudents = useCallback(async () => {
+        if (isFetchingStudents.current) return;
+        isFetchingStudents.current = true;
         setLoading(true);
         try {
             const skip = (currentPage - 1) * limit;
@@ -107,8 +96,29 @@ const AdminStudentsList: React.FC = () => {
             setTotal(0);
         } finally {
             setLoading(false);
+            isFetchingStudents.current = false;
         }
-    };
+    }, [currentPage, limit, activeTab, activeYear]);
+
+    useEffect(() => {
+        fetchCounts();
+
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setActiveDropdown(null);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, [fetchCounts]);
+
+    useEffect(() => {
+        // Only fetch students if counts are loaded (so activeTab is determined)
+        // OR if counts are still loading but we have a tab.
+        if (activeTab) {
+            fetchStudents();
+        }
+    }, [activeTab, activeYear, currentPage, fetchStudents]);
 
     const filteredStudents = students.filter(student => {
         const matchesSearch = `${student.firstName || ''} ${student.lastName || ''} ${student.regNumber || ''}`.toLowerCase().includes(searchTerm.toLowerCase());
@@ -170,47 +180,55 @@ const AdminStudentsList: React.FC = () => {
 
     return (
         <div className="admin-students-list-container">
-            {/* Department Tabs */}
+            {/* Department Tabs & Add Button */}
             {Object.keys(countsData).length > 0 && (
-                <div className="asl-tabs-container">
-                    <div className="asl-tabs-scroll-area">
-                        {Object.keys(countsData).map(dept => (
-                            <button
-                                key={dept}
-                                onClick={() => { setActiveTab(dept); setActiveYear(''); setCurrentPage(1); }}
-                                className={`asl-tab-btn ${activeTab === dept ? 'active' : 'inactive'}`}
-                            >
-                                {dept}
-                            </button>
-                        ))}
-                    </div>
-
-                    {/* Year Cards */}
-                    {activeTab && countsData[activeTab] && (
-                        <div className="asl-cards-grid">
-                            <div
-                                onClick={() => { setActiveYear(''); setCurrentPage(1); }}
-                                className={`asl-stat-card ${!activeYear ? 'active' : 'inactive'}`}
-                            >
-                                <p className="asl-card-count">{countsData[activeTab].count}</p>
-                                <p className="asl-card-label">Total Students</p>
-                            </div>
-                            {countsData[activeTab]['departments-count'].map((yearObj: any, index: number) => {
-                                const yearKey = Object.keys(yearObj)[0];
-                                const yearCount = yearObj[yearKey];
-                                return (
-                                    <div
-                                        key={index}
-                                        onClick={() => { setActiveYear(yearKey); setCurrentPage(1); }}
-                                        className={`asl-stat-card ${activeYear === yearKey ? 'active' : 'inactive'}`}
-                                    >
-                                        <p className="asl-card-count">{yearCount}</p>
-                                        <p className="asl-card-label">{yearKey}</p>
-                                    </div>
-                                )
-                            })}
+                <div className="asl-header-row">
+                    <div className="asl-tabs-wrapper">
+                        <div className="asl-tabs-scroll-area">
+                            {Object.keys(countsData).map(dept => (
+                                <button
+                                    key={dept}
+                                    onClick={() => { setActiveTab(dept); setActiveYear(''); setCurrentPage(1); }}
+                                    className={`asl-tab-btn ${activeTab === dept ? 'active' : 'inactive'}`}
+                                >
+                                    {dept}
+                                </button>
+                            ))}
                         </div>
-                    )}
+                    </div>
+                    <button
+                        onClick={() => setIsAddModalOpen(true)}
+                        className="asl-add-student-btn"
+                    >
+                        + Add Student
+                    </button>
+                </div>
+            )}
+
+            {/* Year Cards - Moved outside for better layout row */}
+            {activeTab && countsData[activeTab] && (
+                <div className="asl-cards-grid">
+                    <div
+                        onClick={() => { setActiveYear(''); setCurrentPage(1); }}
+                        className={`asl-stat-card ${!activeYear ? 'active' : 'inactive'}`}
+                    >
+                        <p className="asl-card-count">{countsData[activeTab].count}</p>
+                        <p className="asl-card-label">Total Students</p>
+                    </div>
+                    {countsData[activeTab]['departments-count'].map((yearObj: any, index: number) => {
+                        const yearKey = Object.keys(yearObj)[0];
+                        const yearCount = yearObj[yearKey];
+                        return (
+                            <div
+                                key={index}
+                                onClick={() => { setActiveYear(yearKey); setCurrentPage(1); }}
+                                className={`asl-stat-card ${activeYear === yearKey ? 'active' : 'inactive'}`}
+                            >
+                                <p className="asl-card-count">{yearCount}</p>
+                                <p className="asl-card-label">{yearKey}</p>
+                            </div>
+                        )
+                    })}
                 </div>
             )}
 
@@ -342,7 +360,7 @@ const AdminStudentsList: React.FC = () => {
                             onClick={() => setCurrentPage(prev => prev - 1)}
                             className="asl-page-btn"
                         >
-                            Previous
+                            <ChevronLeft size={18} />
                         </button>
                         <span className="asl-page-current">
                             Page {currentPage}
@@ -352,7 +370,7 @@ const AdminStudentsList: React.FC = () => {
                             onClick={() => setCurrentPage(prev => prev + 1)}
                             className="asl-page-btn"
                         >
-                            Next
+                            <ChevronRight size={18} />
                         </button>
                     </div>
                 </div>

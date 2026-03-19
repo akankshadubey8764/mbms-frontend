@@ -54,12 +54,10 @@ const MessManagerDashboardLayout: React.FC = () => {
             <div className="mdl-sidebar">
                 <div className="mdl-sidebar-inner">
                     <div className="mdl-sidebar-logo-container">
-                        <div className="mdl-logo-icon">
-                            <span className="mdl-logo-letter">M</span>
-                        </div>
+                        <img src="/images/logos/tpgit_logo.png" alt="TPGIT" className="mdl-logo-img" />
                         <div className="mdl-logo-text-wrapper">
-                            <h2 className="mdl-logo-title">MANAGER</h2>
-                            <p className="mdl-logo-subtitle">Mess Portal</p>
+                            <h2 className="mdl-logo-title">TPGIT</h2>
+                            <p className="mdl-logo-subtitle">Mess Manager</p>
                         </div>
                     </div>
 
@@ -120,10 +118,8 @@ const MessManagerDashboardLayout: React.FC = () => {
                 {/* Mobile Header */}
                 <header className="mdl-mobile-header">
                     <div className="mdl-mobile-brand">
-                        <div className="mdl-mobile-logo">
-                            <span>M</span>
-                        </div>
-                        <h2 className="mdl-mobile-title">Mess Manager</h2>
+                        <img src="/images/logos/tpgit_logo.png" alt="TPGIT" className="mdl-mobile-logo-img" />
+                        <h2 className="mdl-mobile-title">TPGIT Manager</h2>
                     </div>
                     <button
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -142,10 +138,8 @@ const MessManagerDashboardLayout: React.FC = () => {
                     <div className="mdl-mobile-sidebar">
                         <div className="mdl-mobile-sidebar-inner">
                             <div className="mdl-mobile-sidebar-brand">
-                                <div className="mdl-mobile-logo">
-                                    <span>M</span>
-                                </div>
-                                <h2 className="mdl-mobile-title">MANAGER</h2>
+                                <img src="/images/logos/tpgit_logo.png" alt="TPGIT" className="mdl-mobile-logo-img" />
+                                <h2 className="mdl-mobile-title">TPGIT MESS</h2>
                             </div>
 
                             <nav className="mdl-mobile-sidebar-nav">

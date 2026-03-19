@@ -1,12 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
-    CheckCircle,
-    XCircle,
-    Upload,
-    Search,
-    Calendar,
     AlertCircle,
-    Download
+    Calendar,
+    CheckCircle,
+    ChevronLeft,
+    ChevronRight,
+    Download,
+    Search,
+    Upload,
+    XCircle
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import apiClient from '../../../api/apiClient';
@@ -39,38 +41,53 @@ const AdminMessBills: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
     const [uploadAllowed, setUploadAllowed] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [limit, setLimit] = useState(25);
+    const [total, setTotal] = useState(0);
     const fileInputRef = useRef<HTMLInputElement>(null);
-
     const years = Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - i);
+    const isFetching = useRef(false);
 
-    useEffect(() => {
-        fetchStatusList();
-        checkUploadWindow();
-    }, [selectedYear]);
-
-    const fetchStatusList = async () => {
-        setLoading(true);
-        try {
-            const response = await apiClient.get('/admin/mess-bills/status-list', {
-                params: { year: selectedYear }
-            });
-            setStatusList(response.data);
-        } catch (error) {
-            console.error('Error fetching mess status:', error);
-            toast.error('Failed to fetch mess status list');
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const checkUploadWindow = async () => {
+    const checkUploadWindow = useCallback(async () => {
         try {
             const response = await apiClient.get('/admin/mess-bills/upload-window');
             setUploadAllowed(response.data.allowed);
         } catch (error) {
             console.error('Error checking upload window:', error);
         }
-    };
+    }, []);
+
+    const fetchStatusList = useCallback(async () => {
+        if (isFetching.current) return;
+        isFetching.current = true;
+        setLoading(true);
+        try {
+            const skip = (currentPage - 1) * limit;
+            const response = await apiClient.get('/admin/mess-bills/status-list', {
+                params: { year: selectedYear, skip, limit }
+            });
+            if (response.data && response.data.data) {
+                setStatusList(response.data.data);
+                setTotal(response.data.total);
+            } else {
+                setStatusList(response.data || []);
+                setTotal((response.data || []).length);
+            }
+        } catch (error) {
+            console.error('Error fetching mess status:', error);
+            toast.error('Failed to fetch mess status list');
+            setStatusList([]);
+            setTotal(0);
+        } finally {
+            setLoading(false);
+            isFetching.current = false;
+        }
+    }, [selectedYear, currentPage, limit]);
+
+    useEffect(() => {
+        fetchStatusList();
+        checkUploadWindow();
+    }, [fetchStatusList, checkUploadWindow]);
 
     const handleBulkUploadClick = () => {
         if (!uploadAllowed) {
@@ -112,7 +129,6 @@ const AdminMessBills: React.FC = () => {
             }
         };
         reader.readAsText(file);
-        // Reset input
         e.target.value = '';
     };
 
@@ -148,12 +164,10 @@ const AdminMessBills: React.FC = () => {
             );
         }
 
-        // Current or future month - neutral
         if (isCurrentOrFutureMonth(monthIndex)) {
             return <div className="text-gray-300 mx-auto text-xs">-</div>;
         }
 
-        // Past month with no record
         return (
             <div className="amb-cell-vertical op-30">
                 <span className="amb-cell-amount">N/A</span>
@@ -184,10 +198,6 @@ const AdminMessBills: React.FC = () => {
     return (
         <div className="amb-container">
             <div className="amb-header">
-                {/* <div>
-                    <h1 className="amb-title">Mess Bill Management</h1>
-                    <p className="amb-subtitle">Track and calculate student mess bills for {selectedYear}</p>
-                </div> */}
                 <div className="amb-header-actions">
                     <div className="amb-year-select-wrapper">
                         <Calendar size={16} className="amb-calendar-icon" />
@@ -264,7 +274,7 @@ const AdminMessBills: React.FC = () => {
                             ) : (
                                 filteredList.map((student, idx) => (
                                     <tr key={student._id}>
-                                        <td className="amb-td-sticky text-center font-bold">{idx + 1}</td>
+                                        <td className="amb-td-sticky text-center font-bold">{(currentPage - 1) * limit + idx + 1}</td>
                                         <td className="amb-td-sticky text-left">
                                             <div className="amb-student-info">
                                                 <p className="amb-name">{student.name}</p>
@@ -284,6 +294,29 @@ const AdminMessBills: React.FC = () => {
                             )}
                         </tbody>
                     </table>
+                </div>
+
+                <div className="amb-pagination">
+                    <div className="amb-pagination-left">
+                        <span className="amb-pagination-info">Showing {filteredList.length} of {total} records</span>
+                        <div className="amb-limit-select">
+                            <span>Rows per page:</span>
+                            <select value={limit} onChange={(e) => { setLimit(Number(e.target.value)); setCurrentPage(1); }}>
+                                {[25, 50, 100, 200].map(val => (
+                                    <option key={val} value={val}>{val}</option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+                    <div className="amb-pagination-right">
+                        <button disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)} className="amb-page-btn">
+                            <ChevronLeft size={18} />
+                        </button>
+                        <span className="amb-page-indicator">Page {currentPage}</span>
+                        <button disabled={currentPage * limit >= total} onClick={() => setCurrentPage(p => p + 1)} className="amb-page-btn">
+                            <ChevronRight size={18} />
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

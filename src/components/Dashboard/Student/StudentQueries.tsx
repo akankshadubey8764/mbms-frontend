@@ -1,12 +1,40 @@
-import React, { useState } from 'react';
-import { MessageSquare, Send, History, AlertCircle } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { MessageSquare, Send, History, AlertCircle, Clock, CheckCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import apiClient from '../../../api/apiClient';
 
+interface Query {
+    _id: string;
+    queryArea: string;
+    queryText: string;
+    status: string;
+    createdAt: string;
+    response?: string;
+}
+
 const StudentQueries: React.FC = () => {
     const [queryText, setQueryText] = useState('');
-    const [queryArea, setQueryArea] = useState('Hostel Facilities');
+    const [queryArea, setQueryArea] = useState('Food');
     const [submitting, setSubmitting] = useState(false);
+    const [queries, setQueries] = useState<Query[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [expandedId, setExpandedId] = useState<string | null>(null);
+
+    useEffect(() => {
+        fetchMyQueries();
+    }, []);
+
+    const fetchMyQueries = async () => {
+        setLoading(true);
+        try {
+            const response = await apiClient.get('/queries/my_queries');
+            setQueries(response.data || []);
+        } catch (error) {
+            console.error('Error fetching queries:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -17,8 +45,9 @@ const StudentQueries: React.FC = () => {
                 queryArea,
                 queryText
             });
-            toast.success('Your query has been submitted successfully to the administration.', { id: queryToast });
+            toast.success('Your query has been submitted successfully.', { id: queryToast });
             setQueryText('');
+            fetchMyQueries();
         } catch (error: any) {
             toast.error(error.response?.data?.message || 'Failed to submit query', { id: queryToast });
         } finally {
@@ -26,95 +55,156 @@ const StudentQueries: React.FC = () => {
         }
     };
 
+    const toggleExpand = (id: string) => {
+        setExpandedId(expandedId === id ? null : id);
+    };
+
+    const reopenQuery = async (id: string) => {
+        const reopenToast = toast.loading('Reopening your query...');
+        try {
+            await apiClient.put(`/queries/${id}/reopen`);
+            toast.success('Query reopened. We will look into it again.', { id: reopenToast });
+            fetchMyQueries();
+        } catch (error: any) {
+            toast.error(error.response?.data?.message || 'Failed to reopen query', { id: reopenToast });
+        }
+    };
+
     return (
-        <div className="max-w-5xl mx-auto animate-fade-in">
-            <div className="mb-8">
-                <h1 className="text-3xl font-display font-bold text-gray-900">Support & Queries</h1>
-                <p className="text-gray-600">Raise issues or ask questions regarding hostel facilities or the mess</p>
+        <div className="max-w-6xl mx-auto animate-fade-in p-4 lg:p-0">
+            <div className="mb-10">
+                <div className="flex items-center gap-4 mb-2">
+                    <img src="/images/logos/tpgit_logo.png" alt="TPGIT" className="w-12 h-12" />
+                    <h1 className="text-3xl font-display font-black text-gray-900 tracking-tight">Support Center</h1>
+                </div>
+                <p className="text-gray-500 font-medium">TPGIT Hostel Mess - Inquiry and Feedback Portal</p>
             </div>
 
-            <div className="grid lg:grid-cols-5 gap-10">
+            <div className="grid lg:grid-cols-12 gap-10">
                 {/* New Query Form */}
-                <div className="lg:col-span-3 space-y-6">
-                    <div className="bg-white rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 p-8">
-                        <div className="flex items-center space-x-3 mb-6">
-                            <div className="p-2 bg-primary/10 rounded-lg text-primary">
-                                <MessageSquare size={20} />
+                <div className="lg:col-span-4 space-y-6">
+                    <div className="bg-white rounded-[2.5rem] shadow-2xl shadow-gray-200/50 border border-gray-100 p-8 sticky top-8">
+                        <div className="flex items-center space-x-3 mb-8">
+                            <div className="p-3 bg-indigo-50 rounded-2xl text-indigo-600">
+                                <MessageSquare size={24} />
                             </div>
-                            <h2 className="text-xl font-display font-bold text-gray-900">Ask a Question</h2>
+                            <h2 className="text-xl font-display font-black text-gray-900">New Inquiry</h2>
                         </div>
-                        <form onSubmit={handleSubmit} className="space-y-4">
+                        <form onSubmit={handleSubmit} className="space-y-6">
                             <div className="space-y-2">
-                                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Category</label>
+                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] ml-2">Area of Concern</label>
                                 <select
-                                    className="w-full rounded-2xl border-gray-100 bg-gray-50 focus:bg-white focus:ring-primary focus:border-primary transition-all duration-300 p-4 font-semibold text-gray-700"
+                                    className="w-full rounded-2xl border-gray-200 bg-gray-50 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all duration-300 p-4 font-bold text-gray-700 appearance-none"
                                     value={queryArea}
                                     onChange={(e) => setQueryArea(e.target.value)}
                                 >
-                                    <option value="Hostel Facilities">Hostel Facilities</option>
-                                    <option value="Mess Quality">Mess Quality</option>
-                                    <option value="Maintenance">Maintenance</option>
-                                    <option value="Billing Issue">Billing Issue</option>
-                                    <option value="Other">Other</option>
+                                    <option value="Food">Food Quality & Mess</option>
+                                    <option value="Cleanliness">Cleanliness & Hygiene</option>
+                                    <option value="Security">Safety & Security</option>
+                                    <option value="Others">Others</option>
                                 </select>
                             </div>
                             <div className="space-y-2">
-                                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Your Message</label>
+                                <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] ml-2">Detailed Message</label>
                                 <textarea
                                     value={queryText}
                                     onChange={(e) => setQueryText(e.target.value)}
-                                    placeholder="Type your query in detail here..."
-                                    rows={8}
-                                    className="w-full rounded-2xl border-gray-100 bg-gray-50 focus:bg-white focus:ring-primary focus:border-primary transition-all duration-300 p-5 placeholder:text-gray-300 font-medium"
+                                    placeholder="Describe your issue or suggestion..."
+                                    rows={6}
+                                    className="w-full rounded-2xl border-gray-200 bg-gray-50 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all duration-300 p-5 placeholder:text-gray-300 font-bold"
                                     required
                                 ></textarea>
                             </div>
                             <button
                                 type="submit"
                                 disabled={submitting}
-                                className="w-full py-4 bg-gray-900 text-white rounded-2xl font-bold flex items-center justify-center space-x-2 hover:bg-primary-600 transition-all duration-300 shadow-xl shadow-gray-900/10 disabled:opacity-50"
+                                className="w-full py-5 bg-gray-900 text-white rounded-2xl font-black flex items-center justify-center space-x-3 hover:bg-indigo-600 transition-all duration-500 shadow-xl shadow-indigo-200 group disabled:opacity-50"
                             >
-                                <Send size={18} />
-                                <span>{submitting ? 'Sending...' : 'Submit Query'}</span>
+                                <Send size={20} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                                <span>{submitting ? 'SENDING...' : 'SEND MESSAGE'}</span>
                             </button>
                         </form>
                     </div>
                 </div>
 
-                {/* Info / Notice */}
-                <div className="lg:col-span-2 space-y-6">
-                    <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl p-8 text-white shadow-xl relative overflow-hidden">
-                        <div className="relative z-10">
-                            <div className="flex items-center space-x-3 mb-6">
-                                <History size={24} className="text-primary" />
-                                <h3 className="text-xl font-display font-bold">Query Guidelines</h3>
+                {/* Query History */}
+                <div className="lg:col-span-8 space-y-8">
+                    <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-3">
+                            <div className="p-2 bg-emerald-50 rounded-xl text-emerald-600">
+                                <History size={20} />
                             </div>
-                            <ul className="space-y-4 text-gray-400 text-sm font-medium">
-                                <li className="flex items-start space-x-3">
-                                    <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary shrink-0"></div>
-                                    <span>Provide specific details (Block, Room No, exact issue) for faster resolution.</span>
-                                </li>
-                                <li className="flex items-start space-x-3">
-                                    <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary shrink-0"></div>
-                                    <span>Regular queries are answered within 24-48 working hours.</span>
-                                </li>
-                                <li className="flex items-start space-x-3">
-                                    <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary shrink-0"></div>
-                                    <span>Emergency maintenance issues should be reported to the resident warden directly.</span>
-                                </li>
-                            </ul>
+                            <h3 className="text-xl font-display font-black text-gray-900">Recent Applications</h3>
                         </div>
+                        <span className="text-xs font-black text-gray-400 uppercase tracking-widest">{queries.length} Queries</span>
                     </div>
 
-                    <div className="p-6 bg-amber-50 rounded-2xl border border-amber-100 flex items-start space-x-4">
-                        <AlertCircle className="text-amber-500 shrink-0 mt-0.5" size={20} />
-                        <div>
-                            <p className="text-[10px] font-black uppercase tracking-widest text-amber-600 mb-1">Notice</p>
-                            <p className="text-xs text-amber-800 leading-relaxed font-semibold">
-                                Viewable query history is currently under maintenance. You will be notified via email for all resolutions.
-                            </p>
+                    {loading ? (
+                        <div className="space-y-4">
+                            {[1, 2, 3].map(i => <div key={i} className="h-24 bg-gray-100 rounded-3xl animate-pulse"></div>)}
                         </div>
-                    </div>
+                    ) : queries.length === 0 ? (
+                        <div className="bg-gray-50 rounded-[2.5rem] border-2 border-dashed border-gray-200 p-20 text-center">
+                            <AlertCircle size={48} className="text-gray-300 mx-auto mb-4" />
+                            <p className="text-gray-500 font-bold">No inquiry history found.</p>
+                        </div>
+                    ) : (
+                        <div className="space-y-4">
+                            {queries.map((q) => (
+                                <div
+                                    key={q._id}
+                                    className={`bg-white rounded-[2rem] border transition-all duration-300 overflow-hidden ${expandedId === q._id ? 'border-indigo-500 shadow-xl shadow-indigo-100' : 'border-gray-100 hover:border-gray-200'}`}
+                                >
+                                    <div
+                                        className="p-6 cursor-pointer flex items-center justify-between"
+                                        onClick={() => toggleExpand(q._id)}
+                                    >
+                                        <div className="flex items-center gap-4">
+                                            <div className={`p-3 rounded-2xl ${q.status === 'RESOLVED' ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'}`}>
+                                                {q.status === 'RESOLVED' ? <CheckCircle size={20} /> : <Clock size={20} />}
+                                            </div>
+                                            <div>
+                                                <div className="flex items-center gap-2">
+                                                    <h4 className="font-black text-gray-900">{q.queryArea}</h4>
+                                                    <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded-full ${['RESOLVED', 'Resolved'].includes(q.status) ? 'bg-emerald-100 text-emerald-700' : q.status === 'Reopened' ? 'bg-indigo-100 text-indigo-700' : 'bg-amber-100 text-amber-700'}`}>
+                                                        {q.status}
+                                                    </span>
+                                                </div>
+                                                <p className="text-xs text-gray-400 font-bold mt-1">
+                                                    Submitted on {new Date(q.createdAt).toLocaleDateString(undefined, { dateStyle: 'long' })}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        {expandedId === q._id ? <ChevronUp size={20} className="text-gray-300" /> : <ChevronDown size={20} className="text-gray-300" />}
+                                    </div>
+
+                                    {expandedId === q._id && (
+                                        <div className="px-6 pb-6 pt-2 border-t border-gray-50 animate-fade-in">
+                                            <div className="bg-gray-50 rounded-2xl p-4 mb-4">
+                                                <p className="text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Message</p>
+                                                <p className="text-gray-700 font-medium whitespace-pre-wrap">{q.queryText}</p>
+                                            </div>
+
+                                            {['RESOLVED', 'Resolved'].includes(q.status) && (
+                                                <div className="flex flex-col gap-3">
+                                                    <div className="bg-emerald-50 rounded-2xl p-4 border border-emerald-100">
+                                                        <p className="text-xs font-black text-emerald-600 uppercase tracking-widest mb-2">Resolution Status</p>
+                                                        <p className="text-emerald-900 font-bold">This inquiry has been addressed by the administration.</p>
+                                                    </div>
+                                                    <button
+                                                        onClick={() => reopenQuery(q._id)}
+                                                        className="w-full py-3 bg-indigo-50 text-indigo-700 rounded-xl font-bold hover:bg-indigo-100 transition-colors"
+                                                    >
+                                                        Need more help? Reopen this ticket
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

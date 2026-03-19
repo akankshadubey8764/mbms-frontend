@@ -33,12 +33,10 @@ const StudentDashboardLayout: React.FC = () => {
             <div className="hidden md:flex flex-col w-72 bg-gray-900 text-white fixed h-full shadow-2xl z-20">
                 <div className="p-8">
                     <div className="flex items-center space-x-3 mb-10">
-                        <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
-                            <span className="text-white font-bold text-xl uppercase font-display">T</span>
-                        </div>
+                        <img src="/images/logos/tpgit_logo.png" alt="TPGIT" className="w-12 h-12 object-contain" />
                         <div>
-                            <h2 className="text-xl font-display font-bold tracking-tight">STUDENT</h2>
-                            <p className="text-[10px] text-gray-400 uppercase tracking-[2px]">Portal v1.0</p>
+                            <h2 className="text-xl font-display font-bold tracking-tight">TPGIT HOSTEL</h2>
+                            <p className="text-[10px] text-gray-400 uppercase tracking-[2px]">Student Portal</p>
                         </div>
                     </div>
 
@@ -77,10 +75,8 @@ const StudentDashboardLayout: React.FC = () => {
             {/* Mobile Header */}
             <div className="md:hidden fixed top-0 w-full bg-gray-900 px-4 py-4 flex items-center justify-between z-30 shadow-lg">
                 <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                        <span className="text-white font-bold text-lg uppercase font-display">T</span>
-                    </div>
-                    <h2 className="text-white font-display font-bold text-sm tracking-wider uppercase">Student Portal</h2>
+                    <img src="/images/logos/tpgit_logo.png" alt="TPGIT" className="w-8 h-8 object-contain" />
+                    <h2 className="text-white font-display font-bold text-sm tracking-wider uppercase">TPGIT Student</h2>
                 </div>
                 <button
                     onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}

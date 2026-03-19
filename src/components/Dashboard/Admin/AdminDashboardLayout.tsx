@@ -51,12 +51,10 @@ const AdminDashboardLayout: React.FC = () => {
             <div className="adl-sidebar">
                 <div className="adl-sidebar-inner">
                     <div className="adl-sidebar-logo-container">
-                        <div className="adl-logo-icon">
-                            <span className="adl-logo-letter">A</span>
-                        </div>
+                        <img src="/images/logos/tpgit_logo.png" alt="TPGIT" className="adl-logo-img" />
                         <div className="adl-logo-text-wrapper">
-                            <h2 className="adl-logo-title">ADMIN</h2>
-                            <p className="adl-logo-subtitle">Control Panel</p>
+                            <h2 className="adl-logo-title">TPGIT</h2>
+                            <p className="adl-logo-subtitle">Admin Controller</p>
                         </div>
                     </div>
 
@@ -124,10 +122,8 @@ const AdminDashboardLayout: React.FC = () => {
                 {/* Mobile Header */}
                 <header className="adl-mobile-header">
                     <div className="adl-mobile-brand">
-                        <div className="adl-mobile-logo">
-                            <span>A</span>
-                        </div>
-                        <h2 className="adl-mobile-title">Admin Panel</h2>
+                        <img src="/images/logos/tpgit_logo.png" alt="TPGIT" className="adl-mobile-logo-img" />
+                        <h2 className="adl-mobile-title">TPGIT Admin</h2>
                     </div>
                     <button
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -146,10 +142,8 @@ const AdminDashboardLayout: React.FC = () => {
                     <div className="adl-mobile-sidebar">
                         <div className="adl-mobile-sidebar-inner">
                             <div className="adl-mobile-sidebar-brand">
-                                <div className="adl-mobile-logo">
-                                    <span>A</span>
-                                </div>
-                                <h2 className="adl-mobile-title">ADMIN</h2>
+                                <img src="/images/logos/tpgit_logo.png" alt="TPGIT" className="adl-mobile-logo-img" />
+                                <h2 className="adl-mobile-title">TPGIT HOSTEL</h2>
                             </div>
 
                             <nav className="adl-mobile-sidebar-nav">
@@ -182,7 +176,7 @@ const AdminDashboardLayout: React.FC = () => {
                 </div>
 
                 {/* Content Area */}
-                <main className="adl-content-area" style={{ padding: '16px' }}>
+                <main className="adl-content-area" style={{ padding: '0px 16px' }}>
                     <div className="adl-content-inner">
                         <Outlet />
                     </div>

@@ -17,7 +17,7 @@
     position: fixed;
     height: 100%;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-    z-index: 20;
+    z-index: 999;
     transition: all 0.3s;
     overflow: hidden;
 }
@@ -51,24 +51,17 @@
     white-space: nowrap;
 }
 
-.adl-logo-icon {
-    min-width: 40px;
-    width: 40px;
-    height: 40px;
-    background-color: #009688;
-    /* primary */
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 10px 15px -3px rgba(0, 150, 136, 0.2);
+.adl-logo-img {
+    min-width: 48px;
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
 }
 
-.adl-logo-letter {
-    color: white;
-    font-weight: 900;
-    font-size: 1.25rem;
-    font-family: 'Inter', sans-serif;
+.adl-mobile-logo-img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
 }
 
 .adl-logo-text-wrapper {
@@ -317,7 +310,7 @@
     border-bottom: 1px solid #f3f4f6;
     position: sticky;
     top: 0;
-    z-index: 10;
+    z-index: 990;
     width: 100%;
     box-sizing: border-box;
 }

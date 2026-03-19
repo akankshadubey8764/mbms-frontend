@@ -1,296 +1,336 @@
 /* MessManagerOverview.css */
+
 .mmo-container {
-    animation: ammFadeIn 0.5s ease-out;
+    animation: mmoFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
 }
 
-.mmo-welcome {
-    margin-bottom: 32px;
+@keyframes mmoFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.mmo-title {
-    font-size: 32px;
-    font-weight: 800;
-    color: #0f172a;
-    margin: 0;
-    letter-spacing: -0.025em;
-}
-
-.mmo-subtitle {
-    color: #64748b;
-    font-size: 16px;
-    margin-top: 4px;
-}
-
-/* Stats Cards */
-.mmo-stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 24px;
-    margin-bottom: 32px;
-}
-
-.mmo-stat-card {
-    background-color: white;
-    padding: 24px;
-    border-radius: 20px;
+.mmo-header-alt {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    padding: 32px;
+    background: white;
+    border-radius: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+    border: 1px solid #f1f5f9;
+}
+
+.mmo-title-alt {
+    font-size: 2rem;
+    font-weight: 900;
+    color: #0f172a;
+    letter-spacing: -0.05em;
+    margin: 0;
+}
+
+.mmo-subtitle-alt {
+    color: #64748b;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-top: 4px;
+}
+
+.mmo-date-display {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    background: #f8fafc;
+    border-radius: 1rem;
+    color: #475569;
+    font-weight: 800;
+    font-size: 0.85rem;
     border: 1px solid #e2e8f0;
-    transition: transform 0.2s;
 }
 
-.mmo-stat-card:hover {
-    transform: translateY(-4px);
+/* Metric Cards */
+.mmo-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 20px;
 }
 
-.mmo-stat-info {
+@media (min-width: 640px) {
+    .mmo-stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1024px) {
+    .mmo-stats-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+.mmo-metric-card {
+    background: white;
+    padding: 24px;
+    border-radius: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+    border: 1px solid #f1f5f9;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.3s ease;
 }
 
-.mmo-stat-label {
-    font-size: 13px;
+.mmo-metric-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+}
+
+.mmo-metric-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+}
+
+.mmo-metric-label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.mmo-metric-value {
+    font-size: 1.75rem;
+    font-weight: 900;
+    color: #1e293b;
+    margin-top: 4px;
+    letter-spacing: -0.02em;
+}
+
+.mmo-metric-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mmo-metric-subtitle {
+    font-size: 0.7rem;
     font-weight: 700;
     color: #64748b;
+}
+
+/* Colors for metrics */
+.sky .mmo-metric-icon {
+    background: #f0f9ff;
+    color: #0ea5e9;
+}
+
+.rose .mmo-metric-icon {
+    background: #fef2f2;
+    color: #ef4444;
+}
+
+.amber .mmo-metric-icon {
+    background: #fffbeb;
+    color: #f59e0b;
+}
+
+.emerald .mmo-metric-icon {
+    background: #ecfdf5;
+    color: #10b981;
+}
+
+.sky:hover {
+    border-bottom: 4px solid #0ea5e9;
+}
+
+.rose:hover {
+    border-bottom: 4px solid #ef4444;
+}
+
+.amber:hover {
+    border-bottom: 4px solid #f59e0b;
+}
+
+.emerald:hover {
+    border-bottom: 4px solid #10b981;
+}
+
+/* Main Content Grid */
+.mmo-main-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+}
+
+@media (min-width: 1024px) {
+    .mmo-main-content {
+        grid-template-columns: 350px 1fr;
+    }
+}
+
+.mmo-panel {
+    background: white;
+    border-radius: 2.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+    border: 1px solid #f1f5f9;
+    overflow: hidden;
+}
+
+.mmo-panel-header {
+    padding: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.mmo-panel-title {
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: #0f172a;
+    letter-spacing: -0.02em;
+    margin: 0;
+}
+
+.mmo-panel-desc {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    font-weight: 600;
+    margin-top: 4px;
+}
+
+.mmo-badge-rose {
+    padding: 6px 16px;
+    background: #fef2f2;
+    color: #ef4444;
+    border-radius: 2rem;
+    font-size: 0.7rem;
+    font-weight: 900;
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
 
-.mmo-stat-value {
-    font-size: 32px;
-    font-weight: 800;
-    color: #0f172a;
-    letter-spacing: -0.025em;
+.mmo-panel-body {
+    padding: 32px;
 }
 
-.mmo-stat-icon-bg {
-    width: 56px;
-    height: 56px;
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mmo-sky .mmo-stat-icon-bg {
-    background-color: #f0f9ff;
-    color: #0ea5e9;
-}
-
-.mmo-emerald .mmo-stat-icon-bg {
-    background-color: #ecfdf5;
-    color: #10b981;
-}
-
-.mmo-amber .mmo-stat-icon-bg {
-    background-color: #fffbeb;
-    color: #f59e0b;
-}
-
-.mmo-rose .mmo-stat-icon-bg {
-    background-color: #fff1f2;
-    color: #f43f5e;
-}
-
-/* Grid Sections */
-.mmo-content-grid {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 32px;
-    margin-bottom: 32px;
-}
-
-@media (max-width: 1024px) {
-    .mmo-content-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-.mmo-card {
-    background-color: white;
-    border-radius: 24px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-    border: 1px solid #e2e8f0;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-}
-
-.mmo-card-header {
-    padding: 24px;
-    border-bottom: 1px solid #e2e8f0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.mmo-card-title {
-    font-size: 18px;
-    font-weight: 700;
-    color: #1e293b;
-    margin: 0;
-}
-
-.mmo-count-badge {
-    background-color: #fee2e2;
-    color: #ef4444;
-    padding: 4px 12px;
-    border-radius: 999px;
-    font-size: 12px;
-    font-weight: 800;
-}
-
-.mmo-card-body {
-    padding: 24px;
-    flex: 1;
-}
-
-.mmo-card-body.no-padding {
+.mmo-panel-body.no-padding {
     padding: 0;
 }
 
-/* Issue List */
-.mmo-issue-list {
+.mmo-restock-card {
     display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.mmo-issue-item {
-    display: flex;
-    gap: 16px;
-    padding: 16px;
-    background-color: #fef2f2;
-    border-radius: 16px;
-    border: 1px solid #fee2e2;
-}
-
-.mmo-issue-icon {
-    width: 24px;
-    height: 24px;
-    background-color: #ef4444;
-    color: white;
-    border-radius: 50%;
-    display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
-    font-weight: 900;
-    flex-shrink: 0;
+    padding: 20px;
+    background: #fcfdfe;
+    border: 1px solid #f1f5f9;
+    border-radius: 1.5rem;
+    margin-bottom: 16px;
+    transition: all 0.2s ease;
 }
 
-.mmo-issue-name {
-    font-weight: 700;
+.mmo-restock-card:hover {
+    background: #fef2f2;
+    border-color: #fee2e2;
+}
+
+.mmo-restock-name {
+    font-weight: 800;
     color: #1e293b;
     margin: 0;
+    font-size: 0.9rem;
 }
 
-.mmo-issue-desc {
-    font-size: 13px;
+.mmo-restock-qty {
+    font-size: 0.75rem;
     color: #64748b;
-    margin: 2px 0 0 0;
+    font-weight: 600;
+    margin-top: 2px;
 }
 
-.mmo-empty-text {
+.mmo-restock-target {
     text-align: center;
-    color: #94a3b8;
-    padding: 32px 0;
-    font-style: italic;
 }
 
-/* Table Styling */
-.mmo-table-wrapper {
-    overflow-x: auto;
-}
-
-.mmo-table {
+/* Table Update */
+.mmo-table-alt {
     width: 100%;
     border-collapse: collapse;
 }
 
-.mmo-table th {
+.mmo-table-alt th {
+    padding: 24px 32px;
     text-align: left;
-    padding: 16px 24px;
-    background-color: #f8fafc;
-    font-size: 12px;
-    font-weight: 700;
-    color: #64748b;
+    font-size: 10px;
+    font-weight: 800;
+    color: #94a3b8;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    border-bottom: 1px solid #e2e8f0;
+    letter-spacing: 0.1em;
+    background: #fcfdfe;
 }
 
-.mmo-table td {
-    padding: 16px 24px;
-    border-bottom: 1px solid #f1f5f9;
-    font-size: 14px;
+.mmo-table-alt th.center {
+    text-align: center;
 }
 
-.mmo-item-name {
-    font-weight: 600;
-    color: #0f172a;
+.mmo-table-alt td {
+    padding: 24px 32px;
+    font-size: 0.85rem;
+    border-bottom: 1px solid #f8fafc;
 }
 
-.mmo-item-qty {
-    font-weight: 700;
-    color: #334155;
+.mmo-table-alt td.center {
+    text-align: center;
 }
 
-.mmo-status-badge {
-    padding: 4px 12px;
-    border-radius: 999px;
-    font-size: 11px;
-    font-weight: 700;
+.mmo-status-pill {
+    padding: 6px 14px;
+    border-radius: 2rem;
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
 }
 
 .mmo-status-good {
-    background-color: #dcfce7;
+    background: #f0fdf4;
     color: #166534;
 }
 
 .mmo-status-low {
-    background-color: #fef3c7;
+    background: #fffbeb;
     color: #92400e;
 }
 
 .mmo-status-critical {
-    background-color: #fee2e2;
+    background: #fef2f2;
     color: #991b1b;
 }
 
-/* Analytics */
-.mmo-analytics-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-}
-
-@media (max-width: 768px) {
-    .mmo-analytics-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-.mmo-chart-placeholder {
-    height: 200px;
-    border-radius: 20px;
+.mmo-panel-link {
+    background: transparent;
+    border: none;
+    color: #3b82f6;
+    font-weight: 800;
+    font-size: 0.75rem;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 12px;
-    font-weight: 700;
-}
-
-.mmo-chart-placeholder.sky {
-    background-color: #f0f9ff;
-    color: #0ea5e9;
-}
-
-.mmo-chart-placeholder.emerald {
-    background-color: #ecfdf5;
-    color: #10b981;
+    gap: 4px;
+    cursor: pointer;
 }
 
 /* Loader */
@@ -300,32 +340,19 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 16px;
 }
 
 .mmo-loader {
-    width: 48px;
-    height: 48px;
-    border: 4px solid #e2e8f0;
-    border-top-color: #2563eb;
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f1f5f9;
+    border-top: 5px solid #3b82f6;
     border-radius: 50%;
-    animation: ammSpin 1s linear infinite;
+    animation: spin 1s linear infinite;
 }
 
-@keyframes ammSpin {
-    to {
+@keyframes spin {
+    100% {
         transform: rotate(360deg);
-    }
-}
-
-@keyframes ammFadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
     }
 }
