@@ -1,0 +1,209 @@
+/* StudentMessBill Styling */
+
+.smb-container {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.smb-card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+    border: 1px solid #f1f5f9;
+    overflow: hidden;
+}
+
+.smb-card-header {
+    background: linear-gradient(to right, #0f172a, #1e293b);
+    padding: 1rem 1.5rem;
+    color: #ffffff;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.smb-header-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    display: block !important;
+}
+
+.smb-header-subtitle {
+    color: #94a3b8;
+    font-size: 0.75rem;
+    font-weight: 500;
+    display: block !important;
+}
+
+.smb-card-body {
+    padding: 0;
+}
+
+.smb-table-wrapper {
+    overflow-x: auto;
+}
+
+.smb-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.smb-table th {
+    background-color: #f8fafc;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.smb-table td {
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+    color: #1e293b;
+    border-bottom: 1px solid #f8fafc;
+}
+
+.smb-table tr:last-child td {
+    border-bottom: none;
+}
+
+.smb-table tr:hover {
+    background-color: #f8fafc;
+}
+
+.smb-status {
+    padding: 0.2rem 0.5rem;
+    border-radius: 9999px;
+    font-size: 0.65rem;
+    font-weight: 800;
+}
+
+.smb-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.smb-bill-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    position: relative;
+}
+
+@media (min-width: 1024px) {
+    .smb-bill-row {
+        grid-template-columns: 15rem 1fr;
+    }
+}
+
+.smb-date-indicator {
+    padding-top: 1rem;
+}
+
+.smb-date-box {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.smb-dot {
+    width: 0.75rem;
+    height: 0.75rem;
+    background-color: #009688;
+    border-radius: 9999px;
+    box-shadow: 0 0 0 4px rgba(0, 150, 136, 0.1);
+}
+
+.smb-month-text {
+    font-size: 1.125rem;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+.smb-bill-content {
+    background-color: #f8fafc;
+    padding: 1.5rem;
+    border-radius: 1.5rem;
+    border: 1px solid #f1f5f9;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    transition: all 0.3s;
+}
+
+@media (min-width: 768px) {
+    .smb-bill-content {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1280px) {
+    .smb-bill-content {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.smb-bill-content:hover {
+    border-color: #e2e8f0;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+    background-color: #ffffff;
+}
+
+.smb-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.smb-info-label {
+    font-size: 0.625rem;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.smb-info-value {
+    font-size: 1.125rem;
+    font-weight: 800;
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.smb-status {
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.625rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.smb-status-paid {
+    background-color: #ecfdf5;
+    color: #059669;
+}
+
+.smb-status-pending {
+    background-color: #fffbeb;
+    color: #d97706;
+}

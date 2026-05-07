@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { User, Calendar } from 'lucide-react';
+import { Calendar } from 'lucide-react';
 import apiClient from '../../../api/apiClient';
 import toast from 'react-hot-toast';
 import './AdminInventory.css';
@@ -60,11 +60,6 @@ const AdminInventory: React.FC = () => {
         <div className="ai-container animate-fade-in">
             {/* View Header with Filters */}
             <div className="ai-view-header">
-                {/* <div>
-                    <h2 className="ai-title">Inventory Dashboard</h2>
-                    <p className="ai-subtitle">Track monthly grocery purchases and stock levels</p>
-                </div> */}
-
                 <div className="ai-filters">
                     <div className="ai-select-group">
                         <Calendar size={18} />
@@ -86,15 +81,16 @@ const AdminInventory: React.FC = () => {
                     <table className="ai-table">
                         <thead>
                             <tr>
-                                <th className="ai-th">S.No</th>
+                                <th className="ai-th">S.No.</th>
                                 <th className="ai-th">Item Name</th>
                                 <th className="ai-th">Seller Place</th>
                                 <th className="ai-th center">Qty Bought</th>
                                 <th className="ai-th center">Photo</th>
                                 <th className="ai-th center">Price/Kg</th>
-                                <th className="ai-th center">Total Price</th>
+
                                 <th className="ai-th center">Qty Remaining</th>
                                 <th className="ai-th">Comments</th>
+                                <th className="ai-th center">Total Price</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -108,10 +104,7 @@ const AdminInventory: React.FC = () => {
                                         <td className="ai-td center">{idx + 1}</td>
                                         <td className="ai-td font-bold">{item.itemName}</td>
                                         <td className="ai-td">
-                                            <div className="ai-seller-info">
-                                                <User size={14} className="ai-seller-icon" />
-                                                <span>{item.seller}</span>
-                                            </div>
+                                            {item.seller}
                                         </td>
                                         <td className="ai-td center">{item.quantityBought} {item.unit}</td>
                                         <td className="ai-td center">
@@ -122,16 +115,17 @@ const AdminInventory: React.FC = () => {
                                             )}
                                         </td>
                                         <td className="ai-td center">₹{item.pricePerKg}</td>
-                                        <td className="ai-td center font-bold">₹{item.totalPrice}</td>
+
                                         <td className="ai-td center">{item.quantityRemaining ?? '---'}</td>
                                         <td className="ai-td italic text-slate-500">{item.comments || '---'}</td>
+                                        <td className="ai-td center font-bold">₹{item.totalPrice}</td>
                                     </tr>
                                 ))
                             )}
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colSpan={6} className="ai-td text-right font-black uppercase text-slate-500 text-xs">Grand Total:</td>
+                                <td colSpan={8} className="af-td text-right font-black uppercase text-slate-500 text-xs">Grand Total:</td>
                                 <td className="ai-td center font-black text-lg text-emerald-600">₹{grandTotal.toLocaleString()}</td>
                                 <td colSpan={2}></td>
                             </tr>

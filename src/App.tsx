@@ -31,11 +31,8 @@ import AdminMessMenu from './components/Dashboard/Admin/AdminMessMenu';
 import MessManagerDashboardLayout from './components/Dashboard/MessManager/MessManagerDashboardLayout';
 import MessManagerOverview from './components/Dashboard/MessManager/MessManagerOverview';
 import MessManagerGrocery from './components/Dashboard/MessManager/MessManagerGrocery';
-import MessManagerStock from './components/Dashboard/MessManager/MessManagerStock';
 import MessManagerMenu from './components/Dashboard/MessManager/MessManagerMenu';
 import MessManagerSettings from './components/Dashboard/MessManager/MessManagerSettings';
-
-
 
 // Protected Route Component
 interface ProtectedRouteProps {
@@ -61,7 +58,35 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowedRoles 
 const App: React.FC = () => {
     return (
         <>
-            <Toaster position="top-right" />
+            <Toaster
+                position="bottom-center"
+                reverseOrder={false}
+                gutter={8}
+                toastOptions={{
+                    className: 'font-sans text-sm font-medium',
+                    duration: 4000,
+                    style: {
+                        background: '#363636',
+                        color: '#fff',
+                        padding: '12px 20px',
+                        borderRadius: '12px',
+                        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                    },
+                    success: {
+                        duration: 3000,
+                        style: {
+                            background: '#10b981', // Emerald-500
+                        },
+                    },
+                    error: {
+                        duration: 5000,
+                        style: {
+                            background: '#ef4444', // Red-500
+                        },
+                    },
+                    // We can use generic toast with custom background for warnings
+                }}
+            />
             <Router>
                 <Routes>
                     {/* Public Routes */}
@@ -102,7 +127,7 @@ const App: React.FC = () => {
                         <Route path="approvals" element={<AdminApprovals />} />
                         <Route path="mess-bills" element={<AdminMessBills />} />
                         <Route path="inventory" element={<AdminInventory />} />
-                        <Route path="mess-menu" element={<AdminMessMenu />} /> {/* Reusing the menu component */}
+                        <Route path="mess-menu" element={<AdminMessMenu />} />
                         <Route path="queries" element={<AdminQueries />} />
                         <Route path="settings" element={<AdminSettings />} />
                     </Route>
@@ -111,19 +136,16 @@ const App: React.FC = () => {
                     <Route
                         path="/mess-dashboard"
                         element={
-                            <ProtectedRoute allowedRoles={['mess', 'mess_manager']}>
+                            <ProtectedRoute allowedRoles={['mess', 'mess_manager', 'mess_admin', 'mess manager']}>
                                 <MessManagerDashboardLayout />
                             </ProtectedRoute>
                         }
                     >
                         <Route index element={<MessManagerOverview />} />
                         <Route path="grocery" element={<MessManagerGrocery />} />
-                        <Route path="issue" element={<MessManagerStock />} />
                         <Route path="menu" element={<MessManagerMenu />} />
                         <Route path="settings" element={<MessManagerSettings />} />
                     </Route>
-
-
 
                     {/* Catch all - redirect to home */}
                     <Route path="*" element={<Navigate to="/" replace />} />

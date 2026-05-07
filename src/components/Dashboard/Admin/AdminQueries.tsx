@@ -111,11 +111,6 @@ const AdminQueries: React.FC = () => {
         <div className="aq-admin-container animate-fade-in">
             {/* Toolbar / Filters */}
             <div className="aq-toolbar-panel">
-                {/* <div className="aq-branding-inline">
-                    <img src="/images/logos/tpgit_logo.png" alt="Logo" className="aq-mini-logo" />
-                    <h2 className="aq-toolbar-title">Inquiry Management</h2>
-                </div> */}
-
                 <div className="aq-filters-row">
                     <div className="aq-filter-group">
                         <label>Range</label>
@@ -160,7 +155,6 @@ const AdminQueries: React.FC = () => {
                                 className={filters.status === 'Resolved' ? 'active' : ''}
                                 onClick={() => setFilters({ ...filters, status: 'Resolved' })}
                             >Resolved</button>
-
                         </div>
                     </div>
                 </div>
@@ -197,9 +191,9 @@ const AdminQueries: React.FC = () => {
                                                 <p className="aq-card-text">{query.queryText || query.message}</p>
                                                 <div className="aq-card-bottom">
                                                     <div className="aq-mini-user">
-                                                        <div className="aq-tiny-avatar">
+                                                        {/* <div className="aq-tiny-avatar">
                                                             {query.student?.firstName?.[0] || 'U'}
-                                                        </div>
+                                                        </div> */}
                                                         <div className="aq-user-details">
                                                             <p className="aq-user-name">{query.student?.firstName} {query.student?.lastName}</p>
                                                             <div className="aq-user-meta-grid">

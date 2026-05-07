@@ -177,7 +177,7 @@ const AdminMessBills: React.FC = () => {
     };
 
     const downloadTemplate = () => {
-        const headers = ["S.No", "Reg Number"];
+        const headers = ["S.No.", "Reg Number"];
         MONTHS_SHORT.forEach(m => {
             headers.push(`${m} Present`, `${m} Absent`);
         });
@@ -258,7 +258,7 @@ const AdminMessBills: React.FC = () => {
                     <table className="amb-status-table">
                         <thead>
                             <tr>
-                                <th className="amb-th-sticky">S.No</th>
+                                <th className="amb-th-sticky">S.No.</th>
                                 <th className="amb-th-sticky text-left">Name</th>
                                 <th>Dept</th>
                                 <th>Year</th>

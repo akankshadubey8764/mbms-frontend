@@ -1,15 +1,16 @@
-/* AdminDashboardLayout.css */
+/* StudentDashboardLayout.css */
 
-.adl-layout {
+.sdl-layout {
     font-family: Arial, sans-serif;
     font-size: 12px;
     background-color: #f4f6f8;
-    height: 100%;
-    overflow: hidden;
+    min-height: 100vh;
+    padding-top: 50px;
+    /* space for fixed header */
 }
 
 /* Header */
-.adl-top-header {
+.sdl-top-header {
     background-color: white;
     height: 50px;
     display: flex;
@@ -25,13 +26,13 @@
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-.adl-header-brand {
+.sdl-header-brand {
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
-.adl-menu-btn {
+.sdl-menu-btn {
     background: transparent;
     border: none;
     color: black;
@@ -42,50 +43,56 @@
     transition: background 0.2s;
 }
 
-.adl-menu-btn:hover {
+.sdl-menu-btn:hover {
     background-color: #f1f5f9;
 }
 
-.adl-logo-img {
+.sdl-logo-img {
     width: 32px;
     height: 32px;
     object-fit: contain;
 }
 
-.adl-brand-text {
+.sdl-brand-text {
     display: flex;
     flex-direction: column;
 }
 
-.adl-brand-title {
+.sdl-brand-title {
     font-size: 14px;
     font-weight: bold;
     color: #0f172a;
     line-height: 1;
 }
 
-.adl-brand-subtitle {
+.sdl-brand-subtitle {
     font-size: 10px;
     color: #64748b;
     text-transform: capitalize;
 }
 
-.adl-page-header {
+.sdl-page-header {
     margin-bottom: 20px;
 }
 
-.adl-page-title {
+.sdl-page-title {
     font-size: 24px;
     font-weight: bold;
     color: #0f172a;
     margin: 0;
 }
 
-.adl-header-actions {
+@media (max-width: 640px) {
+    .sdl-header-title-center {
+        display: none;
+    }
+}
+
+.sdl-header-actions {
     display: flex;
 }
 
-.adl-logout-btn {
+.sdl-logout-btn {
     display: flex;
     align-items: center;
     gap: 6px;
@@ -101,13 +108,13 @@
     cursor: pointer;
 }
 
-.adl-logout-btn:hover {
+.sdl-logout-btn:hover {
     background-color: #f1f5f9;
     color: #ef4444;
 }
 
 /* Sidebar Wrapper */
-.adl-sidebar {
+.sdl-sidebar {
     position: fixed;
     top: 50px;
     left: 0;
@@ -124,19 +131,19 @@
 }
 
 /* Expand when hovered or pinned */
-.adl-sidebar.pinned,
-.adl-sidebar:hover {
+.sdl-sidebar.pinned,
+.sdl-sidebar:hover {
     width: 250px;
 }
 
-.adl-sidebar.pinned,
-.adl-sidebar.mobile-open {
+.sdl-sidebar.pinned,
+.sdl-sidebar.mobile-open {
     top: 0;
     z-index: 100;
     height: 100vh;
 }
 
-.adl-sidebar-header {
+.sdl-sidebar-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -147,7 +154,7 @@
     border-bottom: 1px solid #f1f5f9;
 }
 
-.adl-close-btn {
+.sdl-close-btn {
     background: transparent;
     border: none;
     cursor: pointer;
@@ -158,13 +165,13 @@
     border-radius: 4px;
 }
 
-.adl-close-btn:hover {
+.sdl-close-btn:hover {
     color: #0f172a;
     background-color: #f1f5f9;
 }
 
 /* Nav Links */
-.adl-nav {
+.sdl-nav {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -174,7 +181,7 @@
     overflow-x: hidden;
 }
 
-.adl-nav-link {
+.sdl-nav-link {
     display: flex;
     align-items: center;
     padding: 12px 17px;
@@ -189,7 +196,7 @@
     border-left: 3px solid transparent;
 }
 
-.adl-nav-icon {
+.sdl-nav-icon {
     width: 20px;
     display: flex;
     justify-content: center;
@@ -197,49 +204,49 @@
     flex-shrink: 0;
 }
 
-.adl-nav-label {
+.sdl-nav-label {
     opacity: 0;
     transition: opacity 0.2s;
     white-space: nowrap;
 }
 
-.adl-sidebar.pinned .adl-nav-label,
-.adl-sidebar:hover .adl-nav-label {
+.sdl-sidebar.pinned .sdl-nav-label,
+.sdl-sidebar:hover .sdl-nav-label {
     opacity: 1;
 }
 
-.adl-nav-link:hover {
+.sdl-nav-link:hover {
     background-color: #f8fafc;
     color: #0f172a;
 }
 
-.adl-nav-link.active {
-    background-color: #e0f2fe;
-    color: #0284c7;
-    border-left: 3px solid #0284c7;
+.sdl-nav-link.active {
+    background-color: #e0f2f1;
+    color: #00897b;
+    border-left: 3px solid #00897b;
 }
 
-.adl-drawer-footer {
+.sdl-drawer-footer {
     padding: 12px 0;
     border-top: 1px solid #e2e8f0;
 }
 
-.adl-drawer-footer .adl-nav-link.text-red {
+.sdl-drawer-footer .sdl-nav-link.text-red {
     color: #ef4444;
 }
 
-.adl-drawer-footer .adl-nav-link.text-red:hover {
+.sdl-drawer-footer .sdl-nav-link.text-red:hover {
     background-color: #fef2f2;
     color: #dc2626;
 }
 
-.adl-main-content {
+/* Main Content Area */
+.sdl-main-content {
     transition: margin-left 0.3s ease-in-out;
     margin-left: 60px;
-    margin-top: 50px;
+    /* margin-top: 50px; */
     height: calc(100vh - 50px);
-    overflow: hidden;
-    /* no page-level scroll */
+    overflow: visible;
     padding: 20px 24px;
     display: flex;
     flex-direction: column;
@@ -247,11 +254,11 @@
 }
 
 /* Expand main content margin only when pinned */
-.layout-pinned .adl-main-content {
+.layout-pinned .sdl-main-content {
     margin-left: 250px;
 }
 
-.adl-content-inner {
+.sdl-content-inner {
     max-width: 100%;
     background-color: transparent;
     flex: 1;
@@ -259,18 +266,17 @@
     flex-direction: column;
     min-height: 0;
     overflow-y: auto;
-    /* fallback scroll for simple pages */
     overflow-x: hidden;
 }
 
 /* Hide redundant page-level titles and descriptions since layout now shows them */
-.adl-content-inner h1:first-of-type,
-.adl-content-inner h1:first-of-type+p {
+/* .sdl-content-inner h1:first-of-type,
+.sdl-content-inner h1:first-of-type+p {
     display: none !important;
-}
+} */
 
 /* Mobile Overrides */
-.adl-mobile-overlay {
+.sdl-mobile-overlay {
     display: none;
     position: fixed;
     inset: 0;
@@ -281,29 +287,29 @@
 }
 
 @media (max-width: 768px) {
-    .adl-sidebar {
+    .sdl-sidebar {
         transform: translateX(-100%);
         width: 250px;
         /* Always 250px on mobile */
     }
 
-    .adl-sidebar.mobile-open {
+    .sdl-sidebar.mobile-open {
         transform: translateX(0);
     }
 
-    .adl-sidebar .adl-nav-label {
+    .sdl-sidebar .sdl-nav-label {
         opacity: 1;
         /* Labels always visible when open on mobile */
     }
 
-    .layout-pinned .adl-main-content,
-    .adl-main-content {
+    .layout-pinned .sdl-main-content,
+    .sdl-main-content {
         margin-left: 0;
         /* Full width on mobile */
-        padding: 12px 16px;
+        padding: 16px;
     }
 
-    .adl-mobile-overlay.visible {
+    .sdl-mobile-overlay.visible {
         display: block;
         opacity: 1;
     }

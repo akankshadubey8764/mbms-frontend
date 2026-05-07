@@ -49,9 +49,9 @@ const Navbar: React.FC = () => {
                         <div className="w-12 h-12 flex items-center justify-center transform group-hover:scale-110 transition-transform duration-500">
                             <img src={Logo} alt="TPGIT Hostel Logo" className="w-full h-full object-contain" />
                         </div>
-                        <div className="hidden md:block">
+                        {/* <div className="hidden md:block">
                             <h1 className="text-base font-bold text-white tracking-widest group-hover:text-secondary transition-colors duration-300 uppercase">TPGIT HOSTEL</h1>
-                        </div>
+                        </div> */}
                     </Link>
 
                     {/* Desktop Navigation */}

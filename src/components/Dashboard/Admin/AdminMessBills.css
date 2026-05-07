@@ -1,306 +1,378 @@
 /* AdminMessBills.css */
 
 .amb-container {
+    animation: amb-fadeIn 0.3s ease-in-out;
     display: flex;
     flex-direction: column;
-    height: calc(100vh - 75px);
-    /* Fill screen minus some padding */
-    animation: fadeIn 0.3s ease-in-out;
-    /* background-color: #f1f5f9; */
-    overflow: hidden;
-    /* Main container shouldn't scroll, inner parts should */
+    flex: 1;
+    min-height: 0;
+    gap: 0;
 }
 
-/* Header */
+@keyframes amb-fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ── Top Toolbar (sticky above table) ────────────── */
 .amb-header {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    padding: 20px 0;
-    /* background-color: #f1f5f9; */
-    z-index: 800;
-    /* Higher but below layout header */
-    position: sticky;
-    top: 0;
-    /* Since we are in the adl-content-area which is scrollable? No, adl-layout is flex. */
-}
-
-.amb-title {
-    font-size: 1.875rem;
-    font-family: 'Inter', sans-serif;
-    font-weight: 900;
-    color: #111827;
-    letter-spacing: -0.025em;
-    margin: 0;
+    flex-shrink: 0;
+    margin-bottom: 12px;
 }
 
 .amb-header-actions {
     display: flex;
-    gap: 12px;
-    justify-content: flex-end;
     align-items: center;
+    gap: 10px;
+    justify-content: flex-end;
 }
 
 .amb-generate-btn {
-    padding: 12px 24px;
-    background-color: #111827;
+    padding: 7px 14px;
+    background-color: #0f172a;
     color: white;
-    border-radius: 1rem;
-    font-weight: 900;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 12px;
     display: flex;
     align-items: center;
     gap: 8px;
     border: none;
     cursor: pointer;
-    transition: all 0.3s;
-    box-shadow: 0 10px 15px -3px rgba(17, 24, 39, 0.2);
+    transition: background 0.2s;
 }
 
 .amb-generate-btn:hover:not(.disabled) {
-    background-color: #009688;
+    background-color: #1e293b;
 }
 
 .amb-generate-btn.disabled {
     opacity: 0.5;
     cursor: not-allowed;
-    background-color: #9ca3af;
 }
 
 .amb-btn-secondary {
-    padding: 12px 24px;
+    padding: 7px 14px;
     background-color: white;
-    color: #111827;
-    border-radius: 1rem;
-    font-weight: 900;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
+    color: #0f172a;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 12px;
     display: flex;
     align-items: center;
     gap: 8px;
-    border: 1px solid #e5e7eb;
+    border: 1px solid #e2e8f0;
     cursor: pointer;
-    transition: all 0.3s;
 }
 
 .amb-btn-secondary:hover {
-    background-color: #f9fafb;
-    border-color: #d1d5db;
+    background-color: #f8fafc;
 }
 
 .amb-year-select-wrapper {
-    position: relative;
     display: flex;
     align-items: center;
-    background-color: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 1rem;
-    padding: 0 16px;
-    transition: all 0.3s;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 0 10px;
+    gap: 4px;
+}
+
+.amb-calendar-icon {
+    color: #94a3b8;
 }
 
 .amb-year-select {
-    padding: 12px 8px;
+    padding: 7px 4px;
     border: none;
     background: transparent;
-    font-weight: 900;
-    font-size: 0.875rem;
-    color: #111827;
+    font-weight: bold;
+    font-size: 13px;
+    color: #0f172a;
     outline: none;
     cursor: pointer;
 }
 
-/* Content Wrapper - This is the scrollable card */
+/* ── Card that holds search + table + pagination ── */
 .amb-content-wrapper {
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
+    background: white;
     border: 1px solid #e2e8f0;
+    border-radius: 8px;
     display: flex;
     flex-direction: column;
     flex: 1;
     min-height: 0;
-    /* Important for flex child to be scrollable */
+    /* critical for nested flex scroll */
     overflow: hidden;
 }
 
-/* Filters bar - stays at top of content card */
+/* ── Filter bar (stays above table) ────────────── */
 .amb-filters-container {
-    padding: 10px;
+    flex-shrink: 0;
+    padding: 10px 12px;
     border-bottom: 1px solid #f1f5f9;
     display: flex;
     align-items: center;
+    gap: 12px;
     justify-content: space-between;
-    background-color: white;
+    flex-wrap: wrap;
 }
 
 .amb-search-wrapper {
     position: relative;
-    width: 20rem;
+    width: 280px;
 }
 
 .amb-search-input {
     width: 100%;
-    padding: 5px 7px 5px 40px;
-    background-color: #f8fafc;
+    padding: 7px 12px 7px 34px;
+    background: #f8fafc;
     border: 1px solid #e2e8f0;
-    border-radius: 0.75rem;
-    font-size: 0.875rem;
+    border-radius: 6px;
+    font-size: 12px;
     outline: none;
+}
+
+.amb-search-input:focus {
+    border-color: #0284c7;
 }
 
 .amb-search-icon {
     position: absolute;
-    left: 14px;
+    left: 10px;
     top: 50%;
     transform: translateY(-50%);
     color: #94a3b8;
 }
 
-/* Table Section - The vertical scroll part */
+.amb-info-alert {
+    padding: 6px 12px;
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-radius: 6px;
+    color: #0369a1;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+/* ── Table wrapper: ONLY this scrolls ─────────── */
 .amb-table-wrapper {
-    overflow: auto;
     flex: 1;
+    overflow: auto;
+    /* scrolls both X and Y */
+    min-height: 0;
 }
 
+/* ── Table ──────────────────────────────────────── */
 .amb-status-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
+    width: max-content;
+    /* allow horizontal overflow */
+    min-width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
 }
 
-/* TABLE HEAD - Fixed at top of its wrapper */
-.amb-status-table th {
-    padding: 16px;
-    font-size: 0.7rem;
-    font-weight: 800;
-    color: #64748b;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    text-align: center;
-    border-bottom: 1px solid #e2e8f0;
-    background-color: #f8fafc;
+/* Sticky column header row */
+.amb-status-table thead tr {
     position: sticky;
     top: 0;
-    z-index: 50;
+    z-index: 10;
 }
 
-/* STICKY COLUMNS for S.No and Name */
+.amb-status-table th {
+    background: #f8fafc;
+    padding: 10px 12px;
+    font-weight: bold;
+    color: black;
+    text-transform: capitalize;
+    font-size: 10px;
+    /* letter-spacing: 0.05em; */
+    text-align: center;
+    border-bottom: 2px solid #e2e8f0;
+    white-space: nowrap;
+}
+
+/* Sticky S.No & Name columns */
 .amb-th-sticky {
     position: sticky;
-    left: 0;
-    z-index: 60 !important;
-    background-color: #f8fafc !important;
+    z-index: 20;
+    /* above row cells AND other headers */
+    background: #f8fafc !important;
     border-right: 1px solid #e2e8f0;
 }
+
+.amb-th-sticky:nth-child(1) {
+    left: 0;
+}
+
+.amb-th-sticky:nth-child(2) {
+    left: 44px;
+}
+
+/* adjust if S.No col width differs */
 
 .amb-td-sticky {
     position: sticky;
-    left: 0;
-    z-index: 40;
-    background-color: white;
+    z-index: 5;
+    background: white;
     border-right: 1px solid #e2e8f0;
 }
 
-.amb-status-table tbody tr:hover td {
-    background-color: #f8fafc;
+.amb-td-sticky:nth-child(1) {
+    left: 0;
 }
 
-.amb-status-table tbody tr:hover .amb-td-sticky {
-    background-color: #f1f5f9;
+.amb-td-sticky:nth-child(2) {
+    left: 44px;
 }
 
-/* Centering all data */
 .amb-status-table td {
-    padding: 5px 10px;
+    padding: 8px 12px;
     text-align: center;
-    vertical-align: middle;
     border-bottom: 1px solid #f1f5f9;
-    font-size: 0.825rem;
+    white-space: nowrap;
+}
+
+.amb-status-table tr:hover td {
+    background: #f8fafc;
+}
+
+.amb-status-table tr:hover .amb-td-sticky {
+    background: #f8fafc;
+}
+
+.amb-name {
+    font-weight: bold;
+    color: #0f172a;
+    margin: 0;
+    text-align: center;
+}
+
+.amb-reg {
+    font-size: 10px;
+    color: #94a3b8;
+    margin: 0;
+    text-align: center;
+    font-weight: 600;
 }
 
 .amb-student-info {
     text-align: center;
-    padding: 0 10px;
 }
 
-.amb-name {
-    font-weight: 800;
-    color: #1e293b;
-    margin: 0;
-    white-space: nowrap;
-}
-
-.amb-reg {
-    font-size: 0.7rem;
-    color: #94a3b8;
-    font-weight: 600;
-}
-
-/* Month Cell styling */
 .amb-cell-vertical {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px;
+    gap: 2px;
 }
 
 .amb-cell-amount {
-    font-size: 0.7rem;
-    font-weight: 700;
-    color: #475569;
+    font-weight: bold;
+    color: #0284c7;
+    font-size: 11px;
 }
 
-/* Pagination */
+.op-30 {
+    opacity: 0.35;
+}
+
+.amb-loader-row,
+.amb-empty-row {
+    text-align: center;
+    padding: 40px;
+    color: #94a3b8;
+    font-style: italic;
+}
+
+/* ── Pagination (pinned to bottom) ─────────────── */
 .amb-pagination {
-    padding: 16px 32px;
-    /* background-color: #f8fafc; */
+    flex-shrink: 0;
+    padding: 10px 20px;
     border-top: 1px solid #e2e8f0;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background: #f8fafc;
+}
+
+.amb-pagination-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.amb-pagination-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .amb-pagination-info {
-    font-size: 0.75rem;
-    font-weight: 700;
+    font-size: 11px;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.amb-limit-select {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
     color: #64748b;
 }
 
+.amb-limit-select select {
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 11px;
+    background: white;
+    color: #0f172a;
+    font-weight: bold;
+    outline: none;
+}
+
 .amb-page-btn {
-    padding: 8px 16px;
-    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
     border: 1px solid #e2e8f0;
     background: white;
-    font-weight: 700;
-    font-size: 0.75rem;
+    color: black;
     cursor: pointer;
+    transition: all 0.15s;
+}
+
+.amb-page-btn:hover:not(:disabled) {
+    background: #0284c7;
+    color: white;
+    border-color: #0284c7;
 }
 
 .amb-page-btn:disabled {
-    opacity: 0.5;
+    opacity: 0.4;
+    cursor: not-allowed;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
-}
-
-.amb-info-alert {
-    padding: 10px;
-    border-radius: 8px;
-    background-color: #f8fafc;
-    border: 1px solid #e2e8f0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
+.amb-page-indicator {
+    font-size: 11px;
+    font-weight: bold;
+    color: #0f172a;
+    min-width: 50px;
+    text-align: center;
 }

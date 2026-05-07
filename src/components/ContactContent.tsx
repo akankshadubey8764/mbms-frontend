@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import apiClient from '../api/apiClient';
+import './ContactContent.css';
 
 const ContactContent: React.FC = () => {
     const [formData, setFormData] = useState({
@@ -42,85 +43,82 @@ const ContactContent: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen py-16">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                {/* Header */}
-                <div className="text-center mb-12 animate-fade-in">
-                    <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-                        Get In Touch
-                    </h1>
-                    <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+        <div className="cc-container">
+            <div className="cc-wrapper">
+                <div className="cc-header">
+                    <h1 className="cc-title">Get In Touch</h1>
+                    <p className="cc-subtitle">
                         Have questions or need assistance? We're here to help! Reach out to us and we'll respond as soon as possible.
                     </p>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-12">
+                <div className="cc-grid">
                     {/* Contact Form */}
-                    <div className="bg-white rounded-2xl shadow-xl p-8 animate-fade-in">
-                        <h2 className="text-2xl font-bold text-gray-900 mb-6">Send Us a Message</h2>
-                        <form onSubmit={handleSubmit} className="space-y-6">
-                            <div>
-                                <label className="form-label">Your Name</label>
+                    <div className="cc-form-card">
+                        <h2 className="cc-form-title">Send Us a Message</h2>
+                        <form onSubmit={handleSubmit} className="cc-form">
+                            <div className="cc-field">
+                                <label className="cc-label">Your Name</label>
                                 <input
                                     type="text"
                                     name="name"
                                     value={formData.name}
                                     onChange={handleChange}
-                                    className="form-input"
+                                    className="cc-input"
                                     required
                                 />
                             </div>
 
-                            <div>
-                                <label className="form-label">Email Address</label>
-                                <div className="relative">
-                                    <Mail className="absolute left-3 top-3.5 text-gray-400" size={20} />
+                            <div className="cc-field">
+                                <label className="cc-label">Email Address</label>
+                                <div className="cc-input-wrapper">
+                                    <Mail className="cc-input-icon" size={20} />
                                     <input
                                         type="email"
                                         name="email"
                                         value={formData.email}
                                         onChange={handleChange}
-                                        className="form-input pl-10"
+                                        className="cc-input cc-input-with-icon"
                                         required
                                     />
                                 </div>
                             </div>
 
-                            <div>
-                                <label className="form-label">Phone Number</label>
-                                <div className="relative">
-                                    <Phone className="absolute left-3 top-3.5 text-gray-400" size={20} />
+                            <div className="cc-field">
+                                <label className="cc-label">Phone Number</label>
+                                <div className="cc-input-wrapper">
+                                    <Phone className="cc-input-icon" size={20} />
                                     <input
                                         type="tel"
                                         name="phone"
                                         value={formData.phone}
                                         onChange={handleChange}
-                                        className="form-input pl-10"
+                                        className="cc-input cc-input-with-icon"
                                         required
                                     />
                                 </div>
                             </div>
 
-                            <div>
-                                <label className="form-label">Subject</label>
+                            <div className="cc-field">
+                                <label className="cc-label">Subject</label>
                                 <input
                                     type="text"
                                     name="subject"
                                     value={formData.subject}
                                     onChange={handleChange}
-                                    className="form-input"
+                                    className="cc-input"
                                     required
                                 />
                             </div>
 
-                            <div>
-                                <label className="form-label">Message</label>
+                            <div className="cc-field">
+                                <label className="cc-label">Message</label>
                                 <textarea
                                     name="message"
                                     value={formData.message}
                                     onChange={handleChange}
                                     rows={5}
-                                    className="form-input resize-none"
+                                    className="cc-textarea"
                                     required
                                 ></textarea>
                             </div>
@@ -128,7 +126,7 @@ const ContactContent: React.FC = () => {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="btn-primary w-full flex items-center justify-center space-x-2 disabled:opacity-50"
+                                className="cc-submit-btn"
                             >
                                 <Send size={20} />
                                 <span>{loading ? 'Sending...' : 'Send Message'}</span>
@@ -137,18 +135,17 @@ const ContactContent: React.FC = () => {
                     </div>
 
                     {/* Contact Information */}
-                    <div className="space-y-8">
-                        {/* Contact Cards */}
-                        <div className="bg-gradient-to-br from-primary-600 to-primary-800 text-white rounded-2xl shadow-xl p-8 animate-fade-in">
-                            <h2 className="text-2xl font-bold mb-6">Contact Information</h2>
-                            <div className="space-y-6">
-                                <div className="flex items-start space-x-4">
-                                    <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <div className="cc-info-section">
+                        <div className="cc-info-card">
+                            <h2 className="cc-info-title">Contact Information</h2>
+                            <div className="cc-info-list">
+                                <div className="cc-info-item">
+                                    <div className="cc-icon-box">
                                         <MapPin size={24} />
                                     </div>
                                     <div>
-                                        <h3 className="font-semibold text-lg mb-1">Address</h3>
-                                        <p className="text-white/90">
+                                        <h3 className="cc-item-title">Address</h3>
+                                        <p className="cc-item-text">
                                             TPGIT Campus<br />
                                             Vellore, Tamil Nadu<br />
                                             India - 632014
@@ -156,68 +153,62 @@ const ContactContent: React.FC = () => {
                                     </div>
                                 </div>
 
-                                <div className="flex items-start space-x-4">
-                                    <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <div className="cc-info-item">
+                                    <div className="cc-icon-box">
                                         <Phone size={24} />
                                     </div>
                                     <div>
-                                        <h3 className="font-semibold text-lg mb-1">Phone</h3>
-                                        <p className="text-white/90">+91 123 456 7890</p>
-                                        <p className="text-white/90">+91 098 765 4321</p>
+                                        <h3 className="cc-item-title">Phone</h3>
+                                        <p className="cc-item-text">+91 123 456 7890</p>
+                                        <p className="cc-item-text">+91 098 765 4321</p>
                                     </div>
                                 </div>
 
-                                <div className="flex items-start space-x-4">
-                                    <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <div className="cc-info-item">
+                                    <div className="cc-icon-box">
                                         <Mail size={24} />
                                     </div>
                                     <div>
-                                        <h3 className="font-semibold text-lg mb-1">Email</h3>
-                                        <p className="text-white/90">hostel@tpgit.edu.in</p>
-                                        <p className="text-white/90">support@tpgit.edu.in</p>
+                                        <h3 className="cc-item-title">Email</h3>
+                                        <p className="cc-item-text">hostel@tpgit.edu.in</p>
+                                        <p className="cc-item-text">support@tpgit.edu.in</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Office Hours */}
-                        <div className="bg-white rounded-2xl shadow-xl p-8 animate-fade-in">
-                            <h2 className="text-2xl font-bold text-gray-900 mb-6">Office Hours</h2>
-                            <div className="space-y-4">
-                                <div className="flex justify-between items-center pb-3 border-b border-gray-200">
-                                    <span className="font-semibold text-gray-700">Monday - Friday</span>
-                                    <span className="text-gray-600">9:00 AM - 6:00 PM</span>
+                        <div className="cc-hours-card">
+                            <h2 className="cc-form-title">Office Hours</h2>
+                            <div className="cc-hours-list">
+                                <div className="cc-hour-row">
+                                    <span className="cc-day">Monday - Friday</span>
+                                    <span className="cc-time">9:00 AM - 6:00 PM</span>
                                 </div>
-                                <div className="flex justify-between items-center pb-3 border-b border-gray-200">
-                                    <span className="font-semibold text-gray-700">Saturday</span>
-                                    <span className="text-gray-600">9:00 AM - 2:00 PM</span>
+                                <div className="cc-hour-row">
+                                    <span className="cc-day">Saturday</span>
+                                    <span className="cc-time">9:00 AM - 2:00 PM</span>
                                 </div>
-                                <div className="flex justify-between items-center">
-                                    <span className="font-semibold text-gray-700">Sunday</span>
-                                    <span className="text-red-600 font-semibold">Closed</span>
+                                <div className="cc-hour-row">
+                                    <span className="cc-day">Sunday</span>
+                                    <span className="cc-closed">Closed</span>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Quick Response */}
-                        <div className="bg-gradient-to-br from-gray-900 to-gray-800 text-white rounded-2xl shadow-xl p-8 animate-fade-in">
-                            <h3 className="text-xl font-bold mb-3">Quick Response</h3>
-                            <p className="text-gray-300 mb-4">
+                        <div className="cc-quick-card">
+                            <h3 style={{ fontSize: '1.25rem', fontWeight: '700', marginBottom: '0.75rem' }}>Quick Response</h3>
+                            <p style={{ color: '#d1d5db', fontSize: '0.875rem', marginBottom: '1rem' }}>
                                 For urgent matters, please call our 24/7 emergency helpline:
                             </p>
-                            <a
-                                href="tel:+911234567890"
-                                className="inline-block bg-white text-gray-900 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
-                            >
+                            <a href="tel:+911234567890" className="cc-quick-btn">
                                 📞 +91 123 456 7890
                             </a>
                         </div>
                     </div>
                 </div>
 
-                {/* Google Map Section */}
-                <div className="mt-16 bg-white rounded-2xl shadow-xl p-4 animate-fade-in relative z-10 transition-transform duration-500 hover:scale-[1.01]">
-                    <div className="rounded-xl overflow-hidden h-[450px] shadow-inner">
+                <div className="cc-map-container">
+                    <div className="cc-map-wrapper">
                         <iframe
                             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3889.303986422792!2d79.11706247473215!3d12.91500438739502!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bad389d00000001%3A0xe67c638c4c34d852!2sThanthai%20Periyar%20Government%20Institute%20of%20Technology!5e0!3m2!1sen!2sin!4v1709123456789!5m2!1sen!2sin"
                             width="100%"

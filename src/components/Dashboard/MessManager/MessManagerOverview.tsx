@@ -1,16 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Package, TrendingUp, ShoppingCart, AlertTriangle, Clock, ChevronRight, Calculator } from 'lucide-react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Package, TrendingUp, ShoppingCart, AlertCircle, Calculator, FileText, CheckCircle } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import apiClient from '../../../api/apiClient';
 import './MessManagerOverview.css';
-
-interface StockItem {
-    _id: string;
-    itemName: string;
-    currentStock: number;
-    minimumStock: number;
-    status: 'Good' | 'Low' | 'Critical';
-    unit: string;
-}
 
 interface DashboardStats {
     totalItems: number;
@@ -20,7 +12,6 @@ interface DashboardStats {
 }
 
 const MessManagerOverview: React.FC = () => {
-    const [stocks, setStocks] = useState<StockItem[]>([]);
     const [stats, setStats] = useState<DashboardStats>({
         totalItems: 0,
         lowStockCount: 0,
@@ -28,18 +19,15 @@ const MessManagerOverview: React.FC = () => {
         monthlyExpenditure: 0
     });
     const [loading, setLoading] = useState(true);
+    const isFetching = useRef(false);
 
-    useEffect(() => {
-        fetchDashboardData();
-    }, []);
-
-    const fetchDashboardData = async () => {
-        setLoading(true);
+    const fetchDashboardData = useCallback(async () => {
+        if (isFetching.current) return;
+        isFetching.current = true;
         try {
             // Fetch Stock Data
             const stockResponse = await apiClient.get('/admin/stock');
             const inventoryData = stockResponse.data.data || [];
-            setStocks(inventoryData);
 
             // Fetch History for Expenditure calculation
             const groceryResponse = await apiClient.get('/mess/grocery');
@@ -69,141 +57,129 @@ const MessManagerOverview: React.FC = () => {
             console.error('Error fetching dashboard data:', error);
         } finally {
             setLoading(false);
+            isFetching.current = false;
         }
-    };
+    }, []);
 
-    const getStatusColor = (status: string) => {
-        switch (status) {
-            case 'Good': return 'mmo-status-good';
-            case 'Low': return 'mmo-status-low';
-            case 'Critical': return 'mmo-status-critical';
-            default: return 'mmo-status-default';
-        }
-    };
+    useEffect(() => {
+        fetchDashboardData();
+    }, [fetchDashboardData]);
 
     if (loading) {
         return (
-            <div className="mmo-loader-container">
-                <div className="mmo-loader"></div>
-                <p className="font-bold text-slate-400 mt-4 uppercase tracking-widest text-xs">Assembling Dashboard...</p>
+            <div className="mo-loader-container">
+                <div className="mo-loader-spinner"></div>
             </div>
         );
     }
 
-    const criticalItems = stocks.filter(s => s.status === 'Critical');
+    const {
+        totalItems = 0,
+        lowStockCount = 0,
+        criticalStockCount = 0,
+        monthlyExpenditure = 0
+    } = stats;
 
     return (
-        <div className="mmo-container animate-fade-in">
-            <div className="mmo-header-alt">
-                <div className="flex items-center gap-4">
-                    <img src="/images/logos/tpgit_logo.png" alt="TPGIT" className="w-16 h-16" />
-                    <div>
-                        <h1 className="mmo-title-alt">Mess Operations</h1>
-                        <p className="mmo-subtitle-alt">TPGIT Hostel Mess Management Portal</p>
-                    </div>
-                </div>
-                <div className="mmo-date-display">
-                    <Clock size={16} />
-                    <span>{new Date().toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}</span>
-                </div>
-            </div>
-
-            {/* Core Metrics */}
-            <div className="mmo-stats-grid">
-                <MetricCard
+        <div className="mess-overview-container animate-fade-in">
+            {/* Main Stats Grid */}
+            <div className="mo-stats-grid">
+                <StatCard
                     label="Stock Expenditure"
-                    value={`₹${(stats.monthlyExpenditure || 0).toLocaleString()}`}
+                    value={`₹${(monthlyExpenditure || 0).toLocaleString()}`}
                     icon={Calculator}
-                    color="sky"
-                    subtitle="Current Month Total"
+                    color="indigo"
+                    sublabel="Current Month Total"
                 />
-                <MetricCard
+                <StatCard
                     label="Critical Items"
-                    value={stats.criticalStockCount}
-                    icon={AlertTriangle}
+                    value={criticalStockCount}
+                    icon={AlertCircle}
                     color="rose"
-                    subtitle="Items needing restock"
+                    sublabel="Items needing restock"
                 />
-                <MetricCard
+                <StatCard
                     label="Low Stock"
-                    value={stats.lowStockCount}
+                    value={lowStockCount}
                     icon={TrendingUp}
                     color="amber"
-                    subtitle="Consider restock soon"
+                    sublabel="Consider restock soon"
                 />
-                <MetricCard
+                <StatCard
                     label="Total Inventory"
-                    value={stats.totalItems}
-                    icon={ShoppingCart}
+                    value={totalItems}
+                    icon={Package}
                     color="emerald"
-                    subtitle="Items currently tracked"
+                    sublabel="Items currently tracked"
                 />
             </div>
 
-            <div className="mmo-main-content">
-                {/* Left Panel: Critical Restock */}
-                <div className="mmo-panel">
-                    <div className="mmo-panel-header">
-                        <div>
-                            <h2 className="mmo-panel-title">Priority Restock</h2>
-                            <p className="mmo-panel-desc">Items below safety threshold</p>
+            <div className="mo-content-grid">
+                {/* Priority Actions */}
+                <div className="mo-priority-container">
+                    <div className="mo-priority-card">
+                        <div className="mo-priority-header">
+                            <h3 className="mo-priority-title">Management Actions</h3>
+                            <span className="mo-priority-badge">Mess Control</span>
                         </div>
-                        <span className="mmo-badge-rose">{criticalItems.length} items</span>
-                    </div>
-                    <div className="mmo-panel-body">
-                        {criticalItems.length > 0 ? (
-                            <div className="mmo-critical-items">
-                                {criticalItems.map(item => (
-                                    <div key={item._id} className="mmo-restock-card">
-                                        <div className="mmo-restock-info">
-                                            <p className="mmo-restock-name">{item.itemName}</p>
-                                            <p className="mmo-restock-qty">Current: <span className="text-rose-600 font-bold">{item.currentStock} {item.unit}</span></p>
-                                        </div>
-                                        <div className="mmo-restock-target">
-                                            <p className="text-[10px] text-slate-400 font-bold uppercase">Threshold</p>
-                                            <p className="font-bold">{item.minimumStock}</p>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        ) : (
-                            <div className="mmo-empty-state">
-                                <Package size={40} className="text-slate-200 mb-2" />
-                                <p>All items above critical level.</p>
-                            </div>
-                        )}
+                        <div className="mo-priority-list">
+                            <TaskItem
+                                title="Update Grocery Stock"
+                                description={`${criticalStockCount} items critically low on stock.`}
+                                icon={ShoppingCart}
+                                color="rose"
+                                action="Restock"
+                                border="left-rose"
+                                to="/mess-dashboard/grocery"
+                            />
+                            <TaskItem
+                                title="Plan Mess Menu"
+                                description="Review and update this week's food menu."
+                                icon={FileText}
+                                color="amber"
+                                action="Edit Menu"
+                                border="left-amber"
+                                to="/mess-dashboard/menu"
+                            />
+                            <TaskItem
+                                title="Stock Utilization"
+                                description="Check usage statistics for essential items."
+                                icon={TrendingUp}
+                                color="blue"
+                                action="View Stocks"
+                                border="left-blue"
+                                to="/mess-dashboard/grocery"
+                            />
+                        </div>
                     </div>
                 </div>
 
-                {/* Right Panel: Inventory Quick Look */}
-                <div className="mmo-panel flex-grow">
-                    <div className="mmo-panel-header">
-                        <h2 className="mmo-panel-title">Inventory Health</h2>
-                        <button className="mmo-panel-link">View Full Stock <ChevronRight size={14} /></button>
+                {/* Statistics & Navigation */}
+                <div className="mo-side-panel">
+                    <div className="mo-quick-links-container">
+                        <h3 className="mo-quick-links-title">Quick Settings</h3>
+                        <div className="mo-quick-links-list">
+                            <QuickLink label="Grocery Stock" to="/mess-dashboard/grocery" icon={Package} />
+                            <QuickLink label="Update Menu" to="/mess-dashboard/menu" icon={FileText} />
+                            <QuickLink label="Account Settings" to="/mess-dashboard/settings" icon={Calculator} />
+                        </div>
                     </div>
-                    <div className="mmo-panel-body no-padding">
-                        <table className="mmo-table-alt">
-                            <thead>
-                                <tr>
-                                    <th>Item Name</th>
-                                    <th className="center">Current Stock</th>
-                                    <th className="center">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {stocks.slice(0, 8).map(item => (
-                                    <tr key={item._id}>
-                                        <td className="font-bold text-slate-700">{item.itemName}</td>
-                                        <td className="center font-black text-slate-600">{item.currentStock} <span className="text-[10px] lowercase text-slate-400 font-medium">{item.unit}</span></td>
-                                        <td className="center">
-                                            <span className={`mmo-status-pill ${getStatusColor(item.status)}`}>
-                                                {item.status}
-                                            </span>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+
+                    <div className="mo-small-stats-card">
+                        <div className="mo-small-stat">
+                            <div className="mo-small-stat-info">
+                                <span className="mo-small-stat-label">Stock Status</span>
+                                <span className="mo-small-stat-value">{totalItems - criticalStockCount} Good</span>
+                            </div>
+                            <CheckCircle size={20} className="text-emerald-500" />
+                        </div>
+                        <div className="mo-small-stat">
+                            <div className="mo-small-stat-info">
+                                <span className="mo-small-stat-label">Needs Attention</span>
+                                <span className="mo-small-stat-value">{criticalStockCount + lowStockCount} Items</span>
+                            </div>
+                            <AlertCircle size={20} className="text-amber-500" />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -211,19 +187,42 @@ const MessManagerOverview: React.FC = () => {
     );
 };
 
-const MetricCard: React.FC<{ label: string; value: any; icon: any; color: string; subtitle: string }> = ({ label, value, icon: Icon, color, subtitle }) => (
-    <div className={`mmo-metric-card ${color}`}>
-        <div className="mmo-metric-main">
-            <div>
-                <p className="mmo-metric-label">{label}</p>
-                <p className="mmo-metric-value">{value}</p>
-            </div>
-            <div className="mmo-metric-icon">
-                <Icon size={24} />
+// Sub-components matching AdminOverview
+const StatCard: React.FC<{ label: string; value: any; icon: any; color: string; sublabel: string }> = ({ label, value, icon: Icon, color, sublabel }) => (
+    <div className={`mo-stat-card ${color}`}>
+        <div className="mo-stat-icon-wrapper">
+            <span className="mo-stat-label">{label}</span>
+            <div className="mo-stat-icon">
+                <Icon size={18} />
             </div>
         </div>
-        <p className="mmo-metric-subtitle">{subtitle}</p>
+        <div>
+            <h4 className="mo-stat-value">{value}</h4>
+            <p className="mo-stat-sublabel">{sublabel}</p>
+        </div>
     </div>
+);
+
+const TaskItem: React.FC<{ title: string; description: string; icon: any; color: string; action: string; border: string; to: string }> = ({ title, description, icon: Icon, color, action, to }) => (
+    <Link to={to} className={`mo-task-item`}>
+        <div className="mo-task-content">
+            <div className={`mo-task-icon ${color}`}>
+                <Icon size={18} />
+            </div>
+            <div>
+                <h4 className="mo-task-title">{title}</h4>
+                <p className="mo-task-desc">{description}</p>
+            </div>
+        </div>
+        <span className="mo-task-action">{action} &rarr;</span>
+    </Link>
+);
+
+const QuickLink: React.FC<{ label: string; to: string; icon: any }> = ({ label, to, icon: Icon }) => (
+    <Link to={to} className="mo-quick-link">
+        <Icon size={16} />
+        <span>{label}</span>
+    </Link>
 );
 
 export default MessManagerOverview;

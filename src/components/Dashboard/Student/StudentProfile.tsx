@@ -1,24 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { User, Mail, GraduationCap, Building2, Hash, DoorOpen, Phone } from 'lucide-react';
+import { User, Mail, Phone, Building, Hash, GraduationCap, Calendar, Save, Upload, AlertCircle, CheckCircle2, BadgeCheck } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 import apiClient from '../../../api/apiClient';
+import './StudentProfile.css';
 
-interface ProfileData {
+interface StudentData {
+    _id: string;
     firstName: string;
     lastName: string;
     regNumber: string;
-    email: string;
     department: string;
     year: string;
     roomNo: number;
     block: string;
+    email: string;
     phone: string;
     photo?: string;
-    status: string;
+    is_Approved: boolean;
 }
 
 const StudentProfile: React.FC = () => {
-    const [profile, setProfile] = useState<ProfileData | null>(null);
+    const [student, setStudent] = useState<StudentData | null>(null);
     const [loading, setLoading] = useState(true);
+    const [saving, setSaving] = useState(false);
+    const [photoPreview, setPhotoPreview] = useState<string>('');
 
     useEffect(() => {
         fetchProfile();
@@ -27,83 +32,171 @@ const StudentProfile: React.FC = () => {
     const fetchProfile = async () => {
         try {
             const response = await apiClient.get('/students/profile');
-            setProfile(response.data);
+            setStudent(response.data);
+            if (response.data.photo) {
+                setPhotoPreview(response.data.photo);
+            }
         } catch (error) {
-            console.error('Error fetching profile:', error);
+            toast.error('Failed to load profile');
         } finally {
             setLoading(false);
         }
     };
 
-    if (loading) {
-        return (
-            <div className="flex items-center justify-center min-h-[400px]">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-primary-600"></div>
-            </div>
-        );
-    }
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        if (!student) return;
+        const { name, value } = e.target;
+        setStudent({ ...student, [name]: value });
+    };
 
-    const fullName = profile ? `${profile.firstName} ${profile.lastName}` : 'Student Name';
+    const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            if (file.size > 2 * 1024 * 1024) {
+                toast.error('Image size should be less than 2MB');
+                return;
+            }
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const base64String = reader.result as string;
+                setPhotoPreview(base64String);
+                setStudent(prev => prev ? { ...prev, photo: base64String } : null);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleUpdate = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!student) return;
+
+        setSaving(true);
+        try {
+            await apiClient.put(`/students/${student._id}`, student);
+            toast.success('Profile updated successfully');
+        } catch (error) {
+            toast.error('Failed to update profile');
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    if (loading) return (
+        <div className="sp-loading">
+            <div className="sp-spinner"></div>
+        </div>
+    );
+
+    if (!student) return <div className="sp-error">No profile data found.</div>;
 
     return (
-        <div className="max-w-4xl mx-auto animate-fade-in">
-            <div className="mb-8">
-                <h1 className="text-3xl font-display font-bold text-gray-900">My Profile</h1>
-                <p className="text-gray-600">View and manage your personal identity within the hostel</p>
-            </div>
+        <div className="sp-wrapper">
+            {/* <div className="sp-page-header">
+                <h1 className="sp-page-title">Personal Profile</h1>
+                <p className="sp-page-subtitle">View and update your institutional records</p>
+            </div> */}
 
-            <div className="bg-white rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden">
-                {/* Profile Banner */}
-                <div className="h-32 bg-gradient-to-r from-primary-600 to-primary-900 relative">
-                    <div className="absolute top-4 right-6">
-                        <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-white/20 text-white backdrop-blur-md`}>
-                            Account {profile?.status || 'PENDING'}
-                        </span>
+            <div className="sp-layout">
+                {/* Left Side: Summary Card */}
+                <div className="sp-side-panel">
+                    <div className="sp-profile-card">
+                        <div className="sp-photo-container">
+                            <img
+                                src={photoPreview || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix'}
+                                alt="Student"
+                                className="sp-avatar"
+                            />
+                            <label className="sp-photo-edit-btn">
+                                <Upload size={14} />
+                                <input type="file" hidden accept="image/*" onChange={handlePhotoChange} />
+                            </label>
+                        </div>
+
+                        <div className="sp-identity-info">
+                            <h2 className="sp-full-name">{student.firstName} {student.lastName}</h2>
+                            <p className="sp-id-tag">{student.regNumber}</p>
+                        </div>
+
+                        <div className={`sp-status-chip ${student.is_Approved ? 'approved' : 'pending'}`}>
+                            {student.is_Approved ? (
+                                <><BadgeCheck size={14} /> <span>Verified</span></>
+                            ) : (
+                                <><AlertCircle size={14} /> <span>Pending</span></>
+                            )}
+                        </div>
+
+                        {!student.is_Approved && (
+                            <div className="sp-notice-box">
+                                <p>Under Review</p>
+                            </div>
+                        )}
                     </div>
                 </div>
 
-                <div className="px-8 pb-10">
-                    <div className="relative -mt-16 mb-8 flex items-end space-x-6">
-                        <div className="w-32 h-32 bg-white rounded-3xl shadow-xl p-2">
-                            <div className="w-full h-full bg-gray-100 rounded-2xl flex items-center justify-center border-4 border-white overflow-hidden">
-                                {profile?.photo ? (
-                                    <img src={profile.photo} alt="Profile" className="w-full h-full object-cover" />
-                                ) : (
-                                    <User size={64} className="text-gray-300" />
-                                )}
-                            </div>
-                        </div>
-                        <div className="pb-2">
-                            <h2 className="text-2xl font-display font-bold text-gray-900">{fullName}</h2>
-                            <p className="text-primary-600 font-bold tracking-wider">{profile?.regNumber}</p>
-                        </div>
-                    </div>
+                {/* Right Side: Detailed Form in Multi-Column */}
+                <div className="sp-main-content">
+                    <form onSubmit={handleUpdate} className="sp-edit-form">
+                        <div className="sp-form-sections-grid">
+                            <section className="sp-form-section">
+                                <div className="sp-section-head">
+                                    <User size={16} />
+                                    <h3>Basic Info</h3>
+                                </div>
+                                <div className="sp-input-grid">
+                                    <FormInput label="First Name" name="firstName" value={student.firstName} onChange={handleInputChange} disabled={!student.is_Approved} />
+                                    <FormInput label="Last Name" name="lastName" value={student.lastName} onChange={handleInputChange} disabled={!student.is_Approved} />
+                                    <FormInput label="Department" name="department" value={student.department} onChange={handleInputChange} disabled={!student.is_Approved} />
+                                    <FormInput label="Year" name="year" value={student.year} onChange={handleInputChange} disabled={!student.is_Approved} />
+                                </div>
+                            </section>
 
-                    <div className="grid md:grid-cols-2 gap-8">
-                        <ProfileItem icon={Mail} label="Email Address" value={profile?.email} />
-                        <ProfileItem icon={Phone} label="Phone Number" value={profile?.phone} />
-                        <ProfileItem icon={GraduationCap} label="Department" value={profile?.department} />
-                        <ProfileItem icon={Hash} label="Year of Study" value={profile?.year} />
-                        <div className="grid grid-cols-2 gap-4">
-                            <ProfileItem icon={DoorOpen} label="Room No" value={profile?.roomNo?.toString()} />
-                            <ProfileItem icon={Building2} label="Block" value={profile?.block} />
+                            <section className="sp-form-section">
+                                <div className="sp-section-head">
+                                    <Building size={16} />
+                                    <h3>Hostel & Contact</h3>
+                                </div>
+                                <div className="sp-input-grid">
+                                    <FormInput label="Hostel Block" name="block" value={student.block} onChange={handleInputChange} />
+                                    <FormInput label="Room No" name="roomNo" value={student.roomNo?.toString()} onChange={handleInputChange} type="number" />
+                                    <FormInput label="Email" name="email" value={student.email} onChange={handleInputChange} type="email" />
+                                    <FormInput label="Phone" name="phone" value={student.phone} onChange={handleInputChange} type="tel" />
+                                </div>
+                            </section>
                         </div>
-                    </div>
+
+                        <div className="sp-form-actions">
+                            <button type="submit" className="sp-submit-button" disabled={saving}>
+                                {saving ? 'Saving...' : 'Save Profile'}
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     );
 };
 
-const ProfileItem: React.FC<{ icon: any; label: string; value: string | undefined }> = ({ icon: Icon, label, value }) => (
-    <div className="flex items-start space-x-4 p-5 rounded-2xl bg-gray-50 border border-transparent hover:border-primary/20 hover:bg-white hover:shadow-lg hover:shadow-gray-200/50 transition-all duration-300 group">
-        <div className="p-3 bg-white rounded-xl shadow-sm text-gray-400 group-hover:text-primary transition-colors">
-            <Icon size={20} />
-        </div>
-        <div>
-            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-[2px] mb-1">{label}</p>
-            <p className="text-base font-display font-bold text-gray-900">{value || 'Not provided'}</p>
-        </div>
+interface FormInputProps {
+    label: string;
+    name: string;
+    value: string;
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    type?: string;
+    disabled?: boolean;
+}
+
+const FormInput: React.FC<FormInputProps> = ({ label, name, value, onChange, type = 'text', disabled }) => (
+    <div className="sp-input-group">
+        <label className="sp-input-label">{label}</label>
+        <input
+            className="sp-text-input"
+            type={type}
+            name={name}
+            value={value || ''}
+            onChange={onChange}
+            disabled={disabled}
+            placeholder={`Enter ${label.toLowerCase()}`}
+        />
     </div>
 );
 

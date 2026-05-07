@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Upload, Mail, Phone, Building, Hash } from 'lucide-react';
+import { Upload, Mail, Phone, Building, Hash, User, GraduationCap, ArrowLeft, KeyRound, CheckCircle2 } from 'lucide-react';
 import Logo from '../assets/images/logos/tpgit_logo.png';
 import { toast } from 'react-hot-toast';
 import apiClient from '../api/apiClient';
+import { useNavigate } from 'react-router-dom';
+import './RegistrationForm.css';
 
 interface FormData {
     firstName: string;
@@ -21,6 +23,7 @@ interface FormData {
 }
 
 const RegistrationForm: React.FC = () => {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState<FormData>({
         firstName: '',
         lastName: '',
@@ -77,7 +80,6 @@ const RegistrationForm: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Email domain validation
         if (!formData.email.toLowerCase().endsWith('@tpgit.com')) {
             toast.error('Hostel registration is restricted to @tpgit.com email addresses.');
             return;
@@ -89,300 +91,230 @@ const RegistrationForm: React.FC = () => {
         }
 
         setLoading(true);
-        const regToast = toast.loading('Registering your account...');
+        const regToast = toast.loading('Registering...');
 
         try {
-            const formDataToSend = new FormData();
-            Object.entries(formData).forEach(([key, value]) => {
-                if (value !== null && key !== 'confirmPassword') {
-                    formDataToSend.append(key, value);
-                }
-            });
+            const payload = {
+                firstname: formData.firstName,
+                lastname: formData.lastName,
+                regnumber: formData.regNumber,
+                department: formData.department,
+                year: formData.year,
+                roomno: Number(formData.roomNo),
+                block: formData.block,
+                email: formData.email,
+                phnnum: formData.phoneNumber,
+                username: formData.userId,
+                password: formData.password,
+                role: 'student',
+                ...(photoPreview && { photo: photoPreview })
+            };
 
-            await apiClient.post('/auth/register', formDataToSend, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
+            await apiClient.post('/auth/register', payload);
 
-            toast.success('Registration successful! Your account will be activated once approved by the admin.', { id: regToast, duration: 6000 });
-            // Reset form
+            toast.success('Registration successful! Awaiting admin approval.', { id: regToast, duration: 10000 });
+
             setFormData({
-                firstName: '',
-                lastName: '',
-                regNumber: '',
-                department: '',
-                year: '',
-                roomNo: '',
-                block: '',
-                email: '',
-                phoneNumber: '',
-                userId: '',
-                password: '',
-                confirmPassword: '',
-                photo: null,
+                firstName: '', lastName: '', regNumber: '', department: '', year: '', roomNo: '', block: '', email: '', phoneNumber: '', userId: '', password: '', confirmPassword: '', photo: null,
             });
             setPhotoPreview('');
+
+            setTimeout(() => navigate('/login'), 2000);
+
         } catch (error: any) {
-            toast.error(error.response?.data?.message || 'Registration failed. Please try again.', { id: regToast });
+            toast.error(error.response?.data?.message || 'Registration failed.', { id: regToast });
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div className="min-h-screen bg-gray-100 py-12">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="bg-white rounded-2xl shadow-2xl p-8 md:p-12 animate-fade-in">
-                    {/* Header */}
-                    <div className="text-center mb-10">
-                        <div className="flex justify-center items-center mb-6">
-                            <div className="w-24 h-24 p-2 bg-white rounded-full shadow-lg border border-gray-100 transform hover:rotate-6 transition-transform duration-500">
-                                <img src={Logo} alt="TPGIT Logo" className="w-full h-full object-contain" />
+        <div className="rf-container">
+            {/* Minimal Header */}
+            <div className="rf-header">
+                <div className="rf-header-left">
+                    <img src={Logo} alt="Logo" className="rf-logo-img" />
+                    <h1 className="rf-title">Hostel Registration</h1>
+                </div>
+                {/* <button 
+                    onClick={() => navigate('/login')}
+                    className="rf-back-btn"
+                >
+                    <ArrowLeft size={16} /> Back to Login
+                </button> */}
+            </div>
+
+            <div className="rf-main-wrapper">
+                <form onSubmit={handleSubmit} className="rf-form">
+
+                    <div className="rf-grid">
+
+                        {/* Column 1: Personal Profile */}
+                        <div className="rf-section">
+                            <div className="rf-section-header">
+                                <User size={20} />
+                                <h2 className="rf-section-title">Personal Profile</h2>
                             </div>
-                        </div>
-                        <h2 className="text-xl font-display font-semibold text-primary-600 uppercase tracking-widest mb-2">Thanthai Periyar Government Institute of Technology</h2>
-                        <h1 className="text-3xl md:text-5xl font-display font-bold text-gray-900 mb-4">
-                            Hostel Registration
-                        </h1>
-                        <div className="h-1 w-24 bg-primary mx-auto rounded-full mb-6"></div>
-                        <p className="text-gray-600 text-lg max-w-2xl mx-auto">Please provide your academic and personal details to request a room in the college hostel.</p>
-                    </div>
 
-                    <form onSubmit={handleSubmit}>
-                        <div className="grid md:grid-cols-2 gap-8">
-                            {/* Personal Information */}
-                            <div className="bg-gray-50 rounded-xl p-6">
-                                <h2 className="text-2xl font-bold text-primary-600 mb-6">Personal Information</h2>
+                            <div className="rf-field-group rf-field-group-2col">
+                                <FormGroup label="First Name" name="firstName" value={formData.firstName} onChange={handleInputChange} required />
+                                <FormGroup label="Last Name" name="lastName" value={formData.lastName} onChange={handleInputChange} required />
+                            </div>
 
-                                <div className="mb-4">
-                                    <label className="form-label">First Name</label>
-                                    <input
-                                        type="text"
-                                        name="firstName"
-                                        value={formData.firstName}
-                                        onChange={handleInputChange}
-                                        className="form-input"
-                                        required
-                                    />
-                                </div>
+                            <FormGroup label="Registration Number" name="regNumber" value={formData.regNumber} onChange={handleInputChange} placeholder="e.g. 513121106005" icon={<Hash size={16} />} required />
 
-                                <div className="mb-4">
-                                    <label className="form-label">Last Name</label>
-                                    <input
-                                        type="text"
-                                        name="lastName"
-                                        value={formData.lastName}
-                                        onChange={handleInputChange}
-                                        className="form-input"
-                                        required
-                                    />
-                                </div>
-
-                                <div className="mb-4">
-                                    <label className="form-label">Registration Number</label>
-                                    <div className="relative">
-                                        <Hash className="absolute left-3 top-3.5 text-gray-400" size={20} />
-                                        <input
-                                            type="text"
-                                            name="regNumber"
-                                            value={formData.regNumber}
-                                            onChange={handleInputChange}
-                                            className="form-input pl-10"
-                                            required
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="mb-4">
-                                    <label className="form-label">Department</label>
+                            <div className="rf-field-group rf-field-group-2col">
+                                <div className="rf-field-wrapper">
+                                    <label className="rf-label">Department</label>
                                     <select
                                         name="department"
                                         value={formData.department}
                                         onChange={handleInputChange}
-                                        className="form-input"
+                                        className="rf-select"
                                         required
                                     >
                                         <option value="">Select Department</option>
-                                        {departments.map((dept) => (
-                                            <option key={dept} value={dept}>
-                                                {dept}
-                                            </option>
-                                        ))}
+                                        {departments.map(d => <option key={d} value={d}>{d}</option>)}
                                     </select>
                                 </div>
-
-                                <div className="mb-4">
-                                    <label className="form-label">Year of Study</label>
+                                <div className="rf-field-wrapper">
+                                    <label className="rf-label">Year of Study</label>
                                     <select
                                         name="year"
                                         value={formData.year}
                                         onChange={handleInputChange}
-                                        className="form-input"
+                                        className="rf-select"
                                         required
                                     >
                                         <option value="">Select Year</option>
-                                        {years.map((year) => (
-                                            <option key={year} value={year}>
-                                                {year}
-                                            </option>
-                                        ))}
+                                        {years.map(y => <option key={y} value={y}>{y}</option>)}
                                     </select>
                                 </div>
                             </div>
 
-                            {/* Accommodation Details */}
-                            <div className="bg-gray-50 rounded-xl p-6">
-                                <h2 className="text-2xl font-bold text-primary-600 mb-6">Accommodation Details</h2>
-
-                                <div className="mb-4">
-                                    <label className="form-label">Room Number</label>
-                                    <div className="relative">
-                                        <Building className="absolute left-3 top-3.5 text-gray-400" size={20} />
-                                        <input
-                                            type="text"
-                                            name="roomNo"
-                                            value={formData.roomNo}
-                                            onChange={handleInputChange}
-                                            className="form-input pl-10"
-                                            required
-                                        />
-                                    </div>
+                            <div className="rf-section" style={{ paddingTop: '0.5rem' }}>
+                                <div className="rf-section-header">
+                                    <KeyRound size={20} />
+                                    <h2 className="rf-section-title">Account Credentials</h2>
                                 </div>
+                                <FormGroup label="User ID" name="userId" value={formData.userId} onChange={handleInputChange} placeholder="Unique User ID" required />
+                                <div className="rf-field-group rf-field-group-2col">
+                                    <FormGroup label="Password" name="password" value={formData.password} onChange={handleInputChange} type="password" placeholder="••••••••" required />
+                                    <FormGroup label="Confirm Password" name="confirmPassword" value={formData.confirmPassword} onChange={handleInputChange} type="password" placeholder="••••••••" required />
+                                </div>
+                            </div>
+                        </div>
 
-                                <div className="mb-4">
-                                    <label className="form-label">Block</label>
+                        {/* Column 2: Accommodation & Contact */}
+                        <div className="rf-section">
+                            <div className="rf-section-header">
+                                <Building size={20} />
+                                <h2 className="rf-section-title">Hostel Details</h2>
+                            </div>
+
+                            <div className="rf-field-group rf-field-group-2col">
+                                <FormGroup label="Room No" name="roomNo" value={formData.roomNo} onChange={handleInputChange} required />
+                                <div className="rf-field-wrapper">
+                                    <label className="rf-label">Block</label>
                                     <select
                                         name="block"
                                         value={formData.block}
                                         onChange={handleInputChange}
-                                        className="form-input"
+                                        className="rf-select"
                                         required
                                     >
                                         <option value="">Select Block</option>
-                                        {blocks.map((block) => (
-                                            <option key={block} value={block}>
-                                                {block}
-                                            </option>
-                                        ))}
+                                        {blocks.map(b => <option key={b} value={b}>{b}</option>)}
                                     </select>
                                 </div>
+                            </div>
 
-                                <div className="mb-4">
-                                    <label className="form-label">Upload Profile Image</label>
-                                    <div className="flex items-center space-x-4">
-                                        <label className="flex-1 cursor-pointer">
-                                            <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-primary-500 transition-colors">
-                                                <Upload className="mx-auto text-gray-400 mb-2" size={32} />
-                                                <span className="text-sm text-gray-600">
-                                                    {formData.photo ? formData.photo.name : 'Choose file'}
-                                                </span>
-                                            </div>
-                                            <input
-                                                type="file"
-                                                accept="image/*"
-                                                onChange={handleFileChange}
-                                                className="hidden"
-                                            />
-                                        </label>
-                                        {photoPreview && (
-                                            <img
-                                                src={photoPreview}
-                                                alt="Preview"
-                                                className="w-20 h-20 rounded-lg object-cover"
-                                            />
-                                        )}
-                                    </div>
-                                </div>
-
-                                <div className="mb-4">
-                                    <label className="form-label">Email</label>
-                                    <div className="relative">
-                                        <Mail className="absolute left-3 top-3.5 text-gray-400" size={20} />
-                                        <input
-                                            type="email"
-                                            name="email"
-                                            value={formData.email}
-                                            onChange={handleInputChange}
-                                            className="form-input pl-10"
-                                            placeholder="example@tpgit.com"
-                                            required
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="mb-4">
-                                    <label className="form-label">Contact Number</label>
-                                    <div className="relative">
-                                        <Phone className="absolute left-3 top-3.5 text-gray-400" size={20} />
-                                        <input
-                                            type="tel"
-                                            name="phoneNumber"
-                                            value={formData.phoneNumber}
-                                            onChange={handleInputChange}
-                                            className="form-input pl-10"
-                                            required
-                                        />
-                                    </div>
+                            <div className="rf-field-wrapper">
+                                <label className="rf-label">Profile Photo</label>
+                                <div className="rf-photo-upload-container">
+                                    <label className="rf-photo-dropzone">
+                                        <div className="rf-upload-icon-wrapper">
+                                            <Upload className="rf-upload-icon" size={24} />
+                                            <span className="rf-photo-label-text">
+                                                {formData.photo ? formData.photo.name : 'Upload Profile Image'}
+                                            </span>
+                                        </div>
+                                        <input type="file" accept="image/*" onChange={handleFileChange} className="hidden" style={{ display: 'none' }} />
+                                    </label>
+                                    {photoPreview && (
+                                        <div className="rf-photo-preview">
+                                            <img src={photoPreview} alt="Preview" />
+                                        </div>
+                                    )}
                                 </div>
                             </div>
-                        </div>
 
-                        {/* Account Information */}
-                        <div className="bg-gray-50 rounded-xl p-6 mt-8">
-                            <h2 className="text-2xl font-bold text-primary-600 mb-6">Account Information</h2>
-                            <div className="grid md:grid-cols-3 gap-6">
-                                <div>
-                                    <label className="form-label">User ID</label>
-                                    <input
-                                        type="text"
-                                        name="userId"
-                                        value={formData.userId}
-                                        onChange={handleInputChange}
-                                        className="form-input"
-                                        required
-                                    />
+                            <div className="rf-section" style={{ paddingTop: '0.5rem' }}>
+                                <div className="rf-section-header">
+                                    <Mail size={20} />
+                                    <h2 className="rf-section-title">Contact Information</h2>
                                 </div>
-                                <div>
-                                    <label className="form-label">Password</label>
-                                    <input
-                                        type="password"
-                                        name="password"
-                                        value={formData.password}
-                                        onChange={handleInputChange}
-                                        className="form-input"
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <label className="form-label">Confirm Password</label>
-                                    <input
-                                        type="password"
-                                        name="confirmPassword"
-                                        value={formData.confirmPassword}
-                                        onChange={handleInputChange}
-                                        className="form-input"
-                                        required
-                                    />
-                                </div>
+                                <FormGroup label="Email (@tpgit.com)" name="email" value={formData.email} onChange={handleInputChange} type="email" placeholder="example@tpgit.com" icon={<Mail size={16} />} required />
+                                <FormGroup label="Contact Number" name="phoneNumber" value={formData.phoneNumber} onChange={handleInputChange} type="tel" placeholder="+91 9876543210" icon={<Phone size={16} />} required />
                             </div>
                         </div>
+                    </div>
 
-                        {/* Submit Button */}
-                        <div className="mt-8 flex justify-end">
-                            <button
-                                type="submit"
-                                disabled={loading}
-                                className="btn-secondary text-lg px-12 py-4 disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                                {loading ? 'Registering...' : 'Register'}
-                            </button>
+                    {/* Submit Bar */}
+                    <div className="rf-submit-bar">
+                        <div className="rf-disclaimer">
+                            <CheckCircle2 size={14} className="rf-check-icon" />
+                            <span>Please verify all details before submitting. Verification can take up to 24 hours.</span>
                         </div>
-                    </form>
-                </div>
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="rf-submit-btn"
+                        >
+                            {loading ? 'Processing...' : 'Submit'}
+                        </button>
+                    </div>
+                </form>
+
+                <footer className="rf-footer">
+                    &copy; {new Date().getFullYear()} TPGIT Hostels - Mess Management System
+                </footer>
             </div>
         </div>
     );
 };
+
+interface FormGroupProps {
+    label: string;
+    name: string;
+    value: string;
+    onChange: any;
+    placeholder?: string;
+    type?: string;
+    icon?: React.ReactNode;
+    required?: boolean;
+}
+
+const FormGroup: React.FC<FormGroupProps> = ({ label, name, value, onChange, placeholder, type = 'text', icon, required }) => (
+    <div className="rf-field-wrapper">
+        <label className="rf-label">{label}</label>
+        <div className="rf-input-container">
+            {icon && (
+                <div className="rf-icon-wrapper">
+                    {icon}
+                </div>
+            )}
+            <input
+                type={type}
+                name={name}
+                value={value}
+                onChange={onChange}
+                placeholder={placeholder}
+                className={`rf-input ${icon ? 'rf-input-with-icon' : ''}`}
+                required={required}
+            />
+        </div>
+    </div>
+);
 
 export default RegistrationForm;

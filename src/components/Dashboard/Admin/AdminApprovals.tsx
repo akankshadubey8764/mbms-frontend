@@ -90,7 +90,7 @@ const AdminApprovals: React.FC = () => {
         const loadingToast = toast.loading(`${action === 'approve' ? 'Approving' : 'Rejecting'} student...`);
         try {
             if (action === 'approve') {
-                await apiClient.post(`/ admin / requests / ${id}/approve`);
+                await apiClient.post(`/admin/requests/${id}/approve`);
             } else {
                 // Reject usually needs a reason in some backends, but here we use DELETE or POST
                 // Based on adminRoutes.js line 44, it's DELETE /requests/:id/reject with reason in body

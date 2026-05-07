@@ -1,357 +1,314 @@
 /* MessManagerDashboardLayout.css */
+
 .mdl-layout {
-    display: flex;
-    min-height: 100vh;
-    background-color: #f8fafc;
-}
-
-/* Sidebar Styling */
-.mdl-sidebar {
-    width: 280px;
-    background-color: #0f172a;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    transition: all 0.3s ease;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    background-color: #f4f6f8;
     height: 100vh;
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    height: 100dvh;
+    width: 100vw;
+    overflow: hidden;
 }
 
-.mdl-sidebar-inner {
-    padding: 32px 20px;
-}
-
-.mdl-sidebar-logo-container {
+/* Header */
+.mdl-top-header {
+    background-color: white;
+    height: 50px;
     display: flex;
     align-items: center;
-    gap: 16px;
-    margin-bottom: 48px;
-    padding-left: 8px;
+    justify-content: space-between;
+    padding: 0 16px;
+    border-bottom: 1px solid #e2e8f0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.mdl-header-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.mdl-menu-btn {
+    background: transparent;
+    border: none;
+    color: black;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+.mdl-menu-btn:hover {
+    background-color: #f1f5f9;
 }
 
 .mdl-logo-img {
-    width: 48px;
-    height: 48px;
+    width: 32px;
+    height: 32px;
     object-fit: contain;
 }
 
-.mdl-mobile-logo-img {
-    width: 36px;
-    height: 36px;
-    object-fit: contain;
-}
-
-.mdl-logo-title {
-    font-size: 20px;
-    font-weight: 800;
-    margin: 0;
-    letter-spacing: -0.025em;
-    color: white;
-}
-
-.mdl-logo-subtitle {
-    font-size: 11px;
-    font-weight: 600;
-    color: #94a3b8;
-    margin: 0;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-}
-
-/* Navigation Links */
-.mdl-nav {
+.mdl-brand-text {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+}
+
+.mdl-brand-title {
+    font-size: 14px;
+    font-weight: bold;
+    color: #0f172a;
+    line-height: 1;
+}
+
+.mdl-brand-subtitle {
+    font-size: 10px;
+    color: #64748b;
+    text-transform: capitalize;
+}
+
+.mdl-page-header {
+    margin-bottom: 20px;
+}
+
+.mdl-page-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #0f172a;
+    margin: 0;
+}
+
+.mdl-header-actions {
+    display: flex;
+}
+
+.mdl-logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: 1px solid #e2e8f0;
+    background-color: #f8fafc;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    color: black;
+    cursor: pointer;
+}
+
+.mdl-logout-btn:hover {
+    background-color: #f1f5f9;
+    color: #ef4444;
+}
+
+/* Sidebar Wrapper */
+.mdl-sidebar {
+    position: fixed;
+    top: 50px;
+    left: 0;
+    bottom: 0;
+    background-color: white;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+    transition: width 0.3s ease-in-out, transform 0.3s ease-in-out;
+    z-index: 40;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    width: 60px;
+    /* collapsed width for desktop */
+}
+
+/* Expand when hovered or pinned */
+.mdl-sidebar.pinned,
+.mdl-sidebar:hover {
+    width: 250px;
+}
+
+.mdl-sidebar.pinned,
+.mdl-sidebar.mobile-open {
+    top: 0;
+    z-index: 100;
+    height: 100vh;
+}
+
+.mdl-sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    min-width: 250px;
+    height: 50px;
+    box-sizing: border-box;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.mdl-close-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #94a3b8;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    border-radius: 4px;
+}
+
+.mdl-close-btn:hover {
+    color: #0f172a;
+    background-color: #f1f5f9;
+}
+
+/* Nav Links */
+.mdl-nav {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 12px 0;
+    gap: 4px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .mdl-nav-link {
     display: flex;
     align-items: center;
-    gap: 14px;
-    padding: 12px 16px;
-    border-radius: 12px;
+    padding: 12px 17px;
+    color: #64748b;
     text-decoration: none;
-    color: #94a3b8;
-    font-weight: 600;
-    font-size: 15px;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 12px;
+    font-weight: bold;
+    transition: background 0.2s, color 0.2s;
+    min-width: 250px;
+    /* Prevents text wrap */
+    box-sizing: border-box;
+    border-left: 3px solid transparent;
 }
 
-.mdl-nav-link:hover {
-    color: white;
-    background-color: rgba(255, 255, 255, 0.05);
-}
-
-.mdl-nav-link.active {
-    color: white;
-    background-color: #2563eb;
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
-}
-
-.mdl-nav-icon-wrapper {
+.mdl-nav-icon {
+    width: 20px;
     display: flex;
-    align-items: center;
     justify-content: center;
-    width: 24px;
+    margin-right: 16px;
+    flex-shrink: 0;
 }
 
-.mdl-nav-text {
-    flex: 1;
-}
-
-/* Sidebar Footer */
-.mdl-sidebar-footer {
-    padding: 24px;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.mdl-logout-btn {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 12px 16px;
-    border-radius: 12px;
-    background-color: rgba(239, 68, 68, 0.1);
-    color: #f87171;
-    border: none;
-    font-weight: 600;
-    font-size: 15px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.mdl-logout-btn:hover {
-    background-color: #ef4444;
-    color: white;
-}
-
-/* Desktop Header Styling */
-.mdl-main-container {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-}
-
-.mdl-desktop-header {
-    height: 80px;
-    background-color: white;
-    border-bottom: 1px solid #e2e8f0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 40px;
-    position: sticky;
-    top: 0;
-    z-index: 40;
-}
-
-.mdl-header-title {
-    font-size: 24px;
-    font-weight: 800;
-    color: #0f172a;
-    margin: 0;
-    letter-spacing: -0.025em;
-}
-
-.mdl-header-actions {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
-
-.mdl-header-logout {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 16px;
-    border-radius: 10px;
-    background-color: #f8fafc;
-    border: 1px solid #e2e8f0;
-    color: #64748b;
-    font-weight: 600;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.mdl-header-logout:hover {
-    color: #ef4444;
-    border-color: #fca5a5;
-    background-color: #fef2f2;
-}
-
-/* Content Area */
-.mdl-content-area {
-    padding: 40px;
-}
-
-.mdl-content-inner {
-    max-width: 1400px;
-    margin: 0 auto;
-}
-
-/* Mobile Styling */
-.mdl-mobile-header {
-    display: none;
-    height: 64px;
-    background-color: white;
-    border-bottom: 1px solid #e2e8f0;
-    padding: 0 20px;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
-
-.mdl-mobile-brand {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.mdl-mobile-logo {
-    width: 36px;
-    height: 36px;
-    background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: 800;
-    font-size: 18px;
-}
-
-.mdl-mobile-title {
-    font-size: 18px;
-    font-weight: 800;
-    color: #0f172a;
-    margin: 0;
-}
-
-.mdl-mobile-menu-btn {
-    padding: 8px;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    color: #64748b;
-    cursor: pointer;
-}
-
-/* Mobile Sidebar & Overlay */
-.mdl-mobile-sidebar-wrapper {
-    position: fixed;
-    inset: 0;
-    z-index: 200;
-    visibility: hidden;
-}
-
-.mdl-mobile-sidebar-wrapper.open {
-    visibility: visible;
-}
-
-.mdl-mobile-overlay {
-    position: absolute;
-    inset: 0;
-    background-color: rgba(15, 23, 42, 0.4);
+.mdl-nav-label {
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.2s;
+    white-space: nowrap;
 }
 
-.mdl-mobile-sidebar-wrapper.open .mdl-mobile-overlay {
+.mdl-sidebar.pinned .mdl-nav-label,
+.mdl-sidebar:hover .mdl-nav-label {
     opacity: 1;
 }
 
-.mdl-mobile-sidebar {
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 280px;
-    background-color: white;
-    transform: translateX(-100%);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 20px 0 25px -5px rgba(0, 0, 0, 0.1);
+.mdl-nav-link:hover {
+    background-color: #f8fafc;
+    color: #0f172a;
 }
 
-.mdl-mobile-sidebar-wrapper.open .mdl-mobile-sidebar {
-    transform: translateX(0);
+.mdl-nav-link.active {
+    background-color: #e0f2fe;
+    color: #0284c7;
+    border-left: 3px solid #0284c7;
 }
 
-.mdl-mobile-sidebar-inner {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    padding: 24px 16px;
+.mdl-drawer-footer {
+    padding: 12px 0;
+    border-top: 1px solid #e2e8f0;
 }
 
-.mdl-mobile-sidebar-brand {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 32px;
-    padding-left: 8px;
-}
-
-.mdl-mobile-sidebar-nav {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    flex: 1;
-}
-
-.mdl-mobile-nav-link {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    border-radius: 12px;
-    text-decoration: none;
-    color: #64748b;
-    font-weight: 600;
-}
-
-.mdl-mobile-nav-link.active {
-    background-color: #2563eb;
-    color: white;
-}
-
-.mdl-mobile-logout {
-    margin-top: auto;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    border-radius: 12px;
-    background-color: #fef2f2;
+.mdl-drawer-footer .mdl-nav-link.text-red {
     color: #ef4444;
-    border: none;
-    font-weight: 600;
-    cursor: pointer;
 }
 
-@media (max-width: 1024px) {
+.mdl-drawer-footer .mdl-nav-link.text-red:hover {
+    background-color: #fef2f2;
+    color: #dc2626;
+}
+
+.mdl-main-content {
+    transition: margin-left 0.3s ease-in-out;
+    margin-left: 60px;
+    margin-top: 50px;
+    height: calc(100vh - 50px);
+    overflow: hidden;
+    /* no page-level scroll */
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+/* Expand main content margin only when pinned */
+.layout-pinned .mdl-main-content {
+    margin-left: 250px;
+}
+
+.mdl-content-inner {
+    max-width: 100%;
+    background-color: transparent;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow-y: auto;
+    /* fallback scroll for simple pages */
+    overflow-x: hidden;
+}
+
+/* Hide redundant page-level titles and descriptions since layout now shows them */
+.mdl-content-inner>h1:first-of-type,
+.mdl-content-inner>h1:first-of-type+p,
+.mdl-content-inner>.mmo-container .mmo-header-alt,
+.mdl-content-inner>.mess-overview-container .mmo-header-alt {
+    display: none !important;
+}
+
+/* Mobile Overrides */
+.mdl-mobile-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 30;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+@media (max-width: 768px) {
     .mdl-sidebar {
-        display: none;
+        transform: translateX(-100%);
+        width: 250px;
+        /* Always 250px on mobile */
     }
 
-    .mdl-desktop-header {
-        display: none;
+    .mdl-sidebar.mobile-open {
+        transform: translateX(0);
     }
 
-    .mdl-mobile-header {
-        display: flex;
+    .mdl-sidebar .mdl-nav-label {
+        opacity: 1;
+        /* Labels always visible when open on mobile */
     }
 
-    .mdl-content-area {
-        padding: 24px 16px;
+    .layout-pinned .mdl-main-content,
+    .mdl-main-content {
+        margin-left: 0;
+        /* Full width on mobile */
+        padding: 12px 16px;
+    }
+
+    .mdl-mobile-overlay.visible {
+        display: block;
+        opacity: 1;
     }
 }

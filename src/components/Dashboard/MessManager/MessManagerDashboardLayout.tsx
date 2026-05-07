@@ -1,32 +1,15 @@
 import React, { useState } from 'react';
 import {
-    LayoutDashboard,
-    ShoppingCart,
-    Package,
-    Utensils,
-    LogOut,
-    Menu,
-    X,
-    Settings,
+    LayoutDashboard, ShoppingCart, Utensils, Settings, LogOut, Menu, X
 } from 'lucide-react';
-
 import { Link, useNavigate, Outlet, useLocation } from 'react-router-dom';
 import './MessManagerDashboardLayout.css';
 
 const MessManagerDashboardLayout: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const [isPinned, setIsPinned] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-    const getPageTitle = () => {
-        const path = location.pathname;
-        if (path.includes('/grocery')) return 'Add Grocery Bill';
-        if (path.includes('/issue')) return 'Update Issued Items';
-        if (path.includes('/menu')) return 'Mess Menu';
-        if (path.includes('/settings')) return 'Settings';
-        return 'Overview';
-
-    };
 
     const handleLogout = () => {
         localStorage.removeItem('authToken');
@@ -36,148 +19,124 @@ const MessManagerDashboardLayout: React.FC = () => {
 
     const navLinks = [
         { path: '/mess-dashboard', label: 'Overview', icon: LayoutDashboard, exact: true },
-        { path: '/mess-dashboard/grocery', label: 'Grocery Bill', icon: ShoppingCart },
-        { path: '/mess-dashboard/issue', label: 'Issued Items', icon: Package },
+        { path: '/mess-dashboard/grocery', label: 'Grocery Management', icon: ShoppingCart },
         { path: '/mess-dashboard/menu', label: 'Mess Menu', icon: Utensils },
-        { path: '/mess-dashboard/settings', label: 'Settings', icon: Settings },
+        { path: '/mess-dashboard/settings', label: 'Update Password', icon: Settings },
     ];
-
 
     const isActive = (path: string, exact = false) => {
         if (exact) return location.pathname === path;
         return location.pathname.startsWith(path);
     };
 
+    const getPageTitle = () => {
+        const path = location.pathname;
+        if (path.includes('/grocery')) return 'Grocery Management';
+        if (path.includes('/menu')) return 'Mess Menu';
+        if (path.includes('/settings')) return 'Update Password';
+        return 'Overview';
+    };
+
+    const toggleSidebar = () => {
+        if (window.innerWidth <= 768) {
+            setIsMobileMenuOpen(true);
+        } else {
+            setIsPinned(!isPinned);
+        }
+    };
+
+    const closeSidebar = () => {
+        setIsPinned(false);
+        setIsMobileMenuOpen(false);
+    };
+
     return (
-        <div className="mdl-layout">
-            {/* Sidebar - Desktop */}
-            <div className="mdl-sidebar">
-                <div className="mdl-sidebar-inner">
-                    <div className="mdl-sidebar-logo-container">
-                        <img src="/images/logos/tpgit_logo.png" alt="TPGIT" className="mdl-logo-img" />
-                        <div className="mdl-logo-text-wrapper">
-                            <h2 className="mdl-logo-title">TPGIT</h2>
-                            <p className="mdl-logo-subtitle">Mess Manager</p>
-                        </div>
+        <div className={`mdl-layout ${isPinned ? 'layout-pinned' : 'layout-unpinned'}`}>
+            <header className="mdl-top-header">
+                <div className="mdl-header-brand">
+                    <button onClick={toggleSidebar} className="mdl-menu-btn">
+                        <Menu size={20} />
+                    </button>
+                    <img src="/images/logos/tpgit_logo.png" alt="TPGIT" className="mdl-logo-img" />
+                    <div className="mdl-brand-text">
+                        <span className="mdl-brand-title">TPGIT HOSTEL</span>
+                        <span className="mdl-brand-subtitle">Mess Management</span>
                     </div>
-
-                    <nav className="mdl-nav">
-                        {navLinks.map((link) => {
-                            const active = isActive(link.path, link.exact);
-                            const Icon = link.icon;
-                            return (
-                                <Link
-                                    key={link.path}
-                                    to={link.path}
-                                    className={`mdl-nav-link ${active ? 'active' : ''}`}
-                                    title={link.label}
-                                >
-                                    <div className="mdl-nav-icon-wrapper">
-                                        <Icon size={20} className="mdl-nav-icon" />
-                                    </div>
-                                    <span className="mdl-nav-text">{link.label}</span>
-                                </Link>
-                            );
-                        })}
-                    </nav>
                 </div>
-
-                <div className="mdl-sidebar-footer">
-                    <button
-                        onClick={handleLogout}
-                        className="mdl-logout-btn"
-                        title="Logout"
-                    >
-                        <div className="mdl-nav-icon-wrapper">
-                            <LogOut size={20} className="mdl-logout-icon" />
-                        </div>
-                        <span className="mdl-logout-text">Logout</span>
+                <div className="mdl-header-actions">
+                    <button onClick={handleLogout} className="mdl-logout-btn">
+                        <span>Logout</span>
+                        <LogOut size={16} />
                     </button>
                 </div>
-            </div>
+            </header>
 
-            {/* Header & Main Content */}
-            <div className="mdl-main-container">
-                {/* Desktop Top Header */}
-                <header className="mdl-desktop-header">
-                    <div>
-                        <h1 className="mdl-header-title">{getPageTitle()}</h1>
-                    </div>
-                    <div className="mdl-header-actions">
-                        <button
-                            onClick={handleLogout}
-                            className="mdl-header-logout"
-                            title="Logout"
-                        >
-                            <span className="mdl-header-logout-text">Logout</span>
-                            <LogOut size={18} className="mdl-header-logout-icon" />
+            {/* Mobile Overlay */}
+            <div
+                className={`mdl-mobile-overlay ${isMobileMenuOpen ? 'visible' : ''}`}
+                onClick={() => setIsMobileMenuOpen(false)}
+            ></div>
+
+            {/* Sidebar (Desktop mini/hover logic + Mobile drawer) */}
+            <aside className={`mdl-sidebar ${isPinned ? 'pinned' : ''} ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
+                {(isPinned || isMobileMenuOpen) && (
+                    <div className="mdl-sidebar-header">
+                        <div className="mdl-header-brand">
+                            <img src="/images/logos/tpgit_logo.png" alt="TPGIT" className="mdl-logo-img" />
+                            <div className="mdl-brand-text">
+                                <span className="mdl-brand-title">TPGIT HOSTEL</span>
+                                <span className="mdl-brand-subtitle">Mess Management</span>
+                            </div>
+                        </div>
+                        <button onClick={closeSidebar} className="mdl-close-btn" title="Close Panel">
+                            <X size={18} />
                         </button>
                     </div>
-                </header>
+                )}
 
-                {/* Mobile Header */}
-                <header className="mdl-mobile-header">
-                    <div className="mdl-mobile-brand">
-                        <img src="/images/logos/tpgit_logo.png" alt="TPGIT" className="mdl-mobile-logo-img" />
-                        <h2 className="mdl-mobile-title">TPGIT Manager</h2>
-                    </div>
-                    <button
-                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                        className="mdl-mobile-menu-btn"
-                    >
-                        {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-                    </button>
-                </header>
-
-                {/* Mobile Menu Sidebar */}
-                <div className={`mdl-mobile-sidebar-wrapper ${isMobileMenuOpen ? 'open' : ''}`}>
-                    <div
-                        className="mdl-mobile-overlay"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                    />
-                    <div className="mdl-mobile-sidebar">
-                        <div className="mdl-mobile-sidebar-inner">
-                            <div className="mdl-mobile-sidebar-brand">
-                                <img src="/images/logos/tpgit_logo.png" alt="TPGIT" className="mdl-mobile-logo-img" />
-                                <h2 className="mdl-mobile-title">TPGIT MESS</h2>
-                            </div>
-
-                            <nav className="mdl-mobile-sidebar-nav">
-                                {navLinks.map((link) => {
-                                    const active = isActive(link.path, link.exact);
-                                    const Icon = link.icon;
-                                    return (
-                                        <Link
-                                            key={link.path}
-                                            to={link.path}
-                                            onClick={() => setIsMobileMenuOpen(false)}
-                                            className={`mdl-mobile-nav-link ${active ? 'active' : 'inactive'}`}
-                                        >
-                                            <Icon size={20} />
-                                            <span className="mdl-mobile-nav-text">{link.label}</span>
-                                        </Link>
-                                    );
-                                })}
-                            </nav>
-
-                            <button
-                                onClick={handleLogout}
-                                className="mdl-mobile-logout"
+                <nav className="mdl-nav">
+                    {navLinks.map((link) => {
+                        const active = isActive(link.path, link.exact);
+                        const Icon = link.icon;
+                        return (
+                            <Link
+                                key={link.path}
+                                to={link.path}
+                                onClick={() => {
+                                    if (window.innerWidth <= 768) {
+                                        setIsMobileMenuOpen(false);
+                                    }
+                                }}
+                                className={`mdl-nav-link ${active ? 'active' : ''}`}
+                                title={link.label}
                             >
-                                <LogOut size={20} />
-                                <span className="mdl-mobile-logout-text">Logout</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                                <div className="mdl-nav-icon">
+                                    <Icon size={18} />
+                                </div>
+                                <span className="mdl-nav-label">{link.label}</span>
+                            </Link>
+                        );
+                    })}
+                </nav>
 
-                {/* Content Area */}
-                <main className="mdl-content-area">
-                    <div className="mdl-content-inner">
-                        <Outlet />
-                    </div>
-                </main>
-            </div>
+                <div className="mdl-drawer-footer">
+                    <button onClick={handleLogout} className="mdl-nav-link text-red w-full bg-transparent border-none text-left cursor-pointer appearance-none ml-0" title="Logout">
+                        <div className="mdl-nav-icon">
+                            <LogOut size={18} />
+                        </div>
+                        <span className="mdl-nav-label">Logout</span>
+                    </button>
+                </div>
+            </aside>
+
+            <main className="mdl-main-content">
+                <div className="mdl-page-header">
+                    <h1 className="mdl-page-title">{getPageTitle()}</h1>
+                </div>
+                <div className="mdl-content-inner">
+                    <Outlet />
+                </div>
+            </main>
         </div>
     );
 };

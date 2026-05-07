@@ -1,0 +1,289 @@
+/* RegistrationForm Styling - Replaces Tailwind */
+
+.rf-container {
+    background-color: #ffffff;
+    min-height: 100vh;
+    font-family: 'Inter', -apple-system, sans-serif;
+}
+
+.rf-header {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #f1f5f9;
+    padding-left: 600px;
+}
+
+.rf-header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.rf-logo-img {
+    height: 2rem;
+    width: auto;
+}
+
+.rf-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0f172a;
+    letter-spacing: -0.025em;
+}
+
+.rf-back-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #64748b;
+    background: transparent;
+    border: none;
+    font-size: 0.875rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.rf-back-btn:hover {
+    color: #009688;
+}
+
+.rf-main-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+}
+
+.rf-form {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+}
+
+.rf-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+}
+
+@media (min-width: 1024px) {
+    .rf-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+    }
+}
+
+.rf-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.rf-section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #009688;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 0.5rem;
+}
+
+.rf-section-title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #0f172a;
+    letter-spacing: -0.025em;
+}
+
+.rf-field-group {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+@media (min-width: 768px) {
+    .rf-field-group-2col {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.rf-field-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+}
+
+.rf-label {
+    font-size: 0.625rem;
+    font-weight: 700;
+    color: #94a3b8;
+    letter-spacing: 0.05em;
+    margin-left: 0.25rem;
+}
+
+.rf-input-container {
+    position: relative;
+}
+
+.rf-icon-wrapper {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #cbd5e1;
+}
+
+.rf-input,
+.rf-select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    outline: none;
+    transition: all 0.2s;
+}
+
+.rf-input:focus,
+.rf-select:focus {
+    background-color: #ffffff;
+    border-color: #009688;
+    box-shadow: 0 0 0 2px rgba(0, 150, 136, 0.1);
+}
+
+.rf-input-with-icon {
+    padding-left: 2.75rem;
+}
+
+/* Photo Upload */
+.rf-photo-upload-container {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.rf-photo-dropzone {
+    flex: 1;
+    cursor: pointer;
+    border: 2px dashed #e2e8f0;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    text-align: center;
+    transition: all 0.2s;
+}
+
+.rf-photo-dropzone:hover {
+    border-color: #009688;
+    background-color: #f8fafc;
+}
+
+.rf-upload-icon {
+    color: #cbd5e1;
+    margin-bottom: 0.25rem;
+}
+
+.rf-photo-label-text {
+    font-size: 0.625rem;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: capitalize;
+    letter-spacing: 0.05em;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.rf-photo-preview {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    flex-shrink: 0;
+}
+
+.rf-photo-preview img {
+    width: 100%;
+    height: 100%;
+    object-cover: cover;
+}
+
+/* Submit Section */
+.rf-submit-bar {
+    padding-top: 1.5rem;
+    border-top: 1px solid #f1f5f9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .rf-submit-bar {
+        flex-direction: row;
+    }
+}
+
+.rf-disclaimer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #94a3b8;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    font-style: italic;
+}
+
+.rf-check-icon {
+    color: #10b981;
+}
+
+.rf-submit-btn {
+    width: 100%;
+    padding: 1rem 3rem;
+    background-color: #009688;
+    color: #ffffff;
+    border: none;
+    border-radius: 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: capitalize;
+    cursor: pointer;
+    box-shadow: 0 10px 15px -3px rgba(0, 150, 136, 0.2);
+    transition: all 0.2s;
+}
+
+@media (min-width: 768px) {
+    .rf-submit-btn {
+        width: auto;
+    }
+}
+
+.rf-submit-btn:hover {
+    background-color: #00796b;
+}
+
+.rf-submit-btn:active {
+    transform: scale(0.98);
+}
+
+.rf-submit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.rf-footer {
+    margin-top: 3rem;
+    text-align: center;
+    color: #cbd5e1;
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+}

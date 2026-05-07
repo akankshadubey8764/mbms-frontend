@@ -1,16 +1,16 @@
 /* MessManagerOverview.css */
 
-.mmo-container {
-    animation: mmoFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+.mess-overview-container {
+    animation: mo-fadeIn 0.3s ease-in-out;
     display: flex;
     flex-direction: column;
-    gap: 32px;
+    gap: 24px;
 }
 
-@keyframes mmoFadeIn {
+@keyframes mo-fadeIn {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(10px);
     }
 
     to {
@@ -19,340 +19,305 @@
     }
 }
 
-.mmo-header-alt {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 32px;
-    background: white;
-    border-radius: 2rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
-    border: 1px solid #f1f5f9;
-}
-
-.mmo-title-alt {
-    font-size: 2rem;
-    font-weight: 900;
-    color: #0f172a;
-    letter-spacing: -0.05em;
-    margin: 0;
-}
-
-.mmo-subtitle-alt {
-    color: #64748b;
-    font-weight: 600;
-    font-size: 0.9rem;
-    margin-top: 4px;
-}
-
-.mmo-date-display {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 20px;
-    background: #f8fafc;
-    border-radius: 1rem;
-    color: #475569;
-    font-weight: 800;
-    font-size: 0.85rem;
-    border: 1px solid #e2e8f0;
-}
-
-/* Metric Cards */
-.mmo-stats-grid {
+/* Main Stats Grid */
+.mo-stats-grid {
     display: grid;
-    grid-template-columns: repeat(1, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 20px;
 }
 
-@media (min-width: 640px) {
-    .mmo-stats-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-}
-
-@media (min-width: 1024px) {
-    .mmo-stats-grid {
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
-}
-
-.mmo-metric-card {
+.mo-stat-card {
     background: white;
-    padding: 24px;
-    border-radius: 2rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
-    border: 1px solid #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    transition: all 0.3s ease;
+    min-height: 120px;
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.mmo-metric-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+.mo-stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-.mmo-metric-main {
+.mo-stat-icon-wrapper {
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    align-items: flex-start;
     margin-bottom: 12px;
 }
 
-.mmo-metric-label {
-    font-size: 0.75rem;
-    font-weight: 800;
-    color: #94a3b8;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
+.mo-stat-label {
+    font-size: 10px;
+    font-weight: bold;
+    color: #64748b;
+    text-transform: capitalize;
+    letter-spacing: 0.05em;
 }
 
-.mmo-metric-value {
-    font-size: 1.75rem;
-    font-weight: 900;
-    color: #1e293b;
-    margin-top: 4px;
-    letter-spacing: -0.02em;
-}
-
-.mmo-metric-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 1rem;
+.mo-stat-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.mmo-metric-subtitle {
-    font-size: 0.7rem;
-    font-weight: 700;
-    color: #64748b;
+.mo-stat-card.rose {
+    border-left: 4px solid #f43f5e;
 }
 
-/* Colors for metrics */
-.sky .mmo-metric-icon {
-    background: #f0f9ff;
-    color: #0ea5e9;
+.mo-stat-card.amber {
+    border-left: 4px solid #f59e0b;
 }
 
-.rose .mmo-metric-icon {
-    background: #fef2f2;
-    color: #ef4444;
+.mo-stat-card.indigo {
+    border-left: 4px solid #3b82f6;
 }
 
-.amber .mmo-metric-icon {
+.mo-stat-card.emerald {
+    border-left: 4px solid #10b981;
+}
+
+/* Color Themes for Stat Icons */
+.mo-stat-card.rose .mo-stat-icon {
+    background: #fff1f2;
+    color: #e11d48;
+}
+
+.mo-stat-card.amber .mo-stat-icon {
     background: #fffbeb;
-    color: #f59e0b;
+    color: #d97706;
 }
 
-.emerald .mmo-metric-icon {
+.mo-stat-card.indigo .mo-stat-icon {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+.mo-stat-card.emerald .mo-stat-icon {
     background: #ecfdf5;
     color: #10b981;
 }
 
-.sky:hover {
-    border-bottom: 4px solid #0ea5e9;
-}
-
-.rose:hover {
-    border-bottom: 4px solid #ef4444;
-}
-
-.amber:hover {
-    border-bottom: 4px solid #f59e0b;
-}
-
-.emerald:hover {
-    border-bottom: 4px solid #10b981;
-}
-
-/* Main Content Grid */
-.mmo-main-content {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 32px;
-}
-
-@media (min-width: 1024px) {
-    .mmo-main-content {
-        grid-template-columns: 350px 1fr;
-    }
-}
-
-.mmo-panel {
-    background: white;
-    border-radius: 2.5rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
-    border: 1px solid #f1f5f9;
-    overflow: hidden;
-}
-
-.mmo-panel-header {
-    padding: 32px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #f1f5f9;
-}
-
-.mmo-panel-title {
-    font-size: 1.25rem;
-    font-weight: 900;
+.mo-stat-value {
+    font-size: 24px;
+    font-weight: bold;
     color: #0f172a;
-    letter-spacing: -0.02em;
     margin: 0;
 }
 
-.mmo-panel-desc {
-    font-size: 0.8rem;
+.mo-stat-sublabel {
+    font-size: 11px;
     color: #94a3b8;
-    font-weight: 600;
     margin-top: 4px;
 }
 
-.mmo-badge-rose {
-    padding: 6px 16px;
-    background: #fef2f2;
-    color: #ef4444;
-    border-radius: 2rem;
-    font-size: 0.7rem;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+/* Layout Grid */
+.mo-content-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
 }
 
-.mmo-panel-body {
-    padding: 32px;
+@media (max-width: 1024px) {
+    .mo-content-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
-.mmo-panel-body.no-padding {
-    padding: 0;
+.mo-priority-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
 }
 
-.mmo-restock-card {
+.mo-priority-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid #f1f5f9;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
-    background: #fcfdfe;
-    border: 1px solid #f1f5f9;
-    border-radius: 1.5rem;
-    margin-bottom: 16px;
-    transition: all 0.2s ease;
 }
 
-.mmo-restock-card:hover {
-    background: #fef2f2;
-    border-color: #fee2e2;
-}
-
-.mmo-restock-name {
-    font-weight: 800;
-    color: #1e293b;
+.mo-priority-title {
+    font-size: 14px;
+    font-weight: bold;
+    color: #0f172a;
     margin: 0;
-    font-size: 0.9rem;
 }
 
-.mmo-restock-qty {
-    font-size: 0.75rem;
+.mo-priority-badge {
+    font-size: 10px;
+    font-weight: bold;
+    background: #f8fafc;
     color: #64748b;
-    font-weight: 600;
-    margin-top: 2px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    text-transform: capitalize;
 }
 
-.mmo-restock-target {
-    text-align: center;
-}
-
-/* Table Update */
-.mmo-table-alt {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.mmo-table-alt th {
-    padding: 24px 32px;
-    text-align: left;
-    font-size: 10px;
-    font-weight: 800;
-    color: #94a3b8;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    background: #fcfdfe;
-}
-
-.mmo-table-alt th.center {
-    text-align: center;
-}
-
-.mmo-table-alt td {
-    padding: 24px 32px;
-    font-size: 0.85rem;
-    border-bottom: 1px solid #f8fafc;
-}
-
-.mmo-table-alt td.center {
-    text-align: center;
-}
-
-.mmo-status-pill {
-    padding: 6px 14px;
-    border-radius: 2rem;
-    font-size: 10px;
-    font-weight: 900;
-    text-transform: uppercase;
-}
-
-.mmo-status-good {
-    background: #f0fdf4;
-    color: #166534;
-}
-
-.mmo-status-low {
-    background: #fffbeb;
-    color: #92400e;
-}
-
-.mmo-status-critical {
-    background: #fef2f2;
-    color: #991b1b;
-}
-
-.mmo-panel-link {
-    background: transparent;
-    border: none;
-    color: #3b82f6;
-    font-weight: 800;
-    font-size: 0.75rem;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    cursor: pointer;
-}
-
-/* Loader */
-.mmo-loader-container {
-    height: 400px;
+.mo-priority-list {
+    padding: 12px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    gap: 8px;
+}
+
+.mo-task-item {
+    display: flex;
     align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-radius: 6px;
+    border: 1px solid #f1f5f9;
+    text-decoration: none;
+    transition: background 0.2s;
 }
 
-.mmo-loader {
-    width: 50px;
-    height: 50px;
-    border: 5px solid #f1f5f9;
-    border-top: 5px solid #3b82f6;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
+.mo-task-item:hover {
+    background: #f8fafc;
 }
 
-@keyframes spin {
-    100% {
-        transform: rotate(360deg);
-    }
+.mo-task-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.mo-task-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mo-task-icon.rose {
+    background: #fff1f2;
+    color: #e11d48;
+}
+
+.mo-task-icon.amber {
+    background: #fffbeb;
+    color: #d97706;
+}
+
+.mo-task-icon.blue {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+.mo-task-icon.purple {
+    background: #faf5ff;
+    color: #7e22ce;
+}
+
+.mo-task-title {
+    font-size: 12px;
+    font-weight: bold;
+    color: #1e293b;
+    margin: 0;
+}
+
+.mo-task-desc {
+    font-size: 11px;
+    color: #64748b;
+    margin: 2px 0 0 0;
+}
+
+.mo-task-action {
+    font-size: 10px;
+    font-weight: bold;
+    color: #94a3b8;
+    text-transform: capitalize;
+}
+
+/* Side Panel */
+.mo-side-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.mo-quick-links-container {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.mo-quick-links-title {
+    font-size: 10px;
+    font-weight: bold;
+    color: #64748b;
+    text-transform: capitalize;
+    margin-bottom: 10px;
+    letter-spacing: 0.1em;
+}
+
+.mo-quick-links-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.mo-quick-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    color: black;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 500;
+    transition: background 0.2s, color 0.2s;
+}
+
+.mo-quick-link:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+}
+
+.mo-small-stats-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 16px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+}
+
+.mo-small-stat {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px;
+    background: #f8fafc;
+    border-radius: 6px;
+}
+
+.mo-small-stat-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.mo-small-stat-label {
+    font-size: 10px;
+    color: #64748b;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.mo-small-stat-value {
+    font-size: 14px;
+    font-weight: bold;
+    color: #0f172a;
 }

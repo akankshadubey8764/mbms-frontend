@@ -1,0 +1,304 @@
+/* MessManagerSettings.css */
+
+.mms-wrapper {
+    width: 60%;
+    /* margin: 0 auto; */
+    padding: 20px;
+    animation: mms-fade-in 0.5s ease-out;
+}
+
+@keyframes mms-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.mms-header {
+    margin-bottom: 2rem;
+}
+
+.mms-title {
+    font-size: 1.875rem;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.025em;
+}
+
+.mms-subtitle {
+    color: #64748b;
+    margin-top: 0.5rem;
+}
+
+/* Success Alert */
+.mms-success-alert {
+    margin-bottom: 2rem;
+    background-color: #ecfdf5;
+    border: 1px solid #d1fae5;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    animation: mms-bounce-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes mms-bounce-in {
+    0% {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.mms-success-icon-box {
+    padding: 0.5rem;
+    background-color: #10b981;
+    border-radius: 0.5rem;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mms-success-text-bold {
+    color: #064e3b;
+    font-weight: 700;
+}
+
+.mms-success-text-sm {
+    color: #047857;
+    font-size: 0.875rem;
+}
+
+/* Main Card */
+.mms-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+    border: 1px solid #f1f5f9;
+    overflow: hidden;
+}
+
+.mms-card-body {
+    padding: 2rem;
+}
+
+@media (min-width: 768px) {
+    .mms-card-body {
+        padding: 2.5rem;
+    }
+}
+
+.mms-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.mms-divider {
+    height: 1px;
+    background-color: #f1f5f9;
+}
+
+.mms-password-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .mms-password-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* Guidance Box */
+.mms-guidance {
+    background-color: rgba(239, 246, 255, 0.5);
+    border: 1px solid rgba(219, 234, 254, 0.5);
+    border-radius: 1rem;
+    padding: 1.25rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.mms-guidance-icon {
+    color: #3b82f6;
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+}
+
+.mms-guidance-title {
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: capitalize;
+    color: #1d4ed8;
+    margin-bottom: 0.25rem;
+}
+
+.mms-guidance-text {
+    font-size: 12px;
+    color: rgba(37, 99, 235, 0.8);
+    line-height: 1.5;
+    font-weight: 500;
+}
+
+/* Submit Button */
+.mms-submit-btn {
+    width: 100%;
+    padding: 1rem;
+    background-color: #0f172a;
+    color: white;
+    border: none;
+    border-radius: 1rem;
+    font-weight: 700;
+    text-transform: capitalize;
+    font-size: 12px;
+    transition: all 0.3s;
+    box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.1);
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+.mms-submit-btn:hover:not(:disabled) {
+    background-color: #2563eb;
+    box-shadow: 0 20px 25px -5px rgba(37, 99, 235, 0.2);
+}
+
+.mms-submit-btn:active:not(:disabled) {
+    transform: scale(0.95);
+}
+
+.mms-submit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Session Info */
+.mms-footer {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background-color: #f8fafc;
+    border-radius: 1rem;
+    border: 1px solid #e2e8f0;
+}
+
+.mms-footer-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #1e293b;
+    text-transform: capitalize;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.75rem;
+}
+
+.mms-info-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+}
+
+.mms-info-row:last-child {
+    margin-bottom: 0;
+}
+
+.mms-info-label {
+    color: #64748b;
+    font-weight: 500;
+}
+
+.mms-info-value {
+    color: #0f172a;
+    font-weight: 700;
+}
+
+.mms-info-value.uppercase {
+    text-transform: capitalize;
+}
+
+/* Password Field Component */
+.mms-field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.mms-field-label {
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: capitalize;
+    margin-left: 0.25rem;
+}
+
+.mms-input-container {
+    position: relative;
+}
+
+.mms-input-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #cbd5e1;
+    transition: color 0.3s;
+}
+
+.mms-input-container:focus-within .mms-input-icon {
+    color: #3b82f6;
+}
+
+.mms-input {
+    width: 100%;
+    height: 3.5rem;
+    padding: 0 3rem;
+    background-color: #f8fafc;
+    border: 1px solid #f1f5f9;
+    border-radius: 1rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #0f172a;
+    outline: none;
+    transition: all 0.3s;
+}
+
+.mms-input::placeholder {
+    color: #cbd5e1;
+}
+
+.mms-input:focus {
+    background-color: white;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+
+.mms-toggle-btn {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #cbd5e1;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mms-toggle-btn:hover {
+    color: #0f172a;
+}

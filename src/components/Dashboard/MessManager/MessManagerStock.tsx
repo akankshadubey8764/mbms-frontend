@@ -139,7 +139,7 @@ const MessManagerStock: React.FC = () => {
                     <table className="mms-table">
                         <thead>
                             <tr>
-                                <th>S.No</th>
+                                <th>S.No.</th>
                                 <th>Item Name</th>
                                 <th>Seller Place</th>
                                 <th>Qty Bought</th>

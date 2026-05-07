@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Wallet, MessageSquare, User, Lock, LogOut, LayoutDashboard, UtensilsCrossed, Menu, X } from 'lucide-react';
 import { Link, useNavigate, Outlet, useLocation } from 'react-router-dom';
+import './StudentDashboardLayout.css';
 
 const StudentDashboardLayout: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const [isPinned, setIsPinned] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const handleLogout = () => {
@@ -14,12 +16,12 @@ const StudentDashboardLayout: React.FC = () => {
     };
 
     const navLinks = [
-        { path: '/student-dashboard', label: 'Dashboard', icon: LayoutDashboard, exact: true },
+        { path: '/student-dashboard', label: 'Overview', icon: LayoutDashboard, exact: true },
         { path: '/student-dashboard/profile', label: 'User Profile', icon: User },
         { path: '/student-dashboard/mess-bill', label: 'Mess Bill', icon: Wallet },
         { path: '/student-dashboard/mess-menu', label: 'Mess Menu', icon: UtensilsCrossed },
-        { path: '/student-dashboard/queries', label: 'Raise Queries', icon: MessageSquare },
-        { path: '/student-dashboard/change-password', label: 'Update Password', icon: Lock },
+        { path: '/student-dashboard/queries', label: 'Support Center', icon: MessageSquare },
+        { path: '/student-dashboard/change-password', label: 'Security Settings', icon: Lock },
     ];
 
     const isActive = (path: string, exact = false) => {
@@ -27,119 +29,116 @@ const StudentDashboardLayout: React.FC = () => {
         return location.pathname.startsWith(path);
     };
 
+    const getPageTitle = () => {
+        const path = location.pathname;
+        if (path.includes('/profile')) return 'User Profile';
+        if (path.includes('/mess-bill')) return 'Mess Bill History';
+        if (path.includes('/mess-menu')) return 'Mess Menu';
+        if (path.includes('/queries')) return 'Support Center';
+        if (path.includes('/change-password')) return 'Security Settings';
+        return 'Dashboard Overview';
+    };
+
+    const toggleSidebar = () => {
+        if (window.innerWidth <= 768) {
+            setIsMobileMenuOpen(true);
+        } else {
+            setIsPinned(!isPinned);
+        }
+    };
+
+    const closeSidebar = () => {
+        setIsPinned(false);
+        setIsMobileMenuOpen(false);
+    };
+
     return (
-        <div className="flex min-h-screen bg-[#f8fafc]">
-            {/* Sidebar - Desktop */}
-            <div className="hidden md:flex flex-col w-72 bg-gray-900 text-white fixed h-full shadow-2xl z-20">
-                <div className="p-8">
-                    <div className="flex items-center space-x-3 mb-10">
-                        <img src="/images/logos/tpgit_logo.png" alt="TPGIT" className="w-12 h-12 object-contain" />
-                        <div>
-                            <h2 className="text-xl font-display font-bold tracking-tight">TPGIT HOSTEL</h2>
-                            <p className="text-[10px] text-gray-400 uppercase tracking-[2px]">Student Portal</p>
-                        </div>
+        <div className={`sdl-layout ${isPinned ? 'layout-pinned' : 'layout-unpinned'}`}>
+            <header className="sdl-top-header">
+                <div className="sdl-header-brand">
+                    <button onClick={toggleSidebar} className="sdl-menu-btn">
+                        <Menu size={20} />
+                    </button>
+                    <img src="/images/logos/tpgit_logo.png" alt="TPGIT" className="sdl-logo-img" />
+                    <div className="sdl-brand-text">
+                        <span className="sdl-brand-title">TPGIT HOSTEL</span>
+                        <span className="sdl-brand-subtitle">Student Portal</span>
                     </div>
-
-                    <nav className="space-y-1.5">
-                        {navLinks.map((link) => {
-                            const active = isActive(link.path, link.exact);
-                            const Icon = link.icon;
-                            return (
-                                <Link
-                                    key={link.path}
-                                    to={link.path}
-                                    className={`flex items-center space-x-3 px-4 py-3.5 rounded-xl transition-all duration-300 group ${active
-                                        ? 'bg-primary text-white shadow-lg shadow-primary/20'
-                                        : 'text-gray-400 hover:bg-gray-800 hover:text-white'
-                                        }`}
-                                >
-                                    <Icon size={20} className={active ? 'text-white' : 'group-hover:scale-110 transition-transform'} />
-                                    <span className="font-display font-semibold text-sm tracking-wide">{link.label}</span>
-                                </Link>
-                            );
-                        })}
-                    </nav>
                 </div>
-
-                <div className="mt-auto p-8">
-                    <button
-                        onClick={handleLogout}
-                        className="w-full flex items-center space-x-3 px-4 py-3.5 rounded-xl bg-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white transition-all duration-300 group shadow-sm hover:shadow-rose-500/20"
-                    >
-                        <LogOut size={20} className="group-hover:rotate-12 transition-transform" />
-                        <span className="font-display font-bold text-sm tracking-wide">Logout</span>
+                <div className="sdl-header-actions">
+                    <button onClick={handleLogout} className="sdl-logout-btn">
+                        <span>Logout</span>
+                        <LogOut size={16} />
                     </button>
                 </div>
-            </div>
+            </header>
 
-            {/* Mobile Header */}
-            <div className="md:hidden fixed top-0 w-full bg-gray-900 px-4 py-4 flex items-center justify-between z-30 shadow-lg">
-                <div className="flex items-center space-x-3">
-                    <img src="/images/logos/tpgit_logo.png" alt="TPGIT" className="w-8 h-8 object-contain" />
-                    <h2 className="text-white font-display font-bold text-sm tracking-wider uppercase">TPGIT Student</h2>
-                </div>
-                <button
-                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                    className="p-2 text-gray-400 hover:text-white transition-colors"
-                >
-                    {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-                </button>
-            </div>
+            {/* Mobile Overlay */}
+            <div
+                className={`sdl-mobile-overlay ${isMobileMenuOpen ? 'visible' : ''}`}
+                onClick={() => setIsMobileMenuOpen(false)}
+            ></div>
 
-            {/* Mobile Menu Backdrop */}
-            {isMobileMenuOpen && (
-                <div
-                    className="md:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-40 transition-opacity"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                />
-            )}
-
-            {/* Mobile Menu Sidebar */}
-            <div className={`md:hidden fixed inset-y-0 left-0 w-72 bg-gray-900 text-white z-50 transform transition-transform duration-300 ease-out ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-                <div className="p-8">
-                    <div className="flex items-center space-x-3 mb-10">
-                        <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
-                            <span className="text-white font-bold text-xl uppercase font-display">T</span>
+            {/* Sidebar (Desktop mini/hover logic + Mobile drawer) */}
+            <aside className={`sdl-sidebar ${isPinned ? 'pinned' : ''} ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
+                {(isPinned || isMobileMenuOpen) && (
+                    <div className="sdl-sidebar-header">
+                        <div className="sdl-header-brand">
+                            <img src="/images/logos/tpgit_logo.png" alt="TPGIT" className="sdl-logo-img" />
+                            <div className="sdl-brand-text">
+                                <span className="sdl-brand-title">TPGIT HOSTEL</span>
+                                <span className="sdl-brand-subtitle">Student Portal</span>
+                            </div>
                         </div>
-                        <h2 className="text-xl font-display font-bold tracking-tight">STUDENT</h2>
-                    </div>
-
-                    <nav className="space-y-1.5">
-                        {navLinks.map((link) => {
-                            const active = isActive(link.path, link.exact);
-                            const Icon = link.icon;
-                            return (
-                                <Link
-                                    key={link.path}
-                                    to={link.path}
-                                    onClick={() => setIsMobileMenuOpen(false)}
-                                    className={`flex items-center space-x-3 px-4 py-3.5 rounded-xl transition-all duration-300 group ${active
-                                        ? 'bg-primary text-white'
-                                        : 'text-gray-400 hover:bg-gray-800'
-                                        }`}
-                                >
-                                    <Icon size={20} />
-                                    <span className="font-display font-semibold text-sm">{link.label}</span>
-                                </Link>
-                            );
-                        })}
-                        <button
-                            onClick={handleLogout}
-                            className="w-full flex items-center space-x-3 px-4 py-3.5 rounded-xl text-rose-500 hover:bg-rose-500 hover:text-white transition-all duration-300"
-                        >
-                            <LogOut size={20} />
-                            <span className="font-display font-bold text-sm">Logout</span>
+                        {/* Close button inside sidebar */}
+                        <button onClick={closeSidebar} className="sdl-close-btn" title="Close Panel">
+                            <X size={18} />
                         </button>
-                    </nav>
-                </div>
-            </div>
+                    </div>
+                )}
 
-            {/* Main Content Area */}
-            <div className="flex-1 md:ml-72 pt-20 md:pt-0 p-4 md:p-10">
-                <div className="max-w-7xl mx-auto py-6">
+                <nav className="sdl-nav">
+                    {navLinks.map((link) => {
+                        const active = isActive(link.path, link.exact);
+                        const Icon = link.icon;
+                        return (
+                            <Link
+                                key={link.path}
+                                to={link.path}
+                                onClick={() => {
+                                    if (window.innerWidth <= 768) {
+                                        setIsMobileMenuOpen(false);
+                                    }
+                                }}
+                                className={`sdl-nav-link ${active ? 'active' : ''}`}
+                            >
+                                <div className="sdl-nav-icon">
+                                    <Icon size={18} />
+                                </div>
+                                <span className="sdl-nav-label">{link.label}</span>
+                            </Link>
+                        );
+                    })}
+                </nav>
+
+                <div className="sdl-drawer-footer">
+                    <button onClick={handleLogout} className="sdl-nav-link text-red w-full bg-transparent border-none text-left cursor-pointer appearance-none ml-0">
+                        <div className="sdl-nav-icon">
+                            <LogOut size={18} />
+                        </div>
+                        <span className="sdl-nav-label">Logout</span>
+                    </button>
+                </div>
+            </aside>
+
+            <main className="sdl-main-content">
+                <div className="sdl-page-header">
+                    <h1 className="sdl-page-title">{getPageTitle()}</h1>
+                </div>
+                <div className="sdl-content-inner">
                     <Outlet />
                 </div>
-            </div>
+            </main>
         </div>
     );
 };

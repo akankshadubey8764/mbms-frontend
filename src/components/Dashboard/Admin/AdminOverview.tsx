@@ -147,13 +147,6 @@ const AdminOverview: React.FC = () => {
                 {/* Statistics & Navigation */}
                 <div className="ao-side-panel">
                     <div className="ao-quick-links-container">
-                        <div className="ao-branding-box">
-                            <img src="/images/logos/tpgit_logo.png" alt="TPGIT" className="ao-tpgit-logo" />
-                            <div className="ao-branding-text">
-                                <h4 className="ao-hostel-name">TPGIT HOSTELS</h4>
-                                <p className="ao-hostel-tag">Management System</p>
-                            </div>
-                        </div>
                         <h3 className="ao-quick-links-title">Quick Settings</h3>
                         <div className="ao-quick-links-list">
                             <QuickLink label="Register Student" to="/admin-dashboard/students" icon={UserPlus} />
@@ -165,14 +158,14 @@ const AdminOverview: React.FC = () => {
 
                     <div className="ao-small-stats-card">
                         <div className="ao-small-stat">
-                            <Users size={18} className="text-blue-500" />
+                            <Users size={18} />
                             <div>
                                 <p className="ao-small-stat-val">{totalStudents}</p>
                                 <p className="ao-small-stat-lab">Total Residents</p>
                             </div>
                         </div>
                         <div className="ao-small-stat">
-                            <CheckCircle size={18} className="text-emerald-500" />
+                            <CheckCircle size={18} />
                             <div>
                                 <p className="ao-small-stat-val">{activeStudents}</p>
                                 <p className="ao-small-stat-lab">Active Mess Users</p>
@@ -187,11 +180,11 @@ const AdminOverview: React.FC = () => {
 
 const StatCard: React.FC<{ label: string; value: any; icon: any; color: string; sublabel: string }> = ({ label, value, icon: Icon, color, sublabel }) => {
     return (
-        <div className={`ao-stat-card ${color} glassmorphism`}>
+        <div className={`ao-stat-card ${color}`}>
             <div className="ao-stat-icon-wrapper">
                 <p className="ao-stat-label">{label}</p>
                 <div className="ao-stat-icon">
-                    <Icon size={20} />
+                    <Icon size={16} />
                 </div>
             </div>
             <p className="ao-stat-value">{value}</p>
@@ -202,10 +195,10 @@ const StatCard: React.FC<{ label: string; value: any; icon: any; color: string; 
 
 const TaskItem: React.FC<{ title: string; description: string; icon: any; color: string; action: string; to: string; border: string }> = ({ title, description, icon: Icon, color, action, to, border }) => {
     return (
-        <Link to={to} className={`ao-task-item group ${border}`}>
+        <Link to={to} className={`ao-task-item ${border}`}>
             <div className="ao-task-content">
                 <div className={`ao-task-icon ${color}`}>
-                    <Icon size={20} />
+                    <Icon size={18} />
                 </div>
                 <div>
                     <h4 className="ao-task-title">{title}</h4>
@@ -220,10 +213,11 @@ const TaskItem: React.FC<{ title: string; description: string; icon: any; color:
 };
 
 const QuickLink: React.FC<{ label: string; to: string; icon: any }> = ({ label, to, icon: Icon }) => (
-    <Link to={to} className="ao-quick-link-item group">
-        <Icon size={16} className="ao-quick-link-icon" />
+    <Link to={to} className="ao-quick-link-item">
+        <Icon size={14} className="ao-quick-link-icon" />
         <span className="ao-quick-link-label">{label}</span>
     </Link>
 );
+
 
 export default AdminOverview;

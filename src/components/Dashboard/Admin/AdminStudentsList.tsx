@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Search, MoreHorizontal, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, MoreHorizontal, X, ChevronLeft, ChevronRight, Edit2, ShieldAlert, Trash2 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import apiClient from '../../../api/apiClient';
-import AddStudentModal from './AddStudentModal';
 import EditStudentModal from './EditStudentModal';
+import ResetPasswordModal from './ResetPasswordModal';
 import './AdminStudentsList.css';
 
 interface MessBill {
@@ -40,9 +40,10 @@ const AdminStudentsList: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [limit] = useState(10);
-    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] = useState(false);
     const [editingStudent, setEditingStudent] = useState<Student | null>(null);
+    const [resettingStudent, setResettingStudent] = useState<Student | null>(null);
     const [countsData, setCountsData] = useState<any>({});
     const [activeTab, setActiveTab] = useState<string>('');
     const [activeYear, setActiveYear] = useState<string>('');
@@ -169,6 +170,12 @@ const AdminStudentsList: React.FC = () => {
         setActiveDropdown(null);
     };
 
+    const handleResetPassword = (student: Student) => {
+        setResettingStudent(student);
+        setIsResetPasswordModalOpen(true);
+        setActiveDropdown(null);
+    };
+
     const handleRowClick = (student: Student) => {
         setSelectedStudentBills(student);
     };
@@ -196,12 +203,6 @@ const AdminStudentsList: React.FC = () => {
                             ))}
                         </div>
                     </div>
-                    <button
-                        onClick={() => setIsAddModalOpen(true)}
-                        className="asl-add-student-btn"
-                    >
-                        + Add Student
-                    </button>
                 </div>
             )}
 
@@ -330,13 +331,22 @@ const AdminStudentsList: React.FC = () => {
                                                             onClick={(e) => { e.stopPropagation(); handleEdit(student); }}
                                                             className="asl-dropdown-item edit"
                                                         >
-                                                            Edit
+                                                            <Edit2 size={14} className="mr-2" />
+                                                            <span>Edit Details</span>
+                                                        </button>
+                                                        <button
+                                                            onClick={(e) => { e.stopPropagation(); handleResetPassword(student); }}
+                                                            className="asl-dropdown-item reset"
+                                                        >
+                                                            <ShieldAlert size={14} className="mr-2" />
+                                                            <span>Change Password</span>
                                                         </button>
                                                         <button
                                                             onClick={(e) => { e.stopPropagation(); setActiveDropdown(null); handleDelete(student._id); }}
                                                             className="asl-dropdown-item delete"
                                                         >
-                                                            Delete
+                                                            <Trash2 size={14} className="mr-2" />
+                                                            <span>Delete Student</span>
                                                         </button>
                                                     </div>
                                                 )}
@@ -376,15 +386,7 @@ const AdminStudentsList: React.FC = () => {
                 </div>
             </div>
 
-            {/* Add Student Modal */}
-            <AddStudentModal
-                isOpen={isAddModalOpen}
-                onClose={() => setIsAddModalOpen(false)}
-                onSuccess={() => {
-                    fetchStudents();
-                    fetchCounts();
-                }}
-            />
+
             {editingStudent && (
                 <EditStudentModal
                     isOpen={isEditModalOpen}
@@ -394,6 +396,15 @@ const AdminStudentsList: React.FC = () => {
                         fetchStudents();
                         fetchCounts();
                     }}
+                />
+            )}
+
+            {resettingStudent && (
+                <ResetPasswordModal
+                    isOpen={isResetPasswordModalOpen}
+                    onClose={() => setIsResetPasswordModalOpen(false)}
+                    studentId={resettingStudent._id}
+                    studentName={`${resettingStudent.firstName} ${resettingStudent.lastName}`}
                 />
             )}
 
