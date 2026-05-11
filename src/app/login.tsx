@@ -3,12 +3,15 @@ import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { LogIn, Mail, Lock, Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import Logo from '../assets/images/logos/tpgit_logo.png';
 import { toast } from 'react-hot-toast';
+import { useAuth } from '../context/AuthContext';
+import { ROLES } from '../constants/roles';
 import apiClient from '../api/apiClient';
 import './Login.css';
 
 const Login: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const { login } = useAuth();
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -43,21 +46,28 @@ const Login: React.FC = () => {
         try {
             const response = await apiClient.post('/auth/login', formData);
             const { token, user } = response.data;
-            const role = user?.role?.toLowerCase();
-
-            localStorage.setItem('authToken', token);
-            localStorage.setItem('userRole', role);
+            
+            // Use AuthContext to update state and storage
+            login(token, user);
 
             toast.success('Welcome back!', { id: loginToast });
 
+            const role = user.role.toLowerCase();
             switch (role) {
-                case 'student': navigate('/student-dashboard'); break;
-                case 'admin': navigate('/admin-dashboard'); break;
+                case ROLES.STUDENT: 
+                    navigate('/student-dashboard'); 
+                    break;
+                case ROLES.ADMIN: 
+                    navigate('/admin-dashboard'); 
+                    break;
                 case 'mess_admin':
                 case 'mess manager':
-                case 'mess_manager':
-                case 'mess': navigate('/mess-dashboard'); break;
-                default: navigate('/');
+                case ROLES.MESS_MANAGER:
+                case 'mess': 
+                    navigate('/mess-dashboard'); 
+                    break;
+                default: 
+                    navigate('/');
             }
         } catch (error: any) {
             toast.error(error.response?.data?.message || 'Login failed.', { id: loginToast });

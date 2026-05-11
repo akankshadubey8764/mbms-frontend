@@ -34,6 +34,8 @@ import MessManagerGrocery from './components/Dashboard/MessManager/MessManagerGr
 import MessManagerMenu from './components/Dashboard/MessManager/MessManagerMenu';
 import MessManagerSettings from './components/Dashboard/MessManager/MessManagerSettings';
 
+import { useAuth } from './context/AuthContext';
+
 // Protected Route Component
 interface ProtectedRouteProps {
     children: React.ReactNode;
@@ -41,14 +43,21 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowedRoles }) => {
-    const token = localStorage.getItem('authToken');
-    const userRole = localStorage.getItem('userRole');
+    const { user, loading } = useAuth();
 
-    if (!token) {
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center min-h-screen bg-[#1a1a1a]">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div>
+            </div>
+        );
+    }
+
+    if (!user) {
         return <Navigate to="/login" replace />;
     }
 
-    if (userRole && !allowedRoles.includes(userRole)) {
+    if (!allowedRoles.includes(user.role)) {
         return <Navigate to="/" replace />;
     }
 
