@@ -266,13 +266,13 @@ const AdminStudentsList: React.FC = () => {
                         </thead>
                         <tbody>
                             {loading ? (
-                                <tr>
-                                    <td colSpan={10} className="asl-text-center">
-                                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '40px' }}>
-                                            <p className="asl-card-label">Loading records...</p>
-                                        </div>
-                                    </td>
-                                </tr>
+                                Array.from({ length: 5 }).map((_, i) => (
+                                    <tr key={i}>
+                                        <td colSpan={10} style={{ padding: '0' }}>
+                                            <div className="skeleton" style={{ height: '50px', margin: '8px 12px', borderRadius: '4px' }}></div>
+                                        </td>
+                                    </tr>
+                                ))
                             ) : filteredStudents.length === 0 ? (
                                 <tr>
                                     <td colSpan={10} className="asl-text-center" style={{ color: '#9ca3af', fontStyle: 'italic', padding: '40px' }}>No students found matching your criteria.</td>

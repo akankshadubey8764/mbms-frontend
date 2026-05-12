@@ -87,20 +87,26 @@ const AdminApprovals: React.FC = () => {
     }, [fetchRequests]);
 
     const handleAction = async (id: string, action: 'approve' | 'reject') => {
+        // Optimistic Update: Immediately remove from the list
+        const originalRequests = [...requests];
+        setRequests(prev => prev.filter(r => r._id !== id));
+        setTotal(prev => prev - 1);
+
         const loadingToast = toast.loading(`${action === 'approve' ? 'Approving' : 'Rejecting'} student...`);
         try {
             if (action === 'approve') {
                 await apiClient.post(`/admin/requests/${id}/approve`);
             } else {
-                // Reject usually needs a reason in some backends, but here we use DELETE or POST
-                // Based on adminRoutes.js line 44, it's DELETE /requests/:id/reject with reason in body
                 await apiClient.delete(`/admin/requests/${id}/reject`, {
                     data: { reason: 'Admin rejected request' }
                 });
             }
             toast.success(`Student ${action === 'approve' ? 'approved' : 'rejected'} successfully!`, { id: loadingToast });
-            fetchRequests();
+            // fetchRequests(); // Optional: re-fetch to stay in sync if needed
         } catch (error: any) {
+            // Rollback on error
+            setRequests(originalRequests);
+            setTotal(originalRequests.length);
             toast.error(error.response?.data?.message || `Failed to ${action} student`, { id: loadingToast });
         }
     };
@@ -169,9 +175,35 @@ const AdminApprovals: React.FC = () => {
             </div>
 
             {loading ? (
-                <div className="aa-loader-container">
-                    <div className="aa-loader-spinner"></div>
-                    <p className="aa-loader-text">Fetching applications...</p>
+                <div className="aa-content-card">
+                    <div className="aa-table-wrapper">
+                        <table className="aa-table">
+                            <thead>
+                                <tr>
+                                    <th>S.No.</th>
+                                    <th>Reg No.</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Dept.</th>
+                                    <th>Year</th>
+                                    <th>Room</th>
+                                    <th>Block</th>
+                                    <th>Requested On</th>
+                                    <th className="actions">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {Array.from({ length: 5 }).map((_, i) => (
+                                    <tr key={i}>
+                                        <td colSpan={11} style={{ padding: '0' }}>
+                                            <div className="skeleton" style={{ height: '50px', margin: '8px 12px', borderRadius: '4px' }}></div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             ) : (
                 <div className="aa-content-card">

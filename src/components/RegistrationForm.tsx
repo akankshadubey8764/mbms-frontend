@@ -64,8 +64,8 @@ const RegistrationForm: React.FC = () => {
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
-            if (file.size > 5 * 1024 * 1024) {
-                toast.error('File size exceeds 5MB');
+            if (file.size > 1 * 1024 * 1024) {
+                toast.error('File size exceeds 1MB. Please compress or choose a smaller image.');
                 return;
             }
             setFormData((prev) => ({ ...prev, photo: file }));
@@ -230,23 +230,38 @@ const RegistrationForm: React.FC = () => {
                             </div>
 
                             <div className="rf-field-wrapper">
-                                <label className="rf-label">Profile Photo</label>
+                                <label className="rf-label">Profile Photo (Max 1MB)</label>
                                 <div className="rf-photo-upload-container">
-                                    <label className="rf-photo-dropzone">
-                                        <div className="rf-upload-icon-wrapper">
-                                            <Upload className="rf-upload-icon" size={24} />
-                                            <span className="rf-photo-label-text">
-                                                {formData.photo ? formData.photo.name : 'Upload Profile Image'}
-                                            </span>
-                                        </div>
-                                        <input type="file" accept="image/*" onChange={handleFileChange} className="hidden" style={{ display: 'none' }} />
-                                    </label>
-                                    {photoPreview && (
-                                        <div className="rf-photo-preview">
-                                            <img src={photoPreview} alt="Preview" />
+                                    {!photoPreview ? (
+                                        <label className="rf-photo-dropzone">
+                                            <div className="rf-upload-icon-wrapper">
+                                                <Upload className="rf-upload-icon" size={24} />
+                                                <span className="rf-photo-label-text">
+                                                    Upload Profile Image
+                                                </span>
+                                            </div>
+                                            <input type="file" accept="image/*" onChange={handleFileChange} className="hidden" style={{ display: 'none' }} />
+                                        </label>
+                                    ) : (
+                                        <div className="rf-photo-preview-wrapper">
+                                            <div className="rf-photo-preview">
+                                                <img src={photoPreview} alt="Preview" />
+                                                <button 
+                                                    type="button" 
+                                                    className="rf-photo-remove-btn"
+                                                    onClick={() => {
+                                                        setPhotoPreview('');
+                                                        setFormData(prev => ({ ...prev, photo: null }));
+                                                    }}
+                                                >
+                                                    <X size={16} />
+                                                </button>
+                                            </div>
+                                            <p className="rf-photo-name">{formData.photo?.name}</p>
                                         </div>
                                     )}
                                 </div>
+                                <p className="rf-photo-hint">Supported formats: JPG, PNG. Max size: 1MB.</p>
                             </div>
 
                             <div className="rf-section" style={{ paddingTop: '0.5rem' }}>

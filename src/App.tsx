@@ -35,6 +35,7 @@ import MessManagerMenu from './components/Dashboard/MessManager/MessManagerMenu'
 import MessManagerSettings from './components/Dashboard/MessManager/MessManagerSettings';
 
 import { useAuth } from './context/AuthContext';
+import Chatbot from './components/Chat/Chatbot';
 
 // Protected Route Component
 interface ProtectedRouteProps {
@@ -159,6 +160,7 @@ const App: React.FC = () => {
                     {/* Catch all - redirect to home */}
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
+                <Chatbot />
             </Router>
         </>
     );

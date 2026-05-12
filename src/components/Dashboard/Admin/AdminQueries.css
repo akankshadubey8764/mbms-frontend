@@ -39,6 +39,27 @@
     color: #0f172a;
 }
 
+.aq-legend-panel {
+    display: flex;
+    gap: 24px;
+    background: #f8fafc;
+    padding: 12px 20px;
+    border-radius: 8px;
+    border: 1px dashed #cbd5e1;
+}
+
+.aq-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.aq-legend-text {
+    font-size: 11px;
+    font-weight: 600;
+    color: #64748b;
+}
+
 .aq-column-title-group {
     display: flex;
     flex-direction: row;
@@ -210,18 +231,43 @@
     margin-bottom: 8px;
 }
 
-.aq-mini-status {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
+.aq-status-badge {
+    font-size: 9px;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 99px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
-.aq-mini-status.status-pending {
-    background: #f43f5e;
+.aq-status-badge.status-pending {
+    background: #fffbeb;
+    color: #d97706;
+    border: 1px solid #fef3c7;
 }
 
-.aq-mini-status.status-resolved {
-    background: #10b981;
+.aq-status-badge.status-resolved {
+    background: #ecfdf5;
+    color: #059669;
+    border: 1px solid #d1fae5;
+}
+
+.aq-status-badge.status-overdue {
+    background: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fee2e2;
+    animation: aq-pulse-red 2s infinite;
+}
+
+@keyframes aq-pulse-red {
+    0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4); }
+    70% { box-shadow: 0 0 0 6px rgba(220, 38, 38, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+}
+
+.aq-mini-card.overdue {
+    border-left: 4px solid #ef4444;
+    background: #fffcfc;
 }
 
 .aq-card-date {

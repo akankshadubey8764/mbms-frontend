@@ -18,16 +18,21 @@ const StudentOverview: React.FC = () => {
     const [stats, setStats] = useState<DashboardStats | null>(null);
     const [loading, setLoading] = useState(true);
 
+    const [notifications, setNotifications] = useState<any[]>([]);
+
     useEffect(() => {
         const fetchDashboardData = async () => {
             try {
-                const [profileRes, billRes] = await Promise.all([
+                const [profileRes, billRes, notifRes] = await Promise.all([
                     apiClient.get('/students/profile'),
-                    apiClient.get('/students/mess-bills/history')
+                    apiClient.get('/students/mess-bills/history'),
+                    apiClient.get('/students/notifications')
                 ]);
 
                 const profile = profileRes.data;
                 const bills = billRes.data || [];
+                const unreadNotifs = (notifRes.data || []).filter((n: any) => !n.read);
+                setNotifications(unreadNotifs);
                 
                 const pendingBills = bills.filter((b: any) => b.paymentStatus !== 'PAID').length;
                 const latestBill = bills.length > 0 ? bills[bills.length - 1] : null;
@@ -51,6 +56,15 @@ const StudentOverview: React.FC = () => {
         fetchDashboardData();
     }, []);
 
+    const markAsRead = async (id: string) => {
+        try {
+            await apiClient.patch(`/students/notifications/${id}/read`);
+            setNotifications(prev => prev.filter(n => n._id !== id));
+        } catch (err) {
+            console.error('Failed to mark as read', err);
+        }
+    };
+
     if (loading) return null;
 
     const statItems = [
@@ -62,6 +76,23 @@ const StudentOverview: React.FC = () => {
 
     return (
         <div className="so-container">
+            {/* Notifications Section */}
+            {notifications.length > 0 && (
+                <div className="so-notif-section">
+                    {notifications.map(notif => (
+                        <div key={notif._id} className="so-notif-banner">
+                            <div className="so-notif-content">
+                                <div className="so-notif-dot"></div>
+                                <p className="so-notif-text">{notif.message}</p>
+                            </div>
+                            <button onClick={() => markAsRead(notif._id)} className="so-notif-close">
+                                <LogOut size={14} style={{ transform: 'rotate(180deg)' }} /> 
+                                <span>Dismiss</span>
+                            </button>
+                        </div>
+                    ))}
+                </div>
+            )}
             {/* Quick Stats Grid */}
             <div className="so-grid">
                 {statItems.map((item, idx) => {

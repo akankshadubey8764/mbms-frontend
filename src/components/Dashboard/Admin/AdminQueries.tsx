@@ -104,7 +104,10 @@ const AdminQueries: React.FC = () => {
     };
 
     const getStatusColor = (status: string) => {
-        return status === 'RESOLVED' ? 'status-resolved' : 'status-pending';
+        const s = status?.toUpperCase();
+        if (s === 'RESOLVED') return 'status-resolved';
+        if (s === 'OVERDUE') return 'status-overdue';
+        return 'status-pending'; // Matches OPEN, PENDING, REOPENED
     };
 
     return (
@@ -160,6 +163,22 @@ const AdminQueries: React.FC = () => {
                 </div>
             </div>
 
+            {/* Legend / Status Info */}
+            <div className="aq-legend-panel">
+                <div className="aq-legend-item">
+                    <span className="aq-status-badge status-pending">PENDING</span>
+                    <span className="aq-legend-text">New queries awaiting attention</span>
+                </div>
+                <div className="aq-legend-item">
+                    <span className="aq-status-badge status-overdue">OVERDUE</span>
+                    <span className="aq-legend-text">Unresolved for {'>'} 48 hours</span>
+                </div>
+                <div className="aq-legend-item">
+                    <span className="aq-status-badge status-resolved">RESOLVED</span>
+                    <span className="aq-legend-text">Issue closed by admin</span>
+                </div>
+            </div>
+
             {loading ? (
                 <div className="aq-skeleton-loader">
                     {[1, 2, 3].map(i => <div key={i} className="aq-skeleton-card"></div>)}
@@ -183,9 +202,11 @@ const AdminQueries: React.FC = () => {
                                         <div className="aq-empty-col">No {category.toLowerCase()} queries</div>
                                     ) : (
                                         filtered.map((query: Query) => (
-                                            <div key={query._id} className="aq-mini-card animate-card-up">
+                                            <div key={query._id} className={`aq-mini-card animate-card-up ${query.status?.toUpperCase() === 'OVERDUE' ? 'overdue' : ''}`}>
                                                 <div className="aq-card-top">
-                                                    <span className={`aq-mini-status ${getStatusColor(query.status)}`}></span>
+                                                    <div className={`aq-status-badge ${getStatusColor(query.status)}`}>
+                                                        {query.status.toUpperCase()}
+                                                    </div>
                                                     <span className="aq-card-date">{new Date(query.createdAt).toLocaleDateString()}</span>
                                                 </div>
                                                 <p className="aq-card-text">{query.queryText || query.message}</p>
@@ -215,7 +236,7 @@ const AdminQueries: React.FC = () => {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    {(query.status === 'Open' || query.status === 'Reopened') && (
+                                                    {(query.status === 'Open' || query.status === 'Reopened' || query.status === 'Overdue') && (
                                                         <button
                                                             className="aq-mini-btn aq-mini-btn-resolve"
                                                             onClick={() => markAsResolved(query._id)}

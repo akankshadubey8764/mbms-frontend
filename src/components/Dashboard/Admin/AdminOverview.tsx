@@ -46,8 +46,21 @@ const AdminOverview: React.FC = () => {
 
     if (loading) {
         return (
-            <div className="ao-loader-container">
-                <div className="ao-loader-spinner"></div>
+            <div className="admin-overview-container">
+                <div className="ao-stats-grid">
+                    {[1, 2, 3, 4].map(i => (
+                        <div key={i} className="ao-stat-card skeleton" style={{ height: '100px' }}></div>
+                    ))}
+                </div>
+                <div className="ao-content-grid" style={{ marginTop: '24px' }}>
+                    <div className="ao-priority-container">
+                        <div className="ao-priority-card skeleton" style={{ height: '400px' }}></div>
+                    </div>
+                    <div className="ao-side-panel">
+                        <div className="ao-quick-links-container skeleton" style={{ height: '200px', marginBottom: '24px' }}></div>
+                        <div className="ao-small-stats-card skeleton" style={{ height: '100px' }}></div>
+                    </div>
+                </div>
             </div>
         );
     }
