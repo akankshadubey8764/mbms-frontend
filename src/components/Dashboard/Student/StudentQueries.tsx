@@ -138,11 +138,18 @@ const StudentQueries: React.FC = () => {
                             <span>{submitting ? 'Sending Request...' : 'Submit Query'}</span>
                         </button>
 
-                        <div style={{ marginTop: '1.5rem', display: 'flex', gap: '0.75rem', padding: '1rem', backgroundColor: '#eff6ff', borderRadius: '1rem' }}>
-                            <AlertCircle className="text-blue-600" size={20} style={{ flexShrink: 0 }} />
-                            <p style={{ fontSize: '0.75rem', color: '#1e40af', fontWeight: '500', lineHeight: '1.4' }}>
-                                Queries are usually addressed by the hostel warden within 24-48 working hours.
-                            </p>
+                        <div style={{ marginTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.75rem', padding: '1rem', backgroundColor: '#eff6ff', borderRadius: '1rem' }}>
+                            <div style={{ display: 'flex', gap: '0.75rem' }}>
+                                <AlertCircle className="text-blue-600" size={20} style={{ flexShrink: 0 }} />
+                                <p style={{ fontSize: '0.75rem', color: '#1e40af', fontWeight: '500', lineHeight: '1.4' }}>
+                                    Queries are usually addressed by the hostel warden within 24-48 working hours.
+                                </p>
+                            </div>
+                            <div style={{ padding: '0.75rem', backgroundColor: 'white', borderRadius: '0.75rem', border: '1px solid #dbeafe' }}>
+                                <p style={{ fontSize: '0.7rem', color: '#1e40af', fontWeight: '600' }}>
+                                    💡 <strong>Pro Tip:</strong> For general questions about mess rates, menu, or hostel rules, please use the <strong>AI Chatbot</strong> (bottom right) for instant answers! Only raise a query for physical issues (maintenance) or specific grievances.
+                                </p>
+                            </div>
                         </div>
                     </form>
                 </div>

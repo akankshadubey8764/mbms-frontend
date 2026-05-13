@@ -63,7 +63,7 @@
 .smb-table th {
     background-color: #f8fafc;
     padding: 0.75rem 1rem;
-    text-align: left;
+    text-align: center;
     font-size: 0.7rem;
     font-weight: 800;
     color: #64748b;
@@ -76,6 +76,7 @@
     padding: 0.75rem 1rem;
     font-size: 0.85rem;
     color: #1e293b;
+    text-align: center;
     border-bottom: 1px solid #f8fafc;
 }
 
@@ -206,4 +207,123 @@
 .smb-status-pending {
     background-color: #fffbeb;
     color: #d97706;
+}
+
+/* New Styles */
+.smb-header-badge {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.4rem 0.8rem;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.smb-upload-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background-color: #0f172a;
+    color: white;
+    border: none;
+    padding: 0.4rem 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.smb-upload-btn:hover {
+    background-color: #1e293b;
+    transform: translateY(-1px);
+}
+
+.smb-footer-note {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 0.75rem;
+    padding: 1rem;
+    background-color: #f8fafc;
+    border-radius: 1rem;
+    border: 1px solid #f1f5f9;
+    color: #64748b;
+    font-size: 0.75rem;
+    line-height: 1.4;
+}
+
+.smb-footer-note svg {
+    flex-shrink: 0;
+    color: #0f172a;
+}
+
+/* Receipt Thumbnail and Modal */
+.smb-receipt-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.smb-thumb {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 2px solid #e2e8f0;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.smb-thumb:hover {
+    transform: scale(1.1);
+    border-color: #0f172a;
+}
+
+.smb-pending-tag {
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+}
+
+.smb-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.smb-modal-content {
+    position: relative;
+    max-width: 90%;
+    max-height: 90%;
+}
+
+.smb-modal-close {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.smb-full-img {
+    max-width: 100%;
+    max-height: 80vh;
+    border-radius: 8px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }

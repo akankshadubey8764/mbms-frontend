@@ -18,15 +18,20 @@
 }
 
 .so-notif-banner {
-    background: linear-gradient(to right, #009688, #00796b);
+    background: #0f172a;
     color: white;
-    padding: 1rem 1.5rem;
-    border-radius: 1rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.75rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: 0 4px 12px rgba(0, 150, 136, 0.2);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     animation: so-slideDown 0.4s ease-out;
+}
+
+.so-notif-banner.bill-announcement {
+    background: linear-gradient(to right, #10b981, #059669);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
 }
 
 @keyframes so-slideDown {
@@ -40,43 +45,94 @@
     gap: 0.75rem;
 }
 
-.so-notif-dot {
-    width: 8px;
-    height: 8px;
-    background-color: #fff;
-    border-radius: 50%;
-    box-shadow: 0 0 10px #fff;
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.5); opacity: 0.5; }
-    100% { transform: scale(1); opacity: 1; }
-}
-
 .so-notif-text {
-    font-size: 0.9375rem;
+    font-size: 0.85rem;
     font-weight: 600;
 }
 
-.so-notif-close {
-    background: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+.so-notif-close-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
     color: white;
-    padding: 0.4rem 0.8rem;
-    border-radius: 0.6rem;
-    font-size: 0.75rem;
-    font-weight: 700;
-    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
-    gap: 0.4rem;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.so-notif-close-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Payment Reminder Alert */
+.so-reminder-alert {
+    background-color: #fff1f2;
+    border: 1px solid #ffe4e6;
+    border-radius: 1rem;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes shake {
+    10%, 90% { transform: translate3d(-1px, 0, 0); }
+    20%, 80% { transform: translate3d(2px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+    40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+
+.so-reminder-icon {
+    width: 40px;
+    height: 40px;
+    background-color: #ef4444;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.so-reminder-content {
+    flex-grow: 1;
+}
+
+.so-reminder-content h3 {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #991b1b;
+    margin: 0 0 2px 0;
+}
+
+.so-reminder-content p {
+    font-size: 0.8rem;
+    color: #b91c1c;
+    margin: 0;
+    font-weight: 500;
+}
+
+.so-reminder-btn {
+    padding: 0.6rem 1.2rem;
+    background-color: #991b1b;
+    color: white;
+    border: none;
+    border-radius: 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
     transition: all 0.2s;
 }
 
-.so-notif-close:hover {
-    background: rgba(255, 255, 255, 0.25);
+.so-reminder-btn:hover {
+    background-color: #7f1d1d;
+    transform: scale(1.05);
 }
 
 .so-grid {

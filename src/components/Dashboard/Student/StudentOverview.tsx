@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { LayoutDashboard, Wallet, Clock, CheckCircle2, UserCircle, Building, Mail, LogOut } from 'lucide-react';
+import { LayoutDashboard, Wallet, Clock, CheckCircle2, UserCircle, Building, Mail, LogOut, X, AlertTriangle, BellRing } from 'lucide-react';
 import apiClient from '../../../api/apiClient';
 import './StudentOverview.css';
 
@@ -76,18 +76,33 @@ const StudentOverview: React.FC = () => {
 
     return (
         <div className="so-container">
+            {/* Payment Reminder Alert */}
+            {stats && stats.pendingBills > 0 && (
+                <div className="so-reminder-alert">
+                    <div className="so-reminder-icon">
+                        <AlertTriangle size={20} />
+                    </div>
+                    <div className="so-reminder-content">
+                        <h3>Outstanding Payment Reminder</h3>
+                        <p>You have <strong>{stats.pendingBills} unpaid</strong> mess bill{stats.pendingBills > 1 ? 's' : ''}. Please clear your dues as soon as possible.</p>
+                    </div>
+                    <button className="so-reminder-btn" onClick={() => window.location.href='/student-dashboard/mess-bill'}>
+                        View Bills
+                    </button>
+                </div>
+            )}
+
             {/* Notifications Section */}
             {notifications.length > 0 && (
                 <div className="so-notif-section">
                     {notifications.map(notif => (
-                        <div key={notif._id} className="so-notif-banner">
+                        <div key={notif._id} className={`so-notif-banner ${notif.type === 'BILL_PUBLISHED' ? 'bill-announcement' : ''}`}>
                             <div className="so-notif-content">
-                                <div className="so-notif-dot"></div>
+                                <BellRing size={16} className="so-notif-icon-main" />
                                 <p className="so-notif-text">{notif.message}</p>
                             </div>
-                            <button onClick={() => markAsRead(notif._id)} className="so-notif-close">
-                                <LogOut size={14} style={{ transform: 'rotate(180deg)' }} /> 
-                                <span>Dismiss</span>
+                            <button onClick={() => markAsRead(notif._id)} className="so-notif-close-btn" title="Dismiss">
+                                <X size={14} />
                             </button>
                         </div>
                     ))}

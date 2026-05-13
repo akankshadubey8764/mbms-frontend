@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Lock, ShieldAlert, KeyRound, Monitor, Save } from 'lucide-react';
+import { Lock, ShieldAlert, KeyRound, Monitor, Save, Zap, Play, Clock, Trash2 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import apiClient from '../../../api/apiClient';
 import './AdminSettings.css';
@@ -18,6 +18,7 @@ const AdminSettings: React.FC = () => {
         role: 'admin'
     });
     const [loading, setLoading] = useState(false);
+    const [triggerLoading, setTriggerLoading] = useState<string | null>(null);
 
     const handlePasswordUpdate = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -56,6 +57,49 @@ const AdminSettings: React.FC = () => {
         }
     };
 
+    const handleTriggerBilling = async () => {
+        if (!window.confirm("Are you sure you want to trigger the Monthly Mess Bill Calculation manually? This will generate bills for the previous month for all approved students.")) return;
+        
+        setTriggerLoading('billing');
+        const billingToast = toast.loading('Generating mess bills...');
+        try {
+            const response = await apiClient.post('/automation/trigger-billing');
+            toast.success(response.data.message || "Bills generated successfully", { id: billingToast });
+        } catch (error: any) {
+            toast.error(error.response?.data?.error || "Failed to trigger billing", { id: billingToast });
+        } finally {
+            setTriggerLoading(null);
+        }
+    };
+
+    const handleTriggerOverdue = async () => {
+        setTriggerLoading('overdue');
+        const overdueToast = toast.loading('Checking for overdue queries...');
+        try {
+            const response = await apiClient.post('/automation/trigger-overdue');
+            toast.success(`Scan complete! ${response.data.updatedCount} queries updated to overdue.`, { id: overdueToast });
+        } catch (error: any) {
+            toast.error("Failed to check for overdue queries", { id: overdueToast });
+        } finally {
+            setTriggerLoading(null);
+        }
+    };
+
+    const handleTriggerStaleCleanup = async () => {
+        if (!window.confirm("Are you sure? This will auto-reject all registration requests older than 30 days.")) return;
+        
+        setTriggerLoading('stale');
+        const staleToast = toast.loading('Cleaning up stale registrations...');
+        try {
+            const response = await apiClient.post('/automation/trigger-stale-cleanup');
+            toast.success(`Cleanup complete! ${response.data.updatedCount} stale requests rejected.`, { id: staleToast });
+        } catch (error: any) {
+            toast.error("Failed to cleanup registrations", { id: staleToast });
+        } finally {
+            setTriggerLoading(null);
+        }
+    };
+
     return (
         <div className="as-container">
             <div className="as-layout-grid">
@@ -74,6 +118,13 @@ const AdminSettings: React.FC = () => {
                         label="Add Admin"
                         description="User permissions"
                         onClick={() => setActiveTab('Admins')}
+                    />
+                    <SettingsTab
+                        active={activeTab === 'Automation'}
+                        icon={Zap}
+                        label="Automation"
+                        description="Cron & Tasks"
+                        onClick={() => setActiveTab('Automation')}
                     />
                     <SettingsTab
                         active={activeTab === 'Display'}
@@ -197,6 +248,95 @@ const AdminSettings: React.FC = () => {
                                     </button>
                                 </div>
                             </form>
+                        </div>
+                    )}
+
+                    {activeTab === 'Automation' && (
+                        <div className="as-card animate-fade-in">
+                            <div className="as-card-header">
+                                <div className="as-card-icon">
+                                    <Zap size={20} />
+                                </div>
+                                <h2 className="as-card-title">Automation & Cron Triggers</h2>
+                            </div>
+                            
+                            <div className="as-automation-grid">
+                                <div className="as-auto-card">
+                                    <div className="as-auto-info">
+                                        <div className="as-auto-icon billing">
+                                            <Save size={24} />
+                                        </div>
+                                        <div>
+                                            <h4>Monthly Billing</h4>
+                                            <p>Generates mess bills for the previous month for all approved students.</p>
+                                        </div>
+                                    </div>
+                                    <button 
+                                        className="as-trigger-btn"
+                                        onClick={handleTriggerBilling}
+                                        disabled={!!triggerLoading}
+                                    >
+                                        {triggerLoading === 'billing' ? (
+                                            <div className="spinner-small" />
+                                        ) : (
+                                            <><Play size={16} /> <span>Trigger Now</span></>
+                                        )}
+                                    </button>
+                                </div>
+
+                                <div className="as-auto-card">
+                                    <div className="as-auto-info">
+                                        <div className="as-auto-icon overdue">
+                                            <Clock size={24} />
+                                        </div>
+                                        <div>
+                                            <h4>Overdue Check</h4>
+                                            <p>Scans open queries and marks those older than 48 hours as Overdue.</p>
+                                        </div>
+                                    </div>
+                                    <button 
+                                        className="as-trigger-btn"
+                                        onClick={handleTriggerOverdue}
+                                        disabled={!!triggerLoading}
+                                    >
+                                        {triggerLoading === 'overdue' ? (
+                                            <div className="spinner-small" />
+                                        ) : (
+                                            <><Play size={16} /> <span>Trigger Now</span></>
+                                        )}
+                                    </button>
+                                </div>
+
+                                <div className="as-auto-card">
+                                    <div className="as-auto-info">
+                                        <div className="as-auto-icon cleanup">
+                                            <Trash2 size={24} />
+                                        </div>
+                                        <div>
+                                            <h4>Stale Cleanup</h4>
+                                            <p>Auto-rejects registration requests that have been pending for over 30 days.</p>
+                                        </div>
+                                    </div>
+                                    <button 
+                                        className="as-trigger-btn"
+                                        onClick={handleTriggerStaleCleanup}
+                                        disabled={!!triggerLoading}
+                                    >
+                                        {triggerLoading === 'stale' ? (
+                                            <div className="spinner-small" />
+                                        ) : (
+                                            <><Play size={16} /> <span>Trigger Now</span></>
+                                        )}
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div className="as-notice-card warning" style={{ marginTop: '20px' }}>
+                                <h3 className="as-notice-title">Developer Note</h3>
+                                <p className="as-notice-text">
+                                    These actions are irreversible. Billing generation should only be triggered once per month in production.
+                                </p>
+                            </div>
                         </div>
                     )}
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MessageSquare, X, Send, Bot, User, Minimize2, Maximize2 } from 'lucide-react';
+import { MessageSquare, X, Send, Bot, User, Minimize2, Maximize2, Expand, Shrink } from 'lucide-react';
 import apiClient from '../../api/apiClient';
+import ReactMarkdown from 'react-markdown';
 import './Chatbot.css';
 
 interface Message {
@@ -11,6 +12,7 @@ interface Message {
 const Chatbot: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [isMinimized, setIsMinimized] = useState(false);
+    const [isFullScreen, setIsFullScreen] = useState(false);
     const [input, setInput] = useState('');
     const [messages, setMessages] = useState<Message[]>([
         { role: 'bot', content: 'Hi! I am the TPGIT Hostel Assistant. How can I help you today?' }
@@ -49,7 +51,7 @@ const Chatbot: React.FC = () => {
     };
 
     return (
-        <div className={`chatbot-wrapper ${isOpen ? 'open' : ''} ${isMinimized ? 'minimized' : ''}`}>
+        <div className={`chatbot-wrapper ${isOpen ? 'open' : ''} ${isMinimized ? 'minimized' : ''} ${isFullScreen ? 'full-screen' : ''}`}>
             {!isOpen ? (
                 <button className="chatbot-toggle" onClick={() => setIsOpen(true)}>
                     <MessageSquare size={24} />
@@ -68,10 +70,15 @@ const Chatbot: React.FC = () => {
                             </div>
                         </div>
                         <div className="chatbot-header-actions">
-                            <button onClick={() => setIsMinimized(!isMinimized)}>
+                            {!isMinimized && (
+                                <button onClick={() => setIsFullScreen(!isFullScreen)} title={isFullScreen ? "Exit Full Screen" : "Full Screen"}>
+                                    {isFullScreen ? <Shrink size={16} /> : <Expand size={16} />}
+                                </button>
+                            )}
+                            <button onClick={() => { setIsMinimized(!isMinimized); setIsFullScreen(false); }} title={isMinimized ? "Maximize" : "Minimize"}>
                                 {isMinimized ? <Maximize2 size={16} /> : <Minimize2 size={16} />}
                             </button>
-                            <button onClick={() => setIsOpen(false)}>
+                            <button onClick={() => { setIsOpen(false); setIsFullScreen(false); }} title="Close">
                                 <X size={16} />
                             </button>
                         </div>
@@ -86,7 +93,11 @@ const Chatbot: React.FC = () => {
                                             {m.role === 'bot' ? <Bot size={14} /> : <User size={14} />}
                                         </div>
                                         <div className="bubble-content">
-                                            {m.content}
+                                            {m.role === 'bot' ? (
+                                                <ReactMarkdown>{m.content}</ReactMarkdown>
+                                            ) : (
+                                                m.content
+                                            )}
                                         </div>
                                     </div>
                                 ))}

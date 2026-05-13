@@ -156,9 +156,11 @@ const AdminMessBills: React.FC = () => {
                         {bill.amountIssued > 0 ? `₹${bill.amountIssued}` : ''}
                     </span>
                     {bill.status === 'PAID' ? (
-                        <CheckCircle size={16} className="text-emerald-500" />
+                        <CheckCircle size={16} className="text-emerald-500" title="Paid" />
+                    ) : bill.status === 'PARTIAL' ? (
+                        <AlertCircle size={16} className="text-amber-500" title="Partial / Verifying" />
                     ) : (
-                        <XCircle size={16} className="text-rose-500" />
+                        <XCircle size={16} className="text-rose-500" title="Unpaid" />
                     )}
                 </div>
             );
