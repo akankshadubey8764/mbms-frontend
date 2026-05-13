@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Send, MessageCircle, Clock, CheckCircle2, AlertCircle, History, MessageSquarePlus } from 'lucide-react';
+import { Send, MessageCircle, Clock, AlertCircle, History, MessageSquarePlus } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import apiClient from '../../../api/apiClient';
 import './StudentQueries.css';
@@ -15,7 +15,6 @@ interface Query {
 
 const StudentQueries: React.FC = () => {
     const [queries, setQueries] = useState<Query[]>([]);
-    const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
     const [formData, setFormData] = useState({ subject: '', message: '' });
 
@@ -30,7 +29,7 @@ const StudentQueries: React.FC = () => {
         } catch (error) {
             // Silently fail if endpoint not ready
         } finally {
-            setLoading(false);
+            // Loading removed
         }
     };
 

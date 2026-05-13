@@ -1,6 +1,4 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
 import Navbar from '../components/Layout/Navbar';
 import Footer from '../components/Layout/Footer';
 import HeroImg from '../assets/images/hostels/Boys-Hostel.jpg'; // Using standard hero if no specific girls hero
@@ -9,7 +7,6 @@ import G2 from '../assets/images/hostels/g2.jpeg';
 import './hostel-details.css';
 
 const WomensHostel: React.FC = () => {
-    const navigate = useNavigate();
     const hostels = [
         {
             name: "Girls Hostel 1",

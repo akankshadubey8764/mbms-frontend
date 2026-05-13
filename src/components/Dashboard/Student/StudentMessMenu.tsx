@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { UtensilsCrossed, Coffee, Sun, Moon, Calendar, Clock, ChevronRight } from 'lucide-react';
+import { Coffee, Sun, Moon, Calendar, Clock } from 'lucide-react';
 import apiClient from '../../../api/apiClient';
 import './StudentMessMenu.css';
 

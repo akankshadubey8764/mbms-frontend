@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { User, Mail, Phone, Building, Hash, GraduationCap, Calendar, Save, Upload, AlertCircle, CheckCircle2, BadgeCheck } from 'lucide-react';
+import { User, Building, Upload, AlertCircle, BadgeCheck } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import apiClient from '../../../api/apiClient';
 import './StudentProfile.css';

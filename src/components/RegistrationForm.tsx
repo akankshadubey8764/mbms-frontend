@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Upload, Mail, Phone, Building, Hash, User, GraduationCap, ArrowLeft, KeyRound, CheckCircle2 } from 'lucide-react';
+import { Upload, Mail, Phone, Building, Hash, User, KeyRound, CheckCircle2, X } from 'lucide-react';
 import Logo from '../assets/images/logos/tpgit_logo.png';
 import { toast } from 'react-hot-toast';
 import apiClient from '../api/apiClient';

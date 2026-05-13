@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { LayoutDashboard, Wallet, Clock, CheckCircle2, UserCircle, Building, Mail, LogOut, X, AlertTriangle, BellRing } from 'lucide-react';
+import { Wallet, Clock, CheckCircle2, UserCircle, Building, X, AlertTriangle, BellRing } from 'lucide-react';
 import apiClient from '../../../api/apiClient';
 import './StudentOverview.css';
 

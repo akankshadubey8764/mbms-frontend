@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Download, Wallet, Clock, CheckCircle2, ChevronRight, FileText, Calendar, UploadCloud, AlertCircle, X } from 'lucide-react';
+import { CheckCircle2, FileText, UploadCloud, AlertCircle, X } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import apiClient from '../../../api/apiClient';
 import './StudentMessBill.css';
@@ -54,7 +54,7 @@ const StudentMessBill: React.FC = () => {
             const verificationToast = toast.loading('AI is verifying your receipt...');
             try {
                 // Submit base64 directly to our backend for Verification + Upload
-                const response = await apiClient.post('/students/bills/upload-proof', {
+                await apiClient.post('/students/bills/upload-proof', {
                     month: uploadingFor.month,
                     year: uploadingFor.year,
                     base64Data: base64,

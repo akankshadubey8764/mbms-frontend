@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Utensils, Coffee, Sun, Soup, Edit2, Save, X, CheckCircle2 } from 'lucide-react';
+import { Utensils, Coffee, Sun, Soup, CheckCircle2 } from 'lucide-react';
 import apiClient from '../../../api/apiClient';
 import toast from 'react-hot-toast';
 import '../Admin/AdminMessMenu.css';
@@ -22,7 +22,7 @@ const mealTimes: ('Breakfast' | 'Lunch' | 'Dinner')[] = ['Breakfast', 'Lunch', '
 const MessManagerMenu: React.FC = () => {
     const [menu, setMenu] = useState<MenuData | null>(null);
     const [loading, setLoading] = useState(true);
-    const [isEditing, setIsEditing] = useState(false);
+    const [isEditing] = useState(false);
     const [editData, setEditData] = useState<MenuData | null>(null);
 
     useEffect(() => {
@@ -49,34 +49,7 @@ const MessManagerMenu: React.FC = () => {
             console.error('Error fetching menu:', error);
             toast.error('Failed to fetch menu');
         } finally {
-            setLoading(false);
-        }
-    };
-
-    const handleEdit = () => {
-        setEditData(JSON.parse(JSON.stringify(menu)));
-        setIsEditing(true);
-    };
-
-    const handleCancel = () => {
-        setIsEditing(false);
-        setEditData(null);
-    };
-
-    const handleSave = async () => {
-        if (!editData) return;
-        const loadingToast = toast.loading('Saving menu...');
-        try {
-            await apiClient.put('/mess/update_mess_menu', {
-                week: editData.week,
-                menuItems: editData.menuItems
-            });
-            setMenu(editData);
-            setIsEditing(false);
-            toast.success('Mess menu updated successfully!', { id: loadingToast });
-        } catch (error) {
-            console.error('Error updating menu:', error);
-            toast.error('Failed to update menu', { id: loadingToast });
+            // Loading removed
         }
     };
 
