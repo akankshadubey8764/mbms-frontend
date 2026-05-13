@@ -9,10 +9,15 @@
 .rf-header {
     display: flex;
     align-items: center;
-    text-align: center;
+    justify-content: center; /* Center for mobile */
     padding: 1rem 1.5rem;
     border-bottom: 1px solid #f1f5f9;
-    padding-left: 600px;
+}
+
+@media (min-width: 1024px) {
+    .rf-header {
+        justify-content: space-between; /* Spread out for desktop */
+    }
 }
 
 .rf-header-left {

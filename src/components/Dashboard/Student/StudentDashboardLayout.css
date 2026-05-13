@@ -5,18 +5,18 @@
     font-size: 12px;
     background-color: #f4f6f8;
     min-height: 100vh;
-    padding-top: 50px;
+    padding-top: 64px;
     /* space for fixed header */
 }
 
 /* Header */
 .sdl-top-header {
     background-color: white;
-    height: 50px;
+    height: 64px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 16px;
+    padding: 0 20px;
     border-bottom: 1px solid #e2e8f0;
     position: fixed;
     top: 0;
@@ -29,7 +29,7 @@
 .sdl-header-brand {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 16px;
 }
 
 .sdl-menu-btn {
@@ -37,9 +37,9 @@
     border: none;
     color: black;
     cursor: pointer;
-    padding: 4px;
+    padding: 6px;
     display: flex;
-    border-radius: 4px;
+    border-radius: 6px;
     transition: background 0.2s;
 }
 
@@ -48,8 +48,8 @@
 }
 
 .sdl-logo-img {
-    width: 32px;
-    height: 32px;
+    width: 44px;
+    height: 44px;
     object-fit: contain;
 }
 
@@ -59,10 +59,11 @@
 }
 
 .sdl-brand-title {
-    font-size: 14px;
-    font-weight: bold;
+    font-size: 16px;
+    font-weight: 800;
     color: #0f172a;
     line-height: 1;
+    letter-spacing: -0.02em;
 }
 
 .sdl-brand-subtitle {
@@ -116,7 +117,7 @@
 /* Sidebar Wrapper */
 .sdl-sidebar {
     position: fixed;
-    top: 50px;
+    top: 64px;
     left: 0;
     bottom: 0;
     background-color: white;
@@ -149,7 +150,7 @@
     justify-content: space-between;
     padding: 0 16px;
     min-width: 250px;
-    height: 50px;
+    height: 64px;
     box-sizing: border-box;
     border-bottom: 1px solid #f1f5f9;
 }

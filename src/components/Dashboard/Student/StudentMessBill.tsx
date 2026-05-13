@@ -135,44 +135,48 @@ const StudentMessBill: React.FC = () => {
                                                 </span>
                                             </td>
                                             <td>
-                                                {bill.isVerified ? (
-                                                    <span className="text-emerald-600 font-bold flex items-center gap-1">
-                                                        <CheckCircle2 size={12} /> Yes
-                                                    </span>
-                                                ) : (
-                                                    <span className="text-slate-400">No</span>
-                                                )}
+                                                <div className="flex justify-center items-center">
+                                                    {bill.isVerified ? (
+                                                        <span className="text-emerald-600 font-bold flex items-center gap-1">
+                                                            <CheckCircle2 size={12} /> Yes
+                                                        </span>
+                                                    ) : (
+                                                        <span className="text-slate-400">No</span>
+                                                    )}
+                                                </div>
                                             </td>
                                             <td className="text-xs text-slate-500">
                                                 {new Date(bill.calculatedAt).toLocaleDateString()}
                                             </td>
                                             <td>
-                                                {bill.paymentStatus === 'PAID' ? (
-                                                    <span className="text-emerald-600 text-xs font-bold flex items-center gap-1">
-                                                        <CheckCircle2 size={14} /> Completed
-                                                    </span>
-                                                ) : bill.receiptUrl ? (
-                                                    <div className="smb-receipt-preview">
-                                                        <img 
-                                                            src={bill.receiptUrl} 
-                                                            alt="Receipt" 
-                                                            className="smb-thumb"
-                                                            onClick={() => setPreviewImage(bill.receiptUrl || null)}
-                                                        />
-                                                        <span className="smb-pending-tag">Verifying...</span>
-                                                    </div>
-                                                ) : (
-                                                    <button 
-                                                        className="smb-upload-btn"
-                                                        onClick={() => {
-                                                            setUploadingFor({ month: bill.month, year: bill.year });
-                                                            fileInputRef.current?.click();
-                                                        }}
-                                                    >
-                                                        <UploadCloud size={14} />
-                                                        <span>Upload</span>
-                                                    </button>
-                                                )}
+                                                <div className="flex justify-center items-center">
+                                                    {bill.paymentStatus === 'PAID' ? (
+                                                        <span className="text-emerald-600 text-xs font-bold flex items-center gap-1">
+                                                            <CheckCircle2 size={14} /> Completed
+                                                        </span>
+                                                    ) : bill.receiptUrl ? (
+                                                        <div className="smb-receipt-preview">
+                                                            <img 
+                                                                src={bill.receiptUrl} 
+                                                                alt="Receipt" 
+                                                                className="smb-thumb"
+                                                                onClick={() => setPreviewImage(bill.receiptUrl || null)}
+                                                            />
+                                                            <span className="smb-pending-tag">Verifying...</span>
+                                                        </div>
+                                                    ) : (
+                                                        <button 
+                                                            className="smb-upload-btn"
+                                                            onClick={() => {
+                                                                setUploadingFor({ month: bill.month, year: bill.year });
+                                                                fileInputRef.current?.click();
+                                                            }}
+                                                        >
+                                                            <UploadCloud size={14} />
+                                                            <span>Upload</span>
+                                                        </button>
+                                                    )}
+                                                </div>
                                             </td>
                                         </tr>
                                     ))
@@ -180,6 +184,17 @@ const StudentMessBill: React.FC = () => {
                             </tbody>
                         </table>
                     </div>
+                </div>
+
+                {/* Reference Sample Link */}
+                <div className="p-4 border-t border-slate-100 flex justify-center">
+                    <button 
+                        onClick={() => setPreviewImage('/src/assets/images/hostels/gpay_reference.png')}
+                        className="text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-primary transition-colors flex items-center gap-2"
+                    >
+                        <FileText size={12} />
+                        <span>View Sample Receipt Reference</span>
+                    </button>
                 </div>
             </div>
 

@@ -6,6 +6,8 @@ import About from './app/about';
 import Contact from './app/contact';
 import Registration from './app/registration';
 import Login from './app/login';
+import MensHostel from './app/mens-hostel';
+import WomensHostel from './app/womens-hostel';
 
 // Student Dashboard Components
 import StudentDashboardLayout from './components/Dashboard/Student/StudentDashboardLayout';
@@ -105,6 +107,8 @@ const App: React.FC = () => {
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/registration" element={<Registration />} />
                     <Route path="/login" element={<Login />} />
+                    <Route path="/mens-hostel" element={<MensHostel />} />
+                    <Route path="/womens-hostel" element={<WomensHostel />} />
 
                     {/* Student Dashboard Nested Routes */}
                     <Route

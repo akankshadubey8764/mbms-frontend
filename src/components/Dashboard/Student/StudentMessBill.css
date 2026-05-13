@@ -62,22 +62,23 @@
 
 .smb-table th {
     background-color: #f8fafc;
-    padding: 0.75rem 1rem;
+    padding: 1rem;
     text-align: center;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     font-weight: 800;
     color: #64748b;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    border-bottom: 1px solid #f1f5f9;
+    border-bottom: 2px solid #f1f5f9;
 }
 
 .smb-table td {
-    padding: 0.75rem 1rem;
+    padding: 1.25rem 1rem;
     font-size: 0.85rem;
     color: #1e293b;
     text-align: center;
     border-bottom: 1px solid #f8fafc;
+    vertical-align: middle;
 }
 
 .smb-table tr:last-child td {

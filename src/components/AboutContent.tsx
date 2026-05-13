@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Building2, Users2 } from 'lucide-react';
 import './AboutContent.css';
+import BoysImg from '../assets/images/hostels/Boys-Hostel.jpg';
+import GirlsImg from '../assets/images/hostels/g1.jpeg';
 
 const AboutContent: React.FC = () => {
     return (
@@ -19,9 +20,7 @@ const AboutContent: React.FC = () => {
                     <h2 className="ac-section-title">Boys' Hostels</h2>
                     <div className="ac-card">
                         <div className="ac-card-image">
-                            <div className="ac-card-icon">
-                                <Building2 size={128} />
-                            </div>
+                            <img src={BoysImg} alt="Boys Hostel" className="w-full h-full object-cover" />
                         </div>
                         <div className="ac-card-body">
                             <h3 className="ac-card-title">Boys' Hostels</h3>
@@ -48,7 +47,7 @@ const AboutContent: React.FC = () => {
                                     </ul>
                                 </div>
                             </div>
-                            <Link to="/registration" className="ac-button">
+                            <Link to="/mens-hostel" className="ac-button">
                                 Explore More
                             </Link>
                         </div>
@@ -58,10 +57,8 @@ const AboutContent: React.FC = () => {
                 <div style={{ marginBottom: '4rem' }}>
                     <h2 className="ac-section-title">Girls' Hostels</h2>
                     <div className="ac-card">
-                        <div className="ac-card-image" style={{ background: 'linear-gradient(to bottom right, #db2777, #7c3aed)' }}>
-                            <div className="ac-card-icon">
-                                <Users2 size={128} />
-                            </div>
+                        <div className="ac-card-image">
+                            <img src={GirlsImg} alt="Girls Hostel" className="w-full h-full object-cover" />
                         </div>
                         <div className="ac-card-body">
                             <h3 className="ac-card-title">Girls' Hostels</h3>
@@ -88,7 +85,7 @@ const AboutContent: React.FC = () => {
                                     </ul>
                                 </div>
                             </div>
-                            <Link to="/registration" className="ac-button">
+                            <Link to="/womens-hostel" className="ac-button">
                                 Explore More
                             </Link>
                         </div>
