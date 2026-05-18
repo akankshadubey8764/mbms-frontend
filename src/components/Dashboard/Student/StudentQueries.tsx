@@ -24,7 +24,7 @@ const StudentQueries: React.FC = () => {
 
     const fetchQueries = async () => {
         try {
-            const response = await apiClient.get('/student/queries');
+            const response = await apiClient.get('/queries/my_queries');
             setQueries(response.data);
         } catch (error) {
             // Silently fail if endpoint not ready
@@ -42,7 +42,7 @@ const StudentQueries: React.FC = () => {
 
         setSubmitting(true);
         try {
-            await apiClient.post('/student/queries', formData);
+            await apiClient.post('/queries/raise_queries', formData);
             toast.success('Query submitted successfully');
             setFormData({ subject: '', message: '' });
             fetchQueries();

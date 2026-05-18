@@ -29,7 +29,7 @@ const AdminSettings: React.FC = () => {
         setLoading(true);
         const settingsToast = toast.loading('Updating password...');
         try {
-            await apiClient.put('/auth/update-password', {
+            await apiClient.post('/auth/password', {
                 currentPassword: passwordData.current,
                 newPassword: passwordData.new
             });

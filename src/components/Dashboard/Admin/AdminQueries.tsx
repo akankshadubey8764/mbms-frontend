@@ -158,6 +158,10 @@ const AdminQueries: React.FC = () => {
                                 className={filters.status === 'Resolved' ? 'active' : ''}
                                 onClick={() => setFilters({ ...filters, status: 'Resolved' })}
                             >Resolved</button>
+                            <button
+                                className={filters.status === 'Overdue' ? 'active' : ''}
+                                onClick={() => setFilters({ ...filters, status: 'Overdue' })}
+                            >Overdue</button>
                         </div>
                     </div>
                 </div>

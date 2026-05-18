@@ -159,8 +159,8 @@ const ContactContent: React.FC = () => {
                                     </div>
                                     <div>
                                         <h3 className="cc-item-title">Phone</h3>
-                                        <p className="cc-item-text">+91 123 456 7890</p>
-                                        <p className="cc-item-text">+91 098 765 4321</p>
+                                        <p className="cc-item-text">0416 226 6101</p>
+                                        <p className="cc-item-text">0416 226 6102</p>
                                     </div>
                                 </div>
 
@@ -170,8 +170,8 @@ const ContactContent: React.FC = () => {
                                     </div>
                                     <div>
                                         <h3 className="cc-item-title">Email</h3>
+                                        <p className="cc-item-text">principal@tpgit.edu.in</p>
                                         <p className="cc-item-text">hostel@tpgit.edu.in</p>
-                                        <p className="cc-item-text">support@tpgit.edu.in</p>
                                     </div>
                                 </div>
                             </div>
@@ -181,12 +181,12 @@ const ContactContent: React.FC = () => {
                             <h2 className="cc-form-title">Office Hours</h2>
                             <div className="cc-hours-list">
                                 <div className="cc-hour-row">
-                                    <span className="cc-day">Monday - Friday</span>
-                                    <span className="cc-time">9:00 AM - 6:00 PM</span>
+                                    <span className="cc-day">Monday - Saturday</span>
+                                    <span className="cc-time">10:00 AM - 5:45 PM</span>
                                 </div>
                                 <div className="cc-hour-row">
-                                    <span className="cc-day">Saturday</span>
-                                    <span className="cc-time">9:00 AM - 2:00 PM</span>
+                                    <span className="cc-day">Second Saturday</span>
+                                    <span className="cc-closed">Closed</span>
                                 </div>
                                 <div className="cc-hour-row">
                                     <span className="cc-day">Sunday</span>
@@ -200,8 +200,8 @@ const ContactContent: React.FC = () => {
                             <p style={{ color: '#d1d5db', fontSize: '0.875rem', marginBottom: '1rem' }}>
                                 For urgent matters, please call our 24/7 emergency helpline:
                             </p>
-                            <a href="tel:+911234567890" className="cc-quick-btn">
-                                📞 +91 123 456 7890
+                            <a href="tel:04162266101" className="cc-quick-btn">
+                                📞 0416 226 6101
                             </a>
                         </div>
                     </div>

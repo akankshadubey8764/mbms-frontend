@@ -150,10 +150,10 @@ const HomeContent: React.FC = () => {
                         <h2 className="hc-section-title-alt">📋 Guidelines</h2>
                         <ul className="hc-list">
                             {[
-                                'Confirm authorized stay and only occupy assigned room.',
-                                'Keep only essential items to minimize theft risk.',
-                                'Dress appropriately and maintain a respectful appearance.',
-                                'Report contagious diseases immediately to the Warden.'
+                                'Ensure your stay is authorized and occupy only your assigned room.',
+                                'Safeguard your personal belongings and minimize storing valuables.',
+                                'Maintain a professional appearance and dress appropriately in common areas.',
+                                'Promptly report any health concerns or contagious illnesses to the administration.'
                             ].map((text, i) => (
                                 <li key={i} className="hc-list-item">
                                     <span className="hc-bullet">•</span>
@@ -167,10 +167,10 @@ const HomeContent: React.FC = () => {
                         <h2 className="hc-section-title-alt">🚫 Prohibitions</h2>
                         <ul className="hc-list">
                             {[
-                                'Do not permit unauthorized guests or outsiders.',
-                                'Do not occupy or transfer to unassigned rooms.',
-                                'Avoid storing costly items; hostel is not liable for theft.',
-                                'Do not allow day scholars inside the hostel.'
+                                'Unauthorized guests or visitors are strictly prohibited.',
+                                'Transferring or occupying unassigned rooms without prior approval is forbidden.',
+                                'The administration assumes no liability for the loss of valuable personal items.',
+                                'Day scholars are not permitted within the hostel premises.'
                             ].map((text, i) => (
                                 <li key={i} className="hc-list-item">
                                     <span className="hc-bullet-red">✕</span>

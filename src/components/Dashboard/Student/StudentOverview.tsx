@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Wallet, Clock, CheckCircle2, UserCircle, Building, X, AlertTriangle, BellRing } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import apiClient from '../../../api/apiClient';
 import './StudentOverview.css';
 
@@ -17,6 +18,7 @@ interface DashboardStats {
 const StudentOverview: React.FC = () => {
     const [stats, setStats] = useState<DashboardStats | null>(null);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     const [notifications, setNotifications] = useState<any[]>([]);
 
@@ -86,7 +88,7 @@ const StudentOverview: React.FC = () => {
                         <h3>Outstanding Payment Reminder</h3>
                         <p>You have <strong>{stats.pendingBills} unpaid</strong> mess bill{stats.pendingBills > 1 ? 's' : ''}. Please clear your dues as soon as possible.</p>
                     </div>
-                    <button className="so-reminder-btn" onClick={() => window.location.href='/student-dashboard/mess-bill'}>
+                    <button className="so-reminder-btn" onClick={() => navigate('/student-dashboard/mess-bill')}>
                         View Bills
                     </button>
                 </div>

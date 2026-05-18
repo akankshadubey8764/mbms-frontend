@@ -35,7 +35,7 @@ const StudentChangePassword: React.FC = () => {
 
         setLoading(true);
         try {
-            await apiClient.put('/auth/change-password', {
+            await apiClient.post('/auth/password', {
                 currentPassword: passwords.currentPassword,
                 newPassword: passwords.newPassword,
             });
